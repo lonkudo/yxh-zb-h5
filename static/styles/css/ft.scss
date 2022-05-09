@@ -1,0 +1,95 @@
+// 文字大小
+.fs-14 {
+	font-size: 14rpx!important;
+}
+.fs-16 {
+	font-size: 16rpx!important;
+}
+.fs-18 {
+	font-size: 18rpx!important;
+}
+.fs-20 {
+	font-size: 20rpx!important;
+}
+.fs-22 {
+	font-size: 22rpx!important;
+}
+.fs-24 {
+	font-size: 24rpx!important;
+}
+.fs-26 {
+	font-size: 26rpx!important;
+}
+.fs-28 {
+	font-size: 28rpx!important;
+}
+.fs-30 {
+	font-size: 30rpx!important;
+}
+.fs-32 {
+	font-size: 32rpx!important;
+}
+.fs-34 {
+	font-size: 34rpx!important;
+}
+.fs-36 {
+	font-size: 36rpx!important;
+}
+.fs-38 {
+	font-size: 38rpx!important;
+}
+.fs-40 {
+	font-size: 40rpx!important;
+}
+.fs-42 {
+	font-size: 42rpx!important;
+}
+.fs-44 {
+	font-size: 44rpx!important;
+}
+.fs-46 {
+	font-size: 46rpx!important;
+}
+
+// fc文字颜色，b黑
+.fc-b-0 {
+	color: #000!important;
+}
+.fc-b-3 {
+	color: #333!important;
+}
+.fc-b-6 {
+	color: #666!important;
+}
+.fc-b-9 {
+	color: #999!important;
+}
+.fc-b-c {
+	color: #ccc!important;
+}
+.fc-b-f {
+	color: #fff!important;
+}
+.fc-g {
+	color: #02b875!important;
+}
+
+// fw文字粗细
+.fw-9 {
+	font-weight: 900!important;
+}
+
+// 文字超出省略号
+.f-hide {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.f-hide-2 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	line-height: 28rpx;
+}

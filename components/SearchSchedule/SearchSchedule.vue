@@ -1,6 +1,10 @@
 <template>
 	<view>
-		<search-schedule-item></search-schedule-item>
+		<search-schedule-item
+			v-for="(item, index) in scheduleList"
+			:key="index"
+			:scheduleInfo="item"
+		></search-schedule-item>
 	</view>
 </template>
 
@@ -8,18 +12,16 @@
 	import SearchScheduleItem from './SearchScheduleItem.vue'
 	import pdata from './data.js'
 	export default {
-		name:"SearchSchedule",
+		name: 'SearchSchedule',
 		components: {
-			SearchScheduleItem
+			SearchScheduleItem,
 		},
 		data() {
 			return {
 				scheduleList: pdata,
-			};
-		}
+			}
+		},
 	}
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

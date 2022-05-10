@@ -6,18 +6,13 @@
 		<text class="f-hide fc-b-6 fs-24 w-200 f-center">
 			{{ attentionInfo.user_nicename }}</text
 		>
-		<u-button
-			iconColor="#02B875"
-			color="#02B875"
-			shape="circle"
-			text="Follow"
-			size="mini"
-			class="w-130"
-		></u-button>
+		<my-button :text="'Follow'" :falseText="'Followed'"></my-button>
 	</view>
 </template>
 
 <script>
+	import MyButton from '@/components/MyButton/MyButton.vue'
+
 	export default {
 		name: 'AttentionItem',
 		props: ['attentionInfo'],

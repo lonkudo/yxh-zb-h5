@@ -27,7 +27,6 @@
 
 <style lang="scss">
 	.input-group {
-		width: 600rpx;
 		height: 56rpx;
 		border-radius: 28rpx;
 		padding: 24rpx;

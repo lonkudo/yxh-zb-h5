@@ -12,11 +12,6 @@
 			<videos></videos>
 			<home-title :title="'Sport news'"></home-title>
 			<news></news>
-			<view>text</view>
-			<view>text</view> <view>text</view>
-			<view>text</view>
-			<view>text</view>
-			<view>text</view>
 		</scroll-view>
 	</view>
 </template>

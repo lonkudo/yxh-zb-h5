@@ -16,9 +16,9 @@
 				}}</text>
 			</view>
 			<view class="flex align-center padding-xs">
-				<image :src="scheduleInfo.home_team.logo" class="margin-right-sm" />
+				<image :src="scheduleInfo.away_team.logo" class="margin-right-sm" />
 				<text class="fc-b-3 fs-24 f-hide w-350">{{
-					scheduleInfo.home_team.name_en
+					scheduleInfo.away_team.name_en
 				}}</text>
 			</view>
 		</view>

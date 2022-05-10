@@ -1,24 +1,29 @@
 <template>
-	<view class=" b-f br-5 live-item flex flex-direction">
-		<view class="hot"><text class="fc-b-f fs-16 b-t iconfont icon-remen">2302</text></view>
-		<img :src="liveInfo.thumb" alt="" >
-		<text class="margin-top-xs margin-left-xs f-hide margin-left-sm fs-28 fc-b-3">{{liveInfo.title}}</text>
-		<view class="flex align-center margin-top-xs margin-left-sm ">
-			<img :src="liveInfo.user_avatar" alt="">
-			<text class="margin-left-xs f-hide fc-b-6 fs-22">{{liveInfo.user_nicename}}</text>
+	<view class="b-f br-5 live-item flex flex-direction">
+		<view class="hot"
+			><text class="fc-b-f fs-16 b-t iconfont icon-remen">2302</text></view
+		>
+		<img :src="liveInfo.thumb" alt="" />
+		<text
+			class="margin-top-xs margin-left-xs f-hide margin-left-sm fs-28 fc-b-3"
+			>{{ liveInfo.title }}</text
+		>
+		<view class="flex align-center margin-top-xs margin-left-sm">
+			<img :src="liveInfo.user_avatar" alt="" />
+			<text class="margin-left-xs f-hide fc-b-6 fs-22">{{
+				liveInfo.user_nicename
+			}}</text>
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		name:"LiveItem",
+		name: 'LiveItem',
 		props: ['liveInfo'],
 		data() {
-			return {
-				
-			};
-		}
+			return {}
+		},
 	}
 </script>
 

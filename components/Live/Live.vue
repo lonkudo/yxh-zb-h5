@@ -1,6 +1,10 @@
 <template>
 	<view class="margin-xs flex flex-wrap live-con justify-between">
-		<live-item v-for="(item,index) in liveList" :key="index" :liveInfo="item"></live-item>
+		<live-item
+			v-for="(item, index) in liveList"
+			:key="index"
+			:liveInfo="item"
+		></live-item>
 	</view>
 </template>
 
@@ -8,20 +12,16 @@
 	import LiveItem from './LiveItem.vue'
 	import pdata from './data.js'
 	export default {
-		name:"Live",
+		name: 'Live',
 		components: {
 			LiveItem,
 		},
 		data() {
 			return {
-				liveList: pdata
-			};
-		}
+				liveList: pdata,
+			}
+		},
 	}
 </script>
 
-<style lang="scss">
-	.live-con {
-		
-	}
-</style>
+<style lang="scss"></style>

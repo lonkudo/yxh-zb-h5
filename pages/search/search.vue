@@ -1,18 +1,18 @@
 <template>
 	<view class="flex">
-		<text>ok</text>
 		<search-page-header></search-page-header>
+		<scroll-view scroll-y="true"> </scroll-view>
 	</view>
 </template>
 
 <script>
-	import '@/components/SearchPageHeader/SearchPageHeader.vue'
+	import SearchPageHeader from '@/components/SearchPageHeader/SearchPageHeader.vue'
 	export default {
-		components: {
-			SearchPageHeader,
-		},
 		data() {
 			return {}
+		},
+		components: {
+			SearchPageHeader,
 		},
 	}
 </script>

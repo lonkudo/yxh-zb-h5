@@ -3,12 +3,12 @@
 		class="flex align-center padding-xs padding-top-sm padding-bottom-sm justify-between b-f"
 	>
 		<view
-			class="flex align-center b-f4 input-group margin-left-sm margin-right-sm"
+			class="flex align-center b-f4 input-group margin-left-sm "
 			><text class="iconfont icon-sousuo fs-32 margin-right-sm"></text
-			><input type="text" placeholder="Search"
+			><input type="text" placeholder=""
 		/></view>
 		<view class="margin-right-sm"
-			><view class="cancel-btn flex align-center justify-around"
+			><view class="cancel-btn flex align-center justify-around padding-xs"
 				><text class="fs-28 fc-b-f">cancel</text></view
 			></view
 		>
@@ -32,11 +32,12 @@
 		padding: 24rpx;
 		input {
 			color: #999;
+			width: 450rpx;
 		}
 	}
 	.cancel-btn {
-		width: 100rpx;
-		height: 40rpx;
+		width: 120rpx;
+		height: 50rpx;
 		background-color: #999;
 		border-radius: 10rpx;
 	}

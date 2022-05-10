@@ -1,7 +1,7 @@
 {
 	"pages": [
 		{
-			"path": "pages/search/search",
+			"path": "pages/search/searchRet",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false

@@ -1,26 +1,66 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-	    {
-            "path" : "pages/home/home",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        },
+	"pages": [
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "uni-app"
 			}
 		}
-    ],
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"navigationStyle": "custom"
+	},
+	"tabBar": {
+		"color": "#999999",
+		"selectedColor": "#02b875",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"height": "100rpx",
+		"fontSize": "22rpx",
+		"iconWidth": "48rpx",
+		"spacing": "3rpx",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/styles/tab/tab-live@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-live-active@2x.png",
+				"text": "Live"
+			},
+			{
+				"pagePath": "pages/score/score",
+				"iconPath": "static/styles/tab/tab-score@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-score-active@2x.png",
+				"text": "Live"
+			},
+			{
+				"pagePath": "pages/data/data",
+				"iconPath": "static/styles/tab/tab-data@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-data-active@2x.png",
+				"text": "Live"
+			},
+			{
+				"pagePath": "pages/discover/discover",
+				"iconPath": "static/styles/tab/tab-find@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-find-active@2x.png",
+				"text": "Live"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/styles/tab/tab-my@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
+				"text": "Live"
+			}
+		]
 	}
 }

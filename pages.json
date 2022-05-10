@@ -1,16 +1,46 @@
 {
 	"pages": [
 		{
-			"path": "pages/home/home",
+			"path": "pages/search/search",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
-			"path": "pages/index/index",
+			"path": "pages/home/home",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+
+		{
+			"path": "pages/discover/discover",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/score/score",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/data/data",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
 			}
 		}
 	],
@@ -41,25 +71,31 @@
 				"pagePath": "pages/score/score",
 				"iconPath": "static/styles/tab/tab-score@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-score-active@2x.png",
-				"text": "Live"
+				"text": "Score"
 			},
 			{
 				"pagePath": "pages/data/data",
 				"iconPath": "static/styles/tab/tab-data@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-data-active@2x.png",
-				"text": "Live"
+				"text": "Data"
 			},
 			{
 				"pagePath": "pages/discover/discover",
 				"iconPath": "static/styles/tab/tab-find@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-find-active@2x.png",
-				"text": "Live"
+				"text": "Discover"
 			},
 			{
 				"pagePath": "pages/my/my",
 				"iconPath": "static/styles/tab/tab-my@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
-				"text": "Live"
+				"text": "My"
+			},
+			{
+				"pagePath": "pages/search/search",
+				"iconPath": "static/styles/tab/tab-my@2x.png",
+				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
+				"text": "My"
 			}
 		]
 	}

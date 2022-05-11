@@ -1,6 +1,13 @@
 {
 	"pages": [
 		{
+			"path": "pages/discover/discover",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/search/searchRet",
 			"style": {
 				"navigationBarTitleText": "",
@@ -9,14 +16,6 @@
 		},
 		{
 			"path": "pages/home/home",
-			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
-			}
-		},
-
-		{
-			"path": "pages/discover/discover",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false

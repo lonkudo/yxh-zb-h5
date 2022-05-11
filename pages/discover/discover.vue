@@ -1,7 +1,5 @@
 <template>
 	<view>
-		<my-u-tabs :tabs="menu"></my-u-tabs>
-		<my-u-tabs :tabs="newsMenu" :scrollable="true"></my-u-tabs>
 		<scroll-view scroll-y="true" class="middle">
 			<discover-video></discover-video>
 			<news></news>

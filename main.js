@@ -11,8 +11,7 @@ import ImageLeft from '@/components/ImageLeft/ImageLeft.vue'
 Vue.component('image-left', ImageLeft)
 import ImageRight from '@/components/ImageRight/ImageRight.vue'
 Vue.component('image-right', ImageRight)
-import MyUTabs from '@/components/MyUTabs/MyUTabs.vue'
-Vue.component('my-u-tabs', MyUTabs)
+
 import ImageInfo from '@/components/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 

@@ -4,8 +4,7 @@
 			:list="list1"
 			@change="change"
 			@click="click"
-			indicator
-			indicatorMode="dot"
+			mode="dot"
 		></u-swiper>
 	</view>
 </template>

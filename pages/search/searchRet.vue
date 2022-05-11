@@ -3,7 +3,7 @@
 		<view>
 			<search-page-header></search-page-header>
 		</view>
-		<my-u-tabs :tabs="searchTabs"></my-u-tabs>
+
 		<scroll-view scroll-y="true" class="b-f6">
 			<search-ret-title :title="'Host'"></search-ret-title>
 			<search-host></search-host>

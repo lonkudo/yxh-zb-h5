@@ -1,3 +1,16 @@
 .br-5 {
-	border-radius: 5rpx!important;
+	border-radius: 5rpx !important;
+}
+
+.br-8 {
+	border-radius: 8rpx !important;
+}
+
+.br-8-t {
+	border-top-left-radius: 8rpx !important;
+	border-top-right-radius: 8rpx !important;
+}
+.br-8-b {
+	border-bottom-left-radius: 8rpx !important;
+	border-bottom-right-radius: 8rpx !important;
 }

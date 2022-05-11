@@ -3,24 +3,7 @@
 		<view>
 			<search-page-header></search-page-header>
 		</view>
-		<view v-if="showTabs">
-			<u-tabs
-				:list="searchTabs"
-				lineWidth="30"
-				lineColor="#02b875"
-				:activeStyle="{
-					color: '#02b875',
-					fontWeight: 'bold',
-					transform: 'scale(1.05)',
-				}"
-				:inactiveStyle="{
-					color: '#606266',
-					transform: 'scale(1)',
-				}"
-				itemStyle="padding-left: 15px; padding-right: 15px; height: 44px; background-color: white"
-				:scrollable="false"
-			></u-tabs>
-		</view>
+		<my-u-tabs :tabs="searchTabs"></my-u-tabs>
 		<scroll-view scroll-y="true" class="b-f6">
 			<search-ret-title :title="'Host'"></search-ret-title>
 			<search-host></search-host>
@@ -52,7 +35,6 @@
 		},
 		data() {
 			return {
-				showTabs: false,
 				searchTabs: [
 					{ name: 'All' },
 					{ name: 'Host' },

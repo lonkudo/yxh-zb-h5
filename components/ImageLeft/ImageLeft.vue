@@ -4,10 +4,7 @@
 		:style="{ height: size + 'rpx' }"
 	>
 		<view class="margin-right-xm flex align-center">
-			<image
-				:src="require('@/static/logo.png')"
-				:style="{ width: size + 'rpx', height: size + 'rpx' }"
-			/>
+			<image :src="img" :style="{ width: size + 'rpx', height: size + 'rpx' }" />
 		</view>
 		<view
 			:class="[

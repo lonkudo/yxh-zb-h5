@@ -14,10 +14,7 @@
 			<text class="fc-b-9 f-hide" v-if="down.length > 0">{{ down }}</text>
 		</view>
 		<view class="margin-right-xm flex align-center">
-			<image
-				:src="require('@/static/logo.png')"
-				:style="{ width: size + 'rpx', height: size + 'rpx' }"
-			/>
+			<image :src="img" :style="{ width: size + 'rpx', height: size + 'rpx' }" />
 		</view>
 	</view>
 </template>

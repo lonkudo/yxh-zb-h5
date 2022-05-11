@@ -4,15 +4,18 @@
 		<my-u-tabs :tabs="newsMenu" :scrollable="true"></my-u-tabs>
 		<scroll-view scroll-y="true" class="middle">
 			<discover-video></discover-video>
+			<news></news>
 		</scroll-view>
 	</view>
 </template>
 
 <script>
 	import DiscoverVideo from '@/components/DiscoverVideo/DiscoverVideo.vue'
+	import News from '../../components/News/News.vue'
 	export default {
 		components: {
 			DiscoverVideo,
+			News,
 		},
 		data() {
 			return {

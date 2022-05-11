@@ -1,7 +1,5 @@
 <template>
-	<view
-		class="margin-xs b-f br-5 padding-top-xs padding-bottom-xs padding-left-sm padding-right-sm news-con"
-	>
+	<view>
 		<news-item
 			class="margin-top-sm margin-bottom-sm"
 			v-for="(item, index) in newsList"
@@ -28,13 +26,4 @@
 	}
 </script>
 
-<style lang="scss">
-	.news-con {
-		view:nth-child(n) {
-			border-bottom: 1px solid #e5e5e5;
-		}
-		view:nth-last-child(1) {
-			border-bottom: 0;
-		}
-	}
-</style>
+<style lang="scss"></style>

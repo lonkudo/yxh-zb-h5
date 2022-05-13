@@ -24,8 +24,11 @@
 		{
 			"path": "pages/my/my",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "My",
+				"navigationBarBackgroundColor": "#F8F8F8",
+				"backgroundColor": "#F8F8F8",
+				"navigationStyle": "default"
 			}
 		},
 		{

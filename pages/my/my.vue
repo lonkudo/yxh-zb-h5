@@ -1,17 +1,41 @@
 <template>
 	<view>
-		rewjirew
-		<text>{{ $store.state.user.token }}</text>
-		<card-con>ok</card-con>
+		<exp-header></exp-header>
+		<card-con class="flex flex-direction">
+			<view
+				v-for="(item, index) in menuList"
+				:key="index"
+				class="flex align-center justify-between margin-sm fs-24"
+			>
+				<text>{{ item.label }}</text>
+				<text class="iconfont icon-right fc-b-9"></text>
+			</view>
+		</card-con>
+		<view
+			class="logout-btn flex align-center b-f margin-xs justify-center fc-b-3 fs-24"
+		>
+			<text class="fc-b-3">Logout</text>
+		</view>
 	</view>
 </template>
 
 <script>
 	import ExpHeader from './my/ExpHeader/ExpHeader.vue'
 	// import MyNavigator from './components/MyNavigator.vue'
+
 	export default {
 		data() {
-			return {}
+			return {
+				menuList: [
+					{ name: 'task', label: 'Task Center' },
+					{ name: 'collection', label: 'Collection' },
+					{ name: 'apply', label: 'Apply for the Host' },
+					{ name: 'feedback', label: 'Feedback' },
+					{ name: 'messages', label: 'Messages' },
+					{ name: 'report', label: 'Report' },
+					{ name: 'About', label: 'about' },
+				],
+			}
 		},
 		components: {
 			ExpHeader,
@@ -19,6 +43,7 @@
 		},
 		created() {
 			this.testPost()
+			// this.$http({})
 		},
 		computed: {},
 		methods: {
@@ -72,4 +97,12 @@
 	}
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+	.logout-btn {
+		height: 80rpx;
+		border-radius: 80rpx;
+		width: 730rpx;
+		position: fixed;
+		bottom: 120rpx;
+	}
+</style>

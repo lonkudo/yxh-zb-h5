@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	import httpservice from '@/utils/request.js'
 	import pdata from './data.js'
 
 	import NewsItem from './NewsItem.vue'

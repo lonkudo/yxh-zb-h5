@@ -1,4 +1,7 @@
+import Vue from 'vue'
 import App from './App'
+
+import store from './store/index.js'
 
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
@@ -7,30 +10,31 @@ import { formatGiven } from '@/utils/index.js'
 
 Vue.filter('formatGiven', formatGiven)
 
-import ImageLeft from '@/components/ImageLeft/ImageLeft.vue'
+import CardCon from '@/layout/CardCon/CardCon.vue'
+Vue.component('card-con', CardCon)
+import ImageLeft from '@/layout/ImageLeft/ImageLeft.vue'
 Vue.component('image-left', ImageLeft)
-import ImageRight from '@/components/ImageRight/ImageRight.vue'
+import ImageRight from '@/layout/ImageRight/ImageRight.vue'
 Vue.component('image-right', ImageRight)
-
-import ImageInfo from '@/components/ImageInfo/ImageInfo.vue'
+import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 
-// #ifndef VUE3
-import Vue from 'vue'
 Vue.config.productionTip = false
 App.mpType = 'app'
+
 const app = new Vue({
 	...App,
+	store,
 })
-app.$mount()
-// #endif
 
-// #ifdef VUE3
-import { createSSRApp } from 'vue'
-export function createApp() {
-	const app = createSSRApp(App)
-	return {
-		app,
-	}
-}
-// #endif
+app.$mount()
+
+// // #ifdef VUE3
+// import { createSSRApp } from 'vue'
+// export function createApp() {
+// 	const app = createSSRApp(App)
+// 	return {
+// 		app,
+// 	}
+// }
+// // #endif

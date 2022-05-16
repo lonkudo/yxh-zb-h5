@@ -11,7 +11,10 @@
 						<text class="f-hide w-550 fs-20">{{ item.content }}</text>
 						<text class="fc-b-9 margin-top-sm fs-20">{{ item.addtime }}</text>
 					</view>
-					<my-button-reverse></my-button-reverse>
+					<my-button-reverse
+						:text="'Processing'"
+						:falseText="'Processed'"
+					></my-button-reverse>
 				</view>
 			</view>
 		</scroll-view>

@@ -84,6 +84,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/applyHost/applyHost",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

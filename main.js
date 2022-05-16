@@ -5,8 +5,8 @@ import store from './store/index.js'
 
 import Request from '@/utils/request.js'
 
-let request = new Request().http
-Vue.prototype.$http = request
+// let request = new Request().http
+// Vue.prototype.$http = request
 
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)

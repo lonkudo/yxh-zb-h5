@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 
 // 观看视频获取金币
 export function addGoldRecord(data) {

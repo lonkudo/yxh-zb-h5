@@ -1,9 +1,9 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 //  获取首页轮播图
 export function getBanner() {
-	return request.http({
+	return request({
 		url: '?service=Front.GetBanner',
 		method: 'GET',
 	})

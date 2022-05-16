@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 
 //  获取分类下视频
 export function getClassVideoList(data) {

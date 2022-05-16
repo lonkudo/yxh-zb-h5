@@ -1,7 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
-import user from '@/store/modules/user'
+const request = new Request().http
 
 //  获取新闻分类
 export function getClassNews() {

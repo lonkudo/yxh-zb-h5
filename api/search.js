@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 
 //  获取主播
 export function getHostList(num, keyword, uid) {

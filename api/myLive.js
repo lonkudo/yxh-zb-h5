@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 
 //  创建直播
 export function createLive(info) {

@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 import { getToken, getUid } from '@/utils/auth'
 
 // 	会员注册

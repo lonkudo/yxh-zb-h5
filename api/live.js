@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 import { version } from '@/settings'
 
 //  用于关注/取消关注主播

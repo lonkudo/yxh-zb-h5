@@ -41,8 +41,11 @@
 		{
 			"path": "pages/data/data",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Data",
+				"navigationBarBackgroundColor": "#F8F8F8",
+				"backgroundColor": "#F8F8F8",
+				"navigationStyle": "default"
 			}
 		}
 	    ,{

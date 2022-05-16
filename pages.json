@@ -54,6 +54,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/collection/collection",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

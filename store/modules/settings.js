@@ -1,0 +1,46 @@
+import defaultSettings from '@/settings'
+import { site } from "@/api/common";
+
+
+const { lan } = defaultSettings
+
+const state = {
+    lan: lan,
+    siteInfo: null,
+}
+
+const mutations = {
+    CHANGE_SETTING: (state, { key, value }) => {
+        if (state.hasOwnProperty(key)) {
+            state[key] = value
+        }
+    },
+    SET_SITEINFO: (state, siteInfo) => {
+        state.siteInfo = siteInfo;
+    }
+}
+
+const actions = {
+    changeSetting({ commit }, data) {
+        commit('CHANGE_SETTING', data)
+    },
+    GetSiteInfo({ commit }) {
+        return new Promise((resolve, reject) => {
+            site().then((res) => {
+                commit('SET_SITEINFO', res.info)
+                resolve(res.info)
+            }).catch((err) => {
+                // console.log(err);
+                reject(err)
+            });
+        })
+    }
+}
+
+export default {
+    namespaced: true,
+    state,
+    mutations,
+    actions
+}
+

@@ -5,13 +5,13 @@
       <recommend-slider></recommend-slider>
       <system-informs-slider :noticeList="noticeList"></system-informs-slider>
       <home-title :title="'Popular game'"></home-title>
-      <popular-game></popular-game>
+      <popular-game :pdata="scheduleList"></popular-game>
       <home-title :title="'Live'"></home-title>
-      <live></live>
+      <live :liveList="liveList"></live>
       <home-title :title="'Videos'"></home-title>
-      <videos></videos>
+      <videos :videoList="videoList"></videos>
       <home-title :title="'Sport news'"></home-title>
-      <news></news>
+      <news :newsList="newsList"></news>
     </scroll-view>
   </view>
 </template>
@@ -44,6 +44,8 @@ export default {
       noticeList: [],
       newsList: [],
       scheduleList: [],
+      liveList: [],
+      videoList: [],
     };
   },
 	created() {
@@ -62,23 +64,25 @@ export default {
           this.noticeList = info.notice;
           this.newsList = info.news.splice(1, 10);
           this.scheduleList = info.schedule;
+          this.liveList = info.live;
+          this.videoList = info.video;
           let topics = [];
           // 获取订阅者id
-          // this.scheduleList.forEach((element) => {
-          //   if (element.status_id > 1 && element.status_id < 9) {
-          //     topics.push(element.id);
-          //   }
-          // });
-          // if (topics.length > 0)
-          //   this.connectMqtt(
-          //     this.$store.state.settings.siteInfo.mqttwsserver,
-          //     "",
-          //     "",
-          //     true,
-          //     // id 保证唯一
-          //     "mqtitId-Home" + Math.random() * 1000,
-          //     topics
-          //   );
+          this.scheduleList.forEach((element) => {
+            if (element.status_id > 1 && element.status_id < 9) {
+              topics.push(element.id);
+            }
+          });
+          if (topics.length > 0)
+            this.connectMqtt(
+              this.$store.state.settings.siteInfo.mqttwsserver,
+              "",
+              "",
+              true,
+              // id 保证唯一
+              "mqtitId-Home" + Math.random() * 1000,
+              topics
+            );
         }
       });
     },

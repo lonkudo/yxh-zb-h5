@@ -1,25 +1,35 @@
 <template>
-	<view>
-		<video-item v-for="(item,index) in videoList" :key="index" :videoInfo="item"></video-item>
-	</view>
+  <view>
+    <video-item
+      v-for="(item, index) in videoList"
+      :key="index"
+      :videoInfo="item"
+    ></video-item>
+  </view>
 </template>
 
 <script>
-	import VideoItem from './VideoItem.vue'
-	import pdata from './data.js'
-	export default {
-		name:"Videos",
-		components: {
-			VideoItem
-		},
-		data() {
-			return {
-				videoList: pdata,
-			};
-		}
-	}
+import VideoItem from "./VideoItem.vue";
+// import pdata from "./data.js";
+export default {
+  name: "Videos",
+  components: {
+    VideoItem,
+  },
+  props: {
+    videoList: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
+  data() {
+    return {
+      // videoList: pdata,
+    };
+  },
+};
 </script>
 
-<style lang="scss">
-	
-</style>
+<style lang="scss"></style>

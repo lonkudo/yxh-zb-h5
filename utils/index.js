@@ -414,11 +414,11 @@ export function getDateFmt() {
 
 export function formatGiven(time, fmt) {
 	// 按制定格式格式化时间
-	// console.log('time', time, typeof time)
+	console.log('time', time, typeof time)
 	if (typeof time === 'string') {
 		time = new Date(parseInt(time + '000'))
 	}
-	// console.log('time', time, typeof time)
+	console.log('time', time, typeof time)
 	var o = {
 		'M+': time.getMonth() + 1, //月份
 		'd+': time.getDate(), //日

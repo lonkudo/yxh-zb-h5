@@ -1,6 +1,8 @@
 <template>
 	<view class="margin-xs b-f br-8 padding-sm">
-		<view class=""></view>
+		<view class="">
+			<text>Task Center</text>
+		</view>
 	</view>
 </template>
 

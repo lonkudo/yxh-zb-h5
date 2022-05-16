@@ -53,8 +53,39 @@
 					>
 						<view class="flex flex-direction">
 							<view
-								class="margin-xs flex align-center justify-between"
+								class="margin-xs flex align-center justify-between margin-bottom-lg"
 								v-for="(item, index) in taskList"
+								:key="index"
+							>
+								<view class="flex">
+									<view
+										class="bg-green icon flex align-center justify-around margin-right-xs"
+									>
+										<text :class="['iconfont fs-36', item.icon]"></text>
+									</view>
+									<view class="flex flex-direction">
+										<text class="fs-10 fc-b-3">{{ item.name }}</text>
+										<text class="fs-10 fc-b-9">{{ item.details }}</text>
+									</view>
+								</view>
+								<my-button-reverse
+									:text="'To Complete'"
+									:falseText="'Completed'"
+								></my-button-reverse>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item class="swiper-item" :key="1" style="height: 100%">
+					<scroll-view
+						scroll-y
+						style="width: 100%; height: 100%"
+						@scrolltolower="onreachBottom"
+					>
+						<view class="flex flex-direction">
+							<view
+								class="margin-xs flex align-center justify-between margin-bottom-lg"
+								v-for="(item, index) in taskList2"
 								:key="index"
 							>
 								<view class="flex">
@@ -124,6 +155,13 @@
 						name: 'browse 2 articles',
 						details: 'Earn 15 Gold Coins',
 						icon: 'icon-baobiao',
+					},
+				],
+				taskList2: [
+					{
+						name: 'watch live show for 15s',
+						details: 'Earn 15 Gold Coins',
+						icon: 'icon-zhibo',
 					},
 				],
 			}

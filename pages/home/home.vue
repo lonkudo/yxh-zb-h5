@@ -17,14 +17,14 @@
 </template>
 
 <script>
-	import SearchHeader from '@/components/SearchHeader/index.vue'
-	import RecommendSlider from '@/components/RecommendSlider/RecommendSlider.vue'
-	import SystemInformsSlider from '@/components/SystemInformsSlider/SystemInformsSlider.vue'
-	import PopularGame from '@/components/PopularGame/PopularGame.vue'
-	import Live from '@/components/Live/Live.vue'
-	import Videos from '@/components/Videos/Videos.vue'
-	import News from '@/components/News/News.vue'
-	import HomeTitle from '@/components/HomeTitle/HomeTitle.vue'
+	import SearchHeader from './home/SearchHeader/index.vue'
+	import RecommendSlider from './home/RecommendSlider/RecommendSlider.vue'
+	import SystemInformsSlider from './home/SystemInformsSlider/SystemInformsSlider.vue'
+	import PopularGame from './home/PopularGame/PopularGame.vue'
+	import Live from './home/Live/Live.vue'
+	import Videos from './home/Videos/Videos.vue'
+	import News from './home/News/News.vue'
+	import HomeTitle from './home/HomeTitle/HomeTitle.vue'
 
 	export default {
 		components: {

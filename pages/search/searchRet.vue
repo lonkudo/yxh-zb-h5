@@ -82,12 +82,12 @@
 </template>
 
 <script>
-	import SearchPageHeader from '@/components/SearchPageHeader/SearchPageHeader.vue'
-	import SearchRetTitle from '@/components/SearchRetTitle/SearchRetTitle.vue'
-	import SearchHost from '@/components/SearchHost/SearchHost.vue'
-	import SearchSchedule from '@/components/SearchSchedule/SearchSchedule.vue'
-	import SearchLive from '@/components/SearchLive/SearchLive.vue'
-	import SearchNews from '@/components/SearchNews/SearchNews.vue'
+	import SearchPageHeader from './searchRet/SearchPageHeader/SearchPageHeader.vue'
+	import SearchRetTitle from './searchRet/SearchRetTitle/SearchRetTitle.vue'
+	import SearchHost from './searchRet/SearchHost/SearchHost.vue'
+	import SearchSchedule from './searchRet/SearchSchedule/SearchSchedule.vue'
+	import SearchLive from './searchRet/SearchLive/SearchLive.vue'
+	import SearchNews from './searchRet/SearchNews/SearchNews.vue'
 	export default {
 		components: {
 			SearchPageHeader,

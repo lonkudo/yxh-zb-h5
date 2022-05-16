@@ -13,10 +13,10 @@
 </template>
 
 <script>
-	import SearchPageHeader from '@/components/SearchPageHeader/SearchPageHeader.vue'
-	import FindTitle from '@/components/FindTitle/FindTitle.vue'
-	import Attention from '@/components/Attention/Attention.vue'
-	import RecommendNews from '@/components/RecommendNews/RecommendNews.vue'
+	import SearchPageHeader from './search/SearchPageHeader/SearchPageHeader.vue'
+	import FindTitle from './search/FindTitle/FindTitle.vue'
+	import Attention from './search/Attention/Attention.vue'
+	import RecommendNews from './search/RecommendNews/RecommendNews.vue'
 	export default {
 		components: {
 			SearchPageHeader,

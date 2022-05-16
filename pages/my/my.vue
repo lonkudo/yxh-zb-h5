@@ -7,15 +7,15 @@
 </template>
 
 <script>
-	import ExpHeader from '@/components/ExpHeader/ExpHeader.vue'
-	import MyNavigator from './components/MyNavigator.vue'
+	import ExpHeader from './my/ExpHeader/ExpHeader.vue'
+	// import MyNavigator from './components/MyNavigator.vue'
 	export default {
 		data() {
 			return {}
 		},
 		components: {
 			ExpHeader,
-			MyNavigator,
+			// MyNavigator,
 		},
 		created() {
 			this.testPost()

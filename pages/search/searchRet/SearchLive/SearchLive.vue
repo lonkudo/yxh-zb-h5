@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import LiveItem from '@/components/Live/LiveItem.vue'
+	import LiveItem from '@/pages/home/home/Live/LiveItem.vue'
 	import pdata from './data.js'
 	export default {
 		name: 'SearchLive',

@@ -91,8 +91,8 @@
 </template>
 
 <script>
-	import DiscoverVideo from '@/components/DiscoverVideo/DiscoverVideo.vue'
-	import News from '../../components/News/News.vue'
+	import DiscoverVideo from './discover/DiscoverVideo/DiscoverVideo.vue'
+	import News from '@/pages/home/home/News/News.vue'
 	export default {
 		components: {
 			DiscoverVideo,

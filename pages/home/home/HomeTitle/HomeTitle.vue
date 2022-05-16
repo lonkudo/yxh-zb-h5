@@ -1,14 +1,17 @@
 <template>
-	<view
-		class="margin-xs margin-top-sm margin-bottom-sm flex align-center justify-between"
-		><text class="fc-b-0 fw-9">{{ title }}</text
-		><text class="fc-b-9">More ></text></view
+	<card-con
+		class="margin-top-sm margin-bottom-sm flex align-center justify-between"
 	>
+		<text class="fc-b-0 fw-9">{{ title }}</text
+		><text class="fc-b-9">More ></text>
+	</card-con>
 </template>
 
 <script>
 	export default {
-		name: 'HomeTitle',
+		components: {
+			name: 'HomeTitle',
+		},
 		props: ['title'],
 		data() {
 			return {}

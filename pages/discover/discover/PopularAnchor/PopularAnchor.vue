@@ -1,24 +1,20 @@
 <template>
-	<view class="b-f margin-xs br-5">
+	<card-con>
 		<anchor></anchor>
-	</view>
+	</card-con>
 </template>
 
 <script>
 	import Anchor from '@/components/Anchor/Anchor.vue'
 	export default {
-		name:"PopularAnchor",
+		name: 'PopularAnchor',
 		components: {
 			Anchor,
 		},
 		data() {
-			return {
-				
-			};
-		}
+			return {}
+		},
 	}
 </script>
 
-<style>
-
-</style>
+<style></style>

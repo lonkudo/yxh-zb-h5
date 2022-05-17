@@ -166,6 +166,7 @@
 				this.swiperCurrent = index
 			},
 			videoTabsChange(index) {
+				this.videoList = []
 				this.swiperVideoCurrent = index
 				let result = this.videoMenu.find((info, infoIndex) => {
 					return index === infoIndex
@@ -174,6 +175,7 @@
 				this.getClassVideoList({ videoclassid: this.vclassid, p: 1 })
 			},
 			newsTabsChange(index) {
+				this.newsList = []
 				this.swiperNewsCurrent = index
 				let result = this.newsMenu.find((info, infoIndex) => {
 					return index === infoIndex

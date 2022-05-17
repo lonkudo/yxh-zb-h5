@@ -11,4 +11,7 @@ export default function (val) {
 			return JSON.stringify(val) === '{}'
 		}
 	}
+	if (typeof val === 'string') {
+		return val === ''
+	}
 }

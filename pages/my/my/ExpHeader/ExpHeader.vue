@@ -17,11 +17,11 @@
 				<view class="flex align-center justify-around w100">
 					<view class="flex flex-direction margin-top-lg align-center">
 						<text class="margin-bottom-xs fs-24 fc-b-9">Coins</text>
-						<text class="fs-24 fc-b-3">{{ userInfo.coin || '0' }}</text>
+						<text class="fs-24 fc-b-3 fw-6">{{ userInfo.coin || '0' }}</text>
 					</view>
 					<view class="flex flex-direction margin-top-lg align-center">
 						<text class="margin-bottom-xs fs-24 fc-b-9">Followed</text>
-						<text class="fs-24 fc-b-3">{{ userInfo.follows || '0' }}</text>
+						<text class="fs-24 fc-b-3 fw-6">{{ userInfo.follows || '0' }}</text>
 					</view>
 					<view class="flex flex-direction margin-top-lg align-center">
 						<text class="margin-bottom-xs fs-24 fc-b-9">Fans</text>

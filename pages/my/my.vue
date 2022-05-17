@@ -2,17 +2,15 @@
 	<view>
 		<exp-header></exp-header>
 		<card-con class="flex flex-direction">
-			<navigator
-				url=""
+			<view
+				class="flex align-center justify-between margin-sm fs-24"
 				v-for="(item, index) in menuList"
 				:key="index"
-				:url="item.url"
+				@tap="go(item.url)"
 			>
-				<view class="flex align-center justify-between margin-sm fs-24">
-					<text>{{ item.label }}</text>
-					<text class="iconfont icon-right fc-b-9"></text>
-				</view>
-			</navigator>
+				<text>{{ item.label }}</text>
+				<text class="iconfont icon-right fc-b-9"></text>
+			</view>
 		</card-con>
 		<view
 			class="logout-btn flex align-center b-f margin-xs justify-center fc-b-3 fs-24"
@@ -54,11 +52,17 @@
 			},
 		},
 		methods: {
-			go() {
-				console.log('go')
-				uni.navigateTo({
-					url: 'coins',
-				})
+			go(val) {
+				console.log('ok')
+				if (this.isEmpty(this.token)) {
+					uni.navigateTo({
+						url: '/pages/login/login',
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/my/' + val,
+					})
+				}
 			},
 			logOut() {
 				this.$store

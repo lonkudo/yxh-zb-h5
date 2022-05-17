@@ -23,11 +23,12 @@
 				<text
 					@tap="getCode"
 					:class="[
-						'fs-28 margin-left-xs margin-right-sm fc-b-3',
+						'fs-28 margin-left-auto margin-right-sm  fc-b-3',
 						isActive ? 'active-font' : '',
+						this.codeCounter === 0 ? '' : 'sending-font',
 					]"
-					>Get Code</text
-				>
+					>{{ this.codeCounter === 0 ? 'Get Code' : this.codeCounter + 's' }}
+				</text>
 			</view>
 			<view
 				:class="[
@@ -93,6 +94,14 @@
 					return
 				} else {
 					this.isUserEmpty = false
+				}
+				if (this.loginForm.user_login.length !== 10) {
+					uni.showToast({
+						title: 'Account length should be 10',
+						duration: 2000,
+						icon: 'none',
+					})
+					return
 				}
 				getCode(this.loginForm.user_login).then((res) => {
 					uni.showToast({
@@ -164,6 +173,19 @@
 				} else {
 					this.isPassEmpty = false
 				}
+				if (this.loginForm.loginType === 'code') {
+					const regCode = new RegExp(/^\d{6}$/)
+					let isCode = regCode.test(this.loginForm.user_pass)
+					console.log('ret', regCode.test(this.loginForm.user_pass))
+					if (!isCode) {
+						uni.showToast({
+							title: 'Verification Code' + 'should be 6 digits',
+							duration: 2000,
+							icon: 'none',
+						})
+						return
+					}
+				}
 				this.$store
 					.dispatch('Login', this.loginForm)
 					.then((res) => {
@@ -186,8 +208,8 @@
 								key: 'keyword',
 								value: '',
 							})
-							uni.switchTab({
-								url: '/pages/my/my',
+							uni.navigateBack({
+								delta: 1,
 							})
 						} else {
 							this.$message({
@@ -196,7 +218,13 @@
 							})
 						}
 					})
-					.catch(() => {})
+					.catch(() => {
+						uni.showToast({
+							title: 'Verification Code ' + 'error',
+							duration: 2000,
+							icon: 'none',
+						})
+					})
 					.finally(() => {
 						this.loginMethod()
 					})
@@ -250,5 +278,8 @@
 	}
 	.active-font {
 		color: #02b875 !important;
+	}
+	.sending-font {
+		color: #b8e2d0 !important;
 	}
 </style>

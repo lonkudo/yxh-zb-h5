@@ -5,7 +5,7 @@ const user = {
 	state: {
 		token: uni.getStorage({ key: 'token' }),
 		uid: uni.getStorage({ key: 'uid' }),
-		userinfo: JSON.parse(uni.getStorage({ key: 'userinfo' })),
+		userinfo: JSON.parse(JSON.stringify(uni.getStorage({ key: 'userinfo' }))),
 		levelexp: parseInt(uni.getStorage({ key: 'levelexp' })),
 	},
 

@@ -43,13 +43,14 @@
 				:current="swiperCurrent"
 				@transition="transition"
 				@animationfinish="animationfinish"
-				style="height: 400rpx"
+				@change="changeSwiper"
+				:style="{ height: swiperHeight + 'px' }"
 			>
-				<swiper-item class="swiper-item" :key="0" style="height: 100%">
+				<swiper-item class="swiper-item" :key="0">
 					<scroll-view
 						scroll-y
-						style="width: 100%; height: 100%"
 						@scrolltolower="onreachBottom"
+						:id="'content-wrap' + 0"
 					>
 						<view class="flex flex-direction">
 							<view
@@ -76,11 +77,11 @@
 						</view>
 					</scroll-view>
 				</swiper-item>
-				<swiper-item class="swiper-item" :key="1" style="height: 100%">
+				<swiper-item class="swiper-item" :key="1">
 					<scroll-view
 						scroll-y
-						style="width: 100%; height: 100%"
 						@scrolltolower="onreachBottom"
+						:id="'content-wrap' + 1"
 					>
 						<view class="flex flex-direction">
 							<view
@@ -115,11 +116,14 @@
 <script>
 	import Coin from '@/components/Coin/Coin.vue'
 	import MyButtonReverse from '@/components/MyButtonReverse/MyButtonReverse.vue'
+	import swiperAutoHeight from '@/mixin/swiperAutoHeight.js'
+	import swiperUTabs from '@/mixin/swiperUTabs.js'
 	export default {
 		components: {
 			Coin,
 			MyButtonReverse,
 		},
+		mixins: [swiperAutoHeight, swiperUTabs],
 		data() {
 			return {
 				coinList: [
@@ -133,8 +137,6 @@
 				],
 				/* tabs+swiper内容 */
 				menu: [{ name: 'Daily Task' }, { name: 'Live Task' }],
-				current: 0, // tabs组件的current值，表示当前活动的tab选项
-				swiperCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 				taskList: [
 					{
 						name: 'browse 2 articles',
@@ -166,22 +168,8 @@
 				],
 			}
 		},
-		methods: {
-			tabsChange(index) {
-				this.swiperCurrent = index
-			},
-			// swiper-item左右移动，通知tabs的滑块跟随移动
-			transition(e) {
-				let dx = e.detail.dx
-				this.$refs.uTabs.setDx(dx)
-			},
-			animationfinish(e) {
-				let current = e.detail.current
-				this.$refs.uTabs.setFinishCurrent(current)
-				this.swiperCurrent = current
-				this.current = current
-			},
-		},
+		onLoad() {},
+		methods: {},
 	}
 </script>
 

@@ -1,25 +1,61 @@
 <template>
-	<view>
-		<uni-forms :modelValue="formData">
-			<uni-forms-item label="姓名" name="name">
-				<uni-easyinput type="text" v-model="formData.a" placeholder="请输入姓名" />
-			</uni-forms-item>
-			<uni-forms-item required name="hobby" label="兴趣爱好"> </uni-forms-item>
-		</uni-forms>
-		<button @click="submitForm">Submit</button>
+	<view class="margin-xs b-f br-8 padding-xs">
+		<u-form :model="form" ref="uForm">
+			<u-form-item>
+				<view>
+					<text>Content:</text>
+					<view>
+						<u-input
+							class="u-input"
+							v-model="form.contact"
+							maxlength="700"
+							type="textarea"
+							placeholder="Please describe the bug you've encounterd. Or anything you want us to improve."
+						/>
+					</view>
+				</view>
+			</u-form-item>
+			<u-form-item>
+				<view>
+					<text>Pictures:</text>
+					<u-upload :action="action" :file-list="fileList" upload-text=""></u-upload>
+					<view> </view>
+				</view>
+			</u-form-item>
+			<u-form-item>
+				<view>
+					<text>Provide your contant information:</text>
+					<view>
+						<u-input
+							class="u-input"
+							v-model="form.info"
+							maxlength="700"
+							placeholder="Your contact info"
+						/>
+					</view>
+				</view>
+			</u-form-item>
+		</u-form>
 	</view>
 </template>
 
 <script>
 	export default {
-	   name: 'WriteFeedback',
-	   data(){
-	     formData:{
-	       a: '',
-	       b: '',
-	     }
-	   },
-	 }
+		data() {
+			return {
+				form: {
+					contact: '',
+					info: '',
+				},
+				action: 'http://test.com',
+				fileList: [],
+			}
+		},
+	}
 </script>
 
-<style></style>
+<style lang="scss">
+	.u-input {
+		width: 710rpx;
+	}
+</style>

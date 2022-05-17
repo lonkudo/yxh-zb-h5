@@ -40,7 +40,7 @@ const user = {
 								commit('SET_UID', info.id)
 								uni.setStorage({ key: 'token', data: 'info.token' })
 								uni.setStorage({ key: 'uid', data: 'info.id' })
-								commit('NEW')
+								// commit('NEW')
 							}
 							resolve(res)
 						})
@@ -97,7 +97,7 @@ const user = {
 				})
 				let percentage = Math.floor((level.level_experience / le.level_up) * 100)
 				commit('SET_LEVELEXP', percentage)
-				window.localStorage.setItem('levelexp', percentage)
+				uni.setStorage({ key: 'levelexp', percentage })
 				// console.log(this.percentage);
 			})
 		},

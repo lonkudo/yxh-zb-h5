@@ -4,7 +4,9 @@ function isSameDay(t) {
 }
 
 function getArts() {
-	let his = JSON.parse(uni.getStorage({ key: 'history' }) || '{}')
+	let his = JSON.parse(
+		JSON.stringify(uni.getStorage({ key: 'history' }) || '{}')
+	)
 	console.log('hasOwn', his.hasOwnProperty('time'), isSameDay(his.time))
 	if (!his.hasOwnProperty('time') || !isSameDay(his.time)) {
 		// 没有数据，或者数据日期变更。创建新数据。

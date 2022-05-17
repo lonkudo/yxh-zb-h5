@@ -6,6 +6,7 @@
 				v-for="(item, index) in menuList"
 				:key="index"
 				class="flex align-center justify-between margin-sm fs-24"
+				@tap="go()"
 			>
 				<text>{{ item.label }}</text>
 				<text class="iconfont icon-right fc-b-9"></text>
@@ -21,7 +22,6 @@
 
 <script>
 	import ExpHeader from './my/ExpHeader/ExpHeader.vue'
-	// import MyNavigator from './components/MyNavigator.vue'
 
 	export default {
 		data() {
@@ -37,60 +37,17 @@
 				],
 			}
 		},
+		computed: {},
 		components: {
 			ExpHeader,
-			// MyNavigator,
 		},
-		created() {
-			this.testPost()
-			// this.$http({})
-		},
+		created() {},
 		computed: {},
 		methods: {
-			testGet() {
-				uni.request({
-					url: '/appapi/?service=Discover.GetNewsList', //仅为示例，并非真实接口地址。
-					method: 'GET',
-					data: {
-						p: 1,
-						num: 20,
-						// type: 3,
-						// time: 20220512,
-						// compe_id: ['429', '1716', '2798'],
-						uid: 321,
-						lan: 1,
-					},
-					header: {
-						'content-type': 'application/x-www-form-urlencoded', //自定义请求头信息
-					},
-					success: (res) => {
-						console.log(res)
-						this.text = 'request success'
-					},
-					sslVerify: false,
-				})
-			},
-			testPost() {
-				uni.request({
-					url: '/appapi/?service=Match.Index', //仅为示例，并非真实接口地址。
-					method: 'POST',
-					data: {
-						p: 1,
-						num: 20,
-						type: 3,
-						time: 20220512,
-						compe_id: ['429', '1716', '2798'],
-						uid: 321,
-						lan: 1,
-					},
-					header: {
-						'content-type': 'application/x-www-form-urlencoded', //自定义请求头信息
-					},
-					success: (res) => {
-						console.log(res)
-						this.text = 'request success'
-					},
-					sslVerify: false,
+			go() {
+				console.log('go')
+				uni.navigateTo({
+					url: 'coins/coins',
 				})
 			},
 		},

@@ -18,6 +18,9 @@
 				</view>
 			</view>
 		</scroll-view>
+		<view class="top-right-btn">
+			<text class="fc-b-3">Write Feedback</text>
+		</view>
 	</view>
 </template>
 
@@ -43,4 +46,9 @@
 			border-bottom: 0;
 		}
 	}
+	// .top-right-btn {
+	// 	position: fixed;
+	// 	right: 0;
+	// 	top: 0;
+	// }
 </style>

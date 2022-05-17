@@ -65,15 +65,23 @@
 		{
 			"path": "pages/my/feedback/feedback",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": true,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Feedback",
+				"navigationBarBackgroundColor": "#F8F8F8",
+				"backgroundColor": "#F8F8F8",
+				"navigationStyle": "default"
 			}
 		},
 		{
-			"path": "pages/my/writeFeedback/writeFeedback",
+			"path": "pages/my/feedback/writeFeedback",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Write Feedback",
+				"navigationBarBackgroundColor": "#F8F8F8",
+				"backgroundColor": "#F8F8F8",
+				"navigationStyle": "default"
 			}
 		},
 		{
@@ -93,7 +101,17 @@
 				"navigationStyle": "default"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/my/test/test",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

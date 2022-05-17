@@ -1,5 +1,17 @@
 <template>
 	<view>
+		<u-navbar
+			:is-back="true"
+			:title="'Feedback'"
+			:title-bold="true"
+			:title-color="'#000'"
+			:back-icon-color="'#000'"
+			:back-icon-size="40"
+		>
+			<navigator :url="'writeFeedback'" slot="right"
+				><text class="margin-right-sm fc-g">write feedback</text></navigator
+			>
+		</u-navbar>
 		<scroll-view scroll-y="true">
 			<view class="flex flex-direction b-f">
 				<view
@@ -18,9 +30,6 @@
 				</view>
 			</view>
 		</scroll-view>
-		<view class="top-right-btn">
-			<text class="fc-b-3">Write Feedback</text>
-		</view>
 	</view>
 </template>
 
@@ -46,9 +55,9 @@
 			border-bottom: 0;
 		}
 	}
-	// .top-right-btn {
-	// 	position: fixed;
-	// 	right: 0;
-	// 	top: 0;
-	// }
+	.top-right-btn {
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
 </style>

@@ -2,15 +2,17 @@
 	<view>
 		<exp-header></exp-header>
 		<card-con class="flex flex-direction">
-			<view
+			<navigator
+				url=""
 				v-for="(item, index) in menuList"
 				:key="index"
-				class="flex align-center justify-between margin-sm fs-24"
-				@tap="go()"
+				:url="item.url"
 			>
-				<text>{{ item.label }}</text>
-				<text class="iconfont icon-right fc-b-9"></text>
-			</view>
+				<view class="flex align-center justify-between margin-sm fs-24">
+					<text>{{ item.label }}</text>
+					<text class="iconfont icon-right fc-b-9"></text>
+				</view>
+			</navigator>
 		</card-con>
 		<view
 			class="logout-btn flex align-center b-f margin-xs justify-center fc-b-3 fs-24"
@@ -27,13 +29,13 @@
 		data() {
 			return {
 				menuList: [
-					{ name: 'task', label: 'Task Center' },
-					{ name: 'collection', label: 'Collection' },
-					{ name: 'apply', label: 'Apply for the Host' },
-					{ name: 'feedback', label: 'Feedback' },
-					{ name: 'messages', label: 'Messages' },
-					{ name: 'report', label: 'Report' },
-					{ name: 'About', label: 'about' },
+					{ name: 'task', label: 'Task Center', url: 'coins/coins' },
+					{ name: 'collection', label: 'Collection', url: 'collection/collection' },
+					{ name: 'apply', label: 'Apply for the Host', url: 'apply/apply' },
+					{ name: 'feedback', label: 'Feedback', url: 'feedback/feedback' },
+					{ name: 'messages', label: 'Messages', url: 'messages/messages' },
+					{ name: 'report', label: 'Report', url: 'report/report' },
+					{ name: 'About', label: 'about', url: 'about/about' },
 				],
 			}
 		},
@@ -47,7 +49,7 @@
 			go() {
 				console.log('go')
 				uni.navigateTo({
-					url: 'coins/coins',
+					url: 'coins',
 				})
 			},
 		},

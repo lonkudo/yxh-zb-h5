@@ -1,24 +1,25 @@
 <template>
 	<view>
-		<custom-nav-bar>ejrkew</custom-nav-bar>
+		<!-- <custom-nav-bar></custom-nav-bar> -->
+		<!-- <u-navbar :is-back="false" title="">
+			<view class="slot-wrap"> ...... </view>
+		</u-navbar> -->
+		<navigator
+			url="/pages/home/home"
+			class="b-f"
+			open-type="switchTab"
+			animation-type="slide-in-right"
+			>aa</navigator
+		>
 	</view>
 </template>
 
 <script>
 	export default {
 		data() {
-			return {
-				bgTextStyle: 'dark',
-				scrollTop: '200rpx',
-				bgColor: '#f2031f',
-				bgColorTop: '#00ff00',
-				bgColorBottom: '#0000ff',
-				nbTitle: '标题',
-				nbLoading: false,
-				nbFrontColor: '#000000',
-				nbBackgroundColor: '#ffffff',
-			}
+			return {}
 		},
+
 		onLoad() {},
 		methods: {},
 	}

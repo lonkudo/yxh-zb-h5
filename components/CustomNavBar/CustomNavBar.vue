@@ -1,30 +1,55 @@
 <template>
 	<view>
-		<u-navbar :is-back="false" title="" :background="background">
-			rewjkrew
+		<u-navbar :is-back="true" back-text="back" title="">
+			<view slot="right"><slot name="right"></slot></view>
 		</u-navbar>
 		<view class="content">
 			<!-- 正文内容 -->
+			{{ prevName }}
 		</view>
 	</view>
 </template>
 
 <script>
 	export default {
+		porps: [],
 		data() {
 			return {
 				background: {
 					backgroundColor: '#fff',
-
-					// 导航栏背景图
-					// background: 'url(https://cdn.uviewui.com/uview/swiper/1.jpg) no-repeat',
-					// 还可以设置背景图size属性
-					// backgroundSize: 'cover',
-
-					// 渐变色
-					// backgroundImage: 'linear-gradient(45deg, rgb(28, 187, 180), rgb(141, 198, 63))'
 				},
+				pages: null,
+				page: null,
+				prevPage: 1,
+				prevName: '',
 			}
 		},
+		mounted() {
+			// this.pages = getCurrentPages() //关于获取页面的官方文档https://uniapp.dcloud.io/api/window/window
+			// this.page = this.pages[this.pages.length - 1]
+			// this.prevPage = this.pages[this.pages.length - 2]
+			// console.log('pages', this.page)
+			// console.log('---3----3----3----3----3---')
+			// this.prevName = this.getName(this.page)
+			// console.log('---4----4----4----4----4---', this.getName(this.page))
+		},
+		methods: {
+			// getName(page) {
+			// 	let arr = page.route.split('/')
+			// 	console.log('arr', arr[arr.length - 1])
+			// 	return arr[arr.legnth - 1]
+			// },
+		},
+		computed: {
+			// prevName: function () {
+			// 	console.log('---2----2----2----2----2---', this.prevPage)
+			// 	if (this.prevPage) {
+			// 		return this.getName(this.page)
+			// 	} else {
+			// 		return ''
+			// 	}
+			// },
+		},
+		watch: {},
 	}
 </script>

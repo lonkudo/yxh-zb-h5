@@ -15,6 +15,8 @@ import { formatGiven } from '@/utils/index.js'
 
 Vue.filter('formatGiven', formatGiven)
 
+import CustomNavBar from '@/components/CustomNavBar/CustomNavBar.vue'
+Vue.component('custom-nav-bar', CustomNavBar)
 import CardCon from '@/layout/CardCon/CardCon.vue'
 Vue.component('card-con', CardCon)
 import ImageLeft from '@/layout/ImageLeft/ImageLeft.vue'

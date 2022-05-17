@@ -1,21 +1,7 @@
 <template>
-	<page-meta
-		:background-text-style="bgTextStyle"
-		:background-color="bgColor"
-		:background-color-top="bgColorTop"
-		:background-color-bottom="bgColorBottom"
-		:scroll-top="scrollTop"
-		page-style="color: pink"
-		root-font-size="16px"
-	>
-		<navigation-bar
-			:title="nbTitle"
-			:loading="nbLoading"
-			:front-color="nbFrontColor"
-			:background-color="nbBackgroundColor"
-		/>
-	</page-meta>
-	<view class="content"> custom Header </view>
+	<view>
+		<custom-nav-bar>ejrkew</custom-nav-bar>
+	</view>
 </template>
 
 <script>

@@ -1,77 +1,78 @@
 @font-face {
-	font-family: 'iconfont'; /* Project id 3385079 */
-	src: url('//at.alicdn.com/t/font_3385079_liuci5b0ju.woff2?t=1652673583274')
-			format('woff2'),
-		url('//at.alicdn.com/t/font_3385079_liuci5b0ju.woff?t=1652673583274')
-			format('woff'),
-		url('//at.alicdn.com/t/font_3385079_liuci5b0ju.ttf?t=1652673583274')
-			format('truetype');
+  font-family: "iconfont"; /* Project id 3385079 */
+  src: url('//at.alicdn.com/t/font_3385079_dg44014tpaq.woff2?t=1652759978283') format('woff2'),
+       url('//at.alicdn.com/t/font_3385079_dg44014tpaq.woff?t=1652759978283') format('woff'),
+       url('//at.alicdn.com/t/font_3385079_dg44014tpaq.ttf?t=1652759978283') format('truetype');
 }
 
 .iconfont {
-	font-family: 'iconfont' !important;
-	font-size: 16px;
-	font-style: normal;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-left:before {
+  content: "\e618";
 }
 
 .icon-zhibo:before {
-	content: '\e61c';
+  content: "\e61c";
 }
 
 .icon-yunhang:before {
-	content: '\ec61';
+  content: "\ec61";
 }
 
 .icon-baobiao:before {
-	content: '\e617';
+  content: "\e617";
 }
 
 .icon-quanburenwu:before {
-	content: '\e6a7';
+  content: "\e6a7";
 }
 
 .icon-right:before {
-	content: '\e6a3';
+  content: "\e6a3";
 }
 
 .icon-star-fill:before {
-	content: '\e86a';
+  content: "\e86a";
 }
 
 .icon-Video:before {
-	content: '\e6ba';
+  content: "\e6ba";
 }
 
 .icon-remen:before {
-	content: '\e638';
+  content: "\e638";
 }
 
 .icon-lingdang:before {
-	content: '\e8c0';
+  content: "\e8c0";
 }
 
 .icon-zhibozhong:before {
-	content: '\e620';
+  content: "\e620";
 }
 
 .icon-sousuo:before {
-	content: '\e678';
+  content: "\e678";
 }
 
 .icon-laba:before {
-	content: '\e628';
+  content: "\e628";
 }
 
 .icon-saoyisao:before {
-	content: '\e891';
+  content: "\e891";
 }
 
 .icon-qiandao:before {
-	content: '\e60d';
+  content: "\e60d";
 }
 
 .icon-dianshizhibo:before {
-	content: '\e60f';
+  content: "\e60f";
 }

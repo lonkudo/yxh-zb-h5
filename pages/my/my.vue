@@ -16,6 +16,7 @@
 		</card-con>
 		<view
 			class="logout-btn flex align-center b-f margin-xs justify-center fc-b-3 fs-24"
+			@tap="logOut"
 		>
 			<text class="fc-b-3">Logout</text>
 		</view>
@@ -44,13 +45,25 @@
 			ExpHeader,
 		},
 		created() {},
-		computed: {},
+		computed: {
+			token: function () {
+				return this.$store.state.user.token || ''
+			},
+			uid: function () {
+				return this.$store.state.user.uid || ''
+			},
+		},
 		methods: {
 			go() {
 				console.log('go')
 				uni.navigateTo({
 					url: 'coins',
 				})
+			},
+			logOut() {
+				this.$store
+					.dispatch('LogOut', { token: this.token, uid: this.uid })
+					.then((res) => {})
 			},
 		},
 	}

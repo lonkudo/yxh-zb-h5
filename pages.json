@@ -60,6 +60,17 @@
 			}
 		},
 		{
+			"path": "pages/my/coins/record",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Gold Detail",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
 			"path": "pages/my/collection/collection",
 			"style": {
 				"enablePullDownRefresh": false,

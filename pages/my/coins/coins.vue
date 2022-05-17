@@ -9,7 +9,9 @@
 				>
 				<text class="fc-b-f fs-30 fw-9">2</text>
 			</view>
-			<view class="fc-b-f fs-20">Gold Record ></view>
+			<navigator url="record">
+				<view class="fc-b-f fs-20">Gold Record ></view>
+			</navigator>
 		</view>
 		<view class="margin-xs br-8 padding-xs b-f">
 			<view class="margin-bottom-sm flex justify-between">
@@ -119,11 +121,11 @@
 	import swiperAutoHeight from '@/mixin/swiperAutoHeight.js'
 	import swiperUTabs from '@/mixin/swiperUTabs.js'
 	export default {
+		mixins: [swiperAutoHeight, swiperUTabs],
 		components: {
 			Coin,
 			MyButtonReverse,
 		},
-		mixins: [swiperAutoHeight, swiperUTabs],
 		data() {
 			return {
 				coinList: [

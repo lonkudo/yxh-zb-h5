@@ -12,8 +12,10 @@ import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
 import { formatGiven } from '@/utils/index.js'
-
 Vue.filter('formatGiven', formatGiven)
+
+import isEmpty from '@/utils/isEmpty.js'
+Vue.prototype.isEmpty = isEmpty
 
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar.vue'
 Vue.component('custom-nav-bar', CustomNavBar)

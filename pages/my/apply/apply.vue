@@ -8,9 +8,9 @@
 				>
 					<view
 						@tap="uploadFunc('idFront')"
-						v-for="(item, index) in 3"
+						v-for="(item, index) in uploadGroup"
 						:key="index"
-						class="margin-bottom-sm"
+						:class="['margin-bottom-sm', item.ref]"
 					>
 						<u-upload
 							ref="idFront"
@@ -18,7 +18,7 @@
 							:file-list="fileList"
 							upload-text=""
 							:customBtn="true"
-							@tap="uploadFunc('idFront')"
+							@tap="uploadFunc(item.ref)"
 						>
 							<view
 								slot="addBtn"
@@ -28,9 +28,9 @@
 							>
 							</view>
 						</u-upload>
-						<text class="fs-20 fc-b-9 padding-left-lg upload-text"
-							>Font Face of ID Card</text
-						>
+						<text class="fs-20 fc-b-9 padding-left-lg upload-text">{{
+							item.label
+						}}</text>
 					</view>
 				</view>
 			</view>
@@ -68,6 +68,23 @@
 				},
 				action: 'http://test.com',
 				fileList: [],
+				uploadGroup: [
+					{
+						ref: 'idFront',
+						img: '/static/styles/png/idFront.png',
+						label: 'Front Face of ID Card',
+					},
+					{
+						ref: 'idBack',
+						img: '/static/styles/png/idBack.png',
+						label: 'Back of ID Card',
+					},
+					{
+						ref: 'idHold',
+						img: '/static/styles/png/idHold.png',
+						label: 'Hold ID Card',
+					},
+				],
 			}
 		},
 		methods: {

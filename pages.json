@@ -100,7 +100,7 @@
 			}
 		},
 		{
-			"path": "pages/my/applyHost/applyHost",
+			"path": "pages/my/apply/apply",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false

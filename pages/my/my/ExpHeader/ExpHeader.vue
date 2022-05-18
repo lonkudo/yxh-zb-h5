@@ -43,17 +43,7 @@
 		data() {
 			return {}
 		},
-		computed: {
-			userInfo: function () {
-				return this.$store.state.user.userinfo || {}
-			},
-			token: function () {
-				return this.$store.state.user.token || ''
-			},
-			uid: function () {
-				return this.$store.state.user.uid || ''
-			},
-		},
+		computed: {},
 		created() {
 			console.log('this aaa', JSON.stringify(this.$store.state))
 		},
@@ -61,11 +51,13 @@
 			go(val) {
 				switch (val) {
 					case 'login':
-						console.log('this.', val)
-						console.log('loing', this.isEmpty(this.userInfo))
 						if (this.isEmpty(this.userInfo)) {
 							uni.navigateTo({
 								url: '/pages/login/login',
+							})
+						} else {
+							uni.navigateTo({
+								url: val,
 							})
 						}
 						break

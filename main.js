@@ -17,6 +17,8 @@ Vue.filter('formatGiven', formatGiven)
 import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty
 
+import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
+
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar.vue'
 Vue.component('custom-nav-bar', CustomNavBar)
 import CardCon from '@/layout/CardCon/CardCon.vue'

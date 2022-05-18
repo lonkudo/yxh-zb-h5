@@ -94,6 +94,10 @@
 					return []
 				},
 			},
+			type: {
+				type: Number,
+				default: 0,
+			},
 		},
 		watch: {
 			show: {
@@ -143,7 +147,7 @@
 			btnClick(index) {
 				this.status = false
 				// this.index为点击的几个组件，index为点击某个组件的第几个按钮(options数组的索引)
-				this.$emit('click', this.index, index, this.myData)
+				this.$emit('click', this.index, index, this.myData, this.type)
 			},
 			// movable-view元素移动事件
 			change(e) {

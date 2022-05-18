@@ -13,18 +13,14 @@
 			:current="swiperCurrent"
 			@transition="transition"
 			@animationfinish="animationfinish"
-			style="height: 2000rpx"
+			@change="changeSwiper"
+			:style="{ height: swiperHeight + 'px' }"
 		>
-			<swiper-item
-				class="swiper-item"
-				:key="0"
-				style="height: 100%"
-				@touchmove.stop=""
-			>
-				<scroll-view scroll-y style="width: 100%; height: 100%">
+			<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
+				<scroll-view scroll-y :id="'content-wrap' + 0">
 					<view
 						class="flex flex-direction"
-						v-for="(time, idx) in newsList"
+						v-for="(time, idx) in collectionList"
 						:key="'t' + idx"
 					>
 						<view class="margin-xs"
@@ -36,23 +32,24 @@
 								:index="index"
 								:myData="time.list"
 								@click="click"
-								@open="open(index, idx, newsList, 'news')"
+								@open="open(index, idx, collectionList, 'news')"
 								:options="options"
 								v-for="(item, index) in time.list"
 								:key="index"
 								btn-width="180"
+								:type="2"
 							>
 								<view class="flex">
 									<image
-										:src="item.mediaw.thumb"
+										:src="item.mediaw.img"
 										mode="aspectFill"
 										class="br-8"
 										style="width: 180rpx; height: 100rpx"
 									/>
 									<view class="margin-left-xs flex flex-direction justify-between"
-										><text class="f-hide w-500 fs-20">{{ item.mediaw.title }}</text
+										><text class="f-hide w-500 fs-20">{{ item.mediaw.caption }}</text
 										><text class="fc-b-9 fs-20">{{
-											item.mediaw.addtime | formatGiven('yyyy-MM-dd hh:ss')
+											item.mediaw.create_time | formatGiven('yyyy-MM-dd hh:ss')
 										}}</text></view
 									>
 								</view>
@@ -61,13 +58,8 @@
 					</view>
 				</scroll-view>
 			</swiper-item>
-			<swiper-item
-				class="swiper-item"
-				:key="1"
-				style="height: 100%"
-				@touchmove.stop=""
-			>
-				<scroll-view scroll-y style="width: 100%; height: 100%">
+			<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
+				<scroll-view scroll-y :id="'content-wrap' + 1">
 					<view
 						class="flex flex-direction"
 						v-for="(time, idx) in videoList"
@@ -86,18 +78,19 @@
 								:options="options"
 								v-for="(item, index) in time.list"
 								:key="index"
-								btn-width="280"
+								btn-width="200"
+								:type="1"
 							>
 								<view class="flex">
 									<image
-										:src="item.mediaw.img"
+										:src="item.mediaw.thumb"
 										mode="aspectFill"
 										class="br-8"
-										style="width: 300rpx; height: 130rpx"
+										style="width: 280rpx; height: 130rpx"
 									/>
 									<view class="margin-left-xs flex flex-direction justify-end"
-										><text class="f-hide w-500 fs-20 margin-auto">{{
-											item.mediaw.caption
+										><text class="f-hide w-400 fs-20 margin-auto">{{
+											item.mediaw.title
 										}}</text
 										><text class="fc-b-9 fs-20">{{
 											item.user_name || 'user does not exist'
@@ -121,6 +114,9 @@
 	import videoData from './dataVideo.js'
 	import listSwipeAciton from '@/components/list-swipe-action/list-swipe-action.vue'
 	import { swiperAutoHeight, swiperUTabs, userComputed } from '@/mixin'
+
+	import { getMyCollection, delMyCollection } from '@/api/my'
+
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs, userComputed],
 		components: {
@@ -129,8 +125,6 @@
 		data() {
 			return {
 				menu: [{ name: 'News' }, { name: 'Video' }],
-				newsList: newsData,
-				videoList: videoData,
 				options: [
 					{
 						text: 'delete',
@@ -139,11 +133,27 @@
 						},
 					},
 				],
+				collectionList: [], // 新闻列表
+				collectionPage: { p: 1, num: 10, show: true },
+				videoList: [], // 视频列表
+				videoPage: { p: 1, num: 10, show: true },
 			}
 		},
 		onLoad() {
-			this.handleData(this.newsList)
-			this.handleData(this.videoList)
+			this.getMyCollection(
+				this.uid,
+				this.collectionPage.p,
+				this.token,
+				2,
+				this.collectionPage.num
+			)
+			this.getMyCollection(
+				this.uid,
+				this.videoPage.p,
+				this.token,
+				1,
+				this.videoPage.num
+			)
 		},
 		methods: {
 			onReachBottom() {
@@ -151,16 +161,13 @@
 			},
 			tabsChange(index) {
 				this.swiperCurrent = index
-				console.log('tasChanged')
-				if (index === 0) {
-					this.newsList = newsData
-				} else {
-					this.videoList = videoData
-				}
 			},
-			click(index, index1, list) {
-				list.splice(index, 1)
-				this.$u.toast(`deleted`)
+			click(index, index1, list, type) {
+				let mediaid = list[index].mediaid
+				this.delMyCollection(list[index].mediaid, type, () => {
+					list.splice(index, 1)
+					this.$u.toast(`deleted`)
+				})
 			},
 			open(index, outerIndex, list, type) {
 				/* 打开一个 u-swiper-action 关闭其他的。 */
@@ -168,7 +175,7 @@
 				list[outerIndex].list[index].show = true
 				list = JSON.parse(JSON.stringify(list))
 				if (type === 'news') {
-					this.newsList = list
+					this.collectionList = list
 				} else if (type === 'video') {
 					this.videoList = list
 				}
@@ -180,6 +187,35 @@
 						ele.show = false
 					})
 				})
+			},
+			getMyCollection(token, uid, p, type, num) {
+				getMyCollection(token, uid, p, type, num)
+					.then((res) => {
+						if (type === 1) {
+							// 1视频2新闻
+							this.videoList = res.info
+						} else if (type === 2) {
+							this.collectionList = res.info
+						}
+					})
+					.catch((err) => {
+						// this.$message.error('2')
+					})
+					.finally(() => {
+						this.$nextTick(() => {
+							this.setSwiperHeight()
+						})
+					})
+			},
+			/* 删除我的收藏 */
+			delMyCollection(mediaid, type, callback) {
+				delMyCollection(this.uid, this.token, mediaid, type)
+					.then((res) => {
+						callback()
+					})
+					.catch((err) => {
+						// this.$message.error('3')
+					})
 			},
 		},
 	}

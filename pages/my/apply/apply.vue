@@ -7,10 +7,9 @@
 					class="flex flex-wrap justify-between padding-left-sm padding-right-sm margin-top-sm"
 				>
 					<view
-						@tap="uploadFunc('idFront')"
 						v-for="(item, index) in uploadGroup"
 						:key="index"
-						:class="['margin-bottom-sm', item.ref]"
+						class="margin-bottom-sm"
 					>
 						<u-upload
 							ref="idFront"
@@ -22,7 +21,7 @@
 						>
 							<view
 								slot="addBtn"
-								class="slot-btn my-upload br-8 idFront"
+								:class="['slot-btn my-upload br-8 ', item.ref]"
 								hover-class="slot-btn__hover"
 								hover-stay-time="150"
 							>
@@ -90,7 +89,7 @@
 		methods: {
 			uploadFunc(ref) {
 				console.log('this.$refs', this.$refs[ref])
-				this.$refs[ref].upload()
+				// this.$refs[ref].upload()
 				// this.$refs[ref].upload()
 				console.log('taped')
 			},
@@ -109,6 +108,12 @@
 	}
 	.idFront {
 		background-image: url('@/static/styles/png/idFront.png');
+	}
+	.idBack {
+		background-image: url('@/static/styles/png/idBack.png');
+	}
+	.idHold {
+		background-image: url('@/static/styles/png/idHold.png');
 	}
 	.upload-item {
 		padding: 0;

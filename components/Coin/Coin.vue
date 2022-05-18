@@ -7,7 +7,7 @@
 			</view>
 		</view>
 		<view class="done" v-if="status === 1">
-			<svg-icon icon-class="check"></svg-icon>
+			<text class="iconfont icon-check fc-b-f"></text>
 		</view>
 		<view class="miss" v-if="status === 2">
 			<svg-icon icon-class="exclam"></svg-icon>

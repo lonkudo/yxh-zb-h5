@@ -17,6 +17,11 @@
 	</scroll-view>
 </template>
 
-<script></script>
+<script>
+	export default {
+		onLoad() {},
+		methods() {},
+	}
+</script>
 
 <style lang="scss"></style>

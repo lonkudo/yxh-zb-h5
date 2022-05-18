@@ -27,6 +27,10 @@
 				type: Boolean,
 				default: true,
 			},
+			mana: {
+				type: Boolean,
+				default: false,
+			},
 		},
 		data() {
 			return {
@@ -35,7 +39,9 @@
 		},
 		methods: {
 			handleTap: function () {
-				this.isActive = !this.isActive
+				if (!this.mana) {
+					this.isActive = !this.isActive
+				}
 				this.$emit('onTap')
 			},
 		},

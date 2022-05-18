@@ -194,8 +194,8 @@
 							let info = res.info
 							this.avatar = info.avatar
 							this.nicename = info.nicename
-							this.token = info.token
-							this.userInfo = info
+							// this.token = info.token
+							// this.userInfo = info
 							this.$store.dispatch('GetInfo', {
 								uid: info.id,
 								token: info.token,

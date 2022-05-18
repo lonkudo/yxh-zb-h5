@@ -18,8 +18,19 @@
 							upload-text=""
 							:customBtn="true"
 							@tap="uploadFunc(item.ref)"
+							width="300"
+							height="170"
+							:form-data="passParams()"
+							:header="{ 'x-token': '321' }"
+							:multiple="false"
+							@on-list-change="
+								(args) => {
+									onListChanged(item, args)
+								}
+							"
 						>
 							<view
+								v-if="item.show"
 								slot="addBtn"
 								:class="['slot-btn my-upload br-8 ', item.ref]"
 								hover-class="slot-btn__hover"
@@ -27,9 +38,9 @@
 							>
 							</view>
 						</u-upload>
-						<text class="fs-20 fc-b-9 padding-left-lg upload-text">{{
-							item.label
-						}}</text>
+						<view class="flex justify-center">
+							<text class="fs-20 fc-b-9 upload-text">{{ item.label }}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -65,23 +76,26 @@
 					contact: '',
 					info: '',
 				},
-				action: 'http://test.com',
+				action: '/appapi',
 				fileList: [],
 				uploadGroup: [
 					{
 						ref: 'idFront',
 						img: '/static/styles/png/idFront.png',
 						label: 'Front Face of ID Card',
+						show: true,
 					},
 					{
 						ref: 'idBack',
 						img: '/static/styles/png/idBack.png',
 						label: 'Back of ID Card',
+						show: true,
 					},
 					{
-						ref: 'idHold',
-						img: '/static/styles/png/idHold.png',
-						label: 'Hold ID Card',
+						ref: 'idHand',
+						img: '/static/styles/png/idHand.png',
+						label: 'ID Card in Hand',
+						show: true,
 					},
 				],
 			}
@@ -92,6 +106,20 @@
 				// this.$refs[ref].upload()
 				// this.$refs[ref].upload()
 				console.log('taped')
+			},
+			passParams() {
+				return {
+					uid: this.uid,
+					token: this,
+					service: 'User.UpdateLiveimg',
+				}
+			},
+			onListChanged(item, args) {
+				if (args.length === 0) {
+					item.show = true
+				} else {
+					item.show = false
+				}
 			},
 		},
 	}
@@ -112,8 +140,8 @@
 	.idBack {
 		background-image: url('@/static/styles/png/idBack.png');
 	}
-	.idHold {
-		background-image: url('@/static/styles/png/idHold.png');
+	.idHand {
+		background-image: url('@/static/styles/png/idHand.png');
 	}
 	.upload-item {
 		padding: 0;

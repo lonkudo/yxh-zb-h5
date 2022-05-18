@@ -350,3 +350,12 @@ export function liveRecord(data) {
 		data: data,
 	})
 }
+
+// 金币日志
+export function goldLog(data) {
+	return request({
+		url: '?service=User.GoldLog',
+		method: 'POST',
+		data: data,
+	})
+}

@@ -2,6 +2,7 @@
 node_modules
 uni_modules
 dist
+markdown
 
 
 # local env files

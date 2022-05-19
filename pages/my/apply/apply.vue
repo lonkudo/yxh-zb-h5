@@ -87,7 +87,7 @@
 
 <script>
 	import MyUpload from '@/components/my-upload/my-upload.vue'
-	import { applyLive, checkIsAnchor } from '@/api/my'
+	import { applyLive } from '@/api/my'
 
 	export default {
 		data() {
@@ -123,9 +123,7 @@
 				},
 			}
 		},
-		onLoad() {
-			this.checkIsAnchor()
-		},
+		onLoad() {},
 		methods: {
 			uploadFunc(ref) {
 				console.log('this.$refs', this.$refs[ref])
@@ -195,30 +193,6 @@
 								delta: 1,
 							})
 						}, 1000)
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			checkIsAnchor() {
-				console.log('this', this.uid)
-				checkIsAnchor(this.uid, this.token)
-					.then((res) => {
-						switch (res.info.status) {
-							case -1:
-								break
-							case 0:
-								break
-							case 1:
-								break
-							case 2:
-								break
-							default:
-								break
-						}
-						this.refuseReason = res.info.msg
-						this.$u.toast(res.info.status)
-						this.$u.toast(res.info.msg)
 					})
 					.catch((err) => {
 						console.log(err)

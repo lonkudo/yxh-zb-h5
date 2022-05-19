@@ -225,6 +225,28 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
+		},
+		{
+			"path": "pages/my/report/report",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Reports",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/about/about",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Reports",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
 		}
 	],
 	"globalStyle": {

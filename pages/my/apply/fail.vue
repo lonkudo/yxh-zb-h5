@@ -25,7 +25,7 @@
 		methods: {
 			go(val) {
 				uni.navigateTo({
-					url: 'apply',
+					url: val,
 				})
 			},
 		},

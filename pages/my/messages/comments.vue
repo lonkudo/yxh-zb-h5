@@ -21,7 +21,7 @@
 					</view>
 				</view>
 				<view class="margin-top-sm f-hide w-700">
-					<text>{{ item.user_content }}</text>
+					<text>{{ item.content }}</text>
 				</view>
 				<view class="self-end flex margin-top-sm margin-bottom-sm">
 					<view class="margin-right-lg flex align-center">
@@ -32,16 +32,22 @@
 						<text class="iconfont icon-dianzan"></text>
 					</view>
 				</view>
-				<view class="br-8 b-f6 flex align-center of-h">
-					<image :src="item.media.thumb" mode="aspectFill" class="h-120 w-200" />
-					<view
-						class="flex flex-direction padding-left-sm padding-top-xs padding-bottom-xs h-120 justify-between"
+				<view class="br-8 b-f6">
+					<view class="flex margin-bottom-xs align-center"
+						><text class="fc-blue fs-24">{{ item.user.user_nicename }} :</text
+						><text class="margin-left-xs fs-24">{{ item.user_content }}</text></view
 					>
-						<!-- <text class="fc-b-3 f-hide-2 fs-24">{{ item.media.title }}</text> -->
-						<view class="f-hide w-450">
-							<text class="fc-b-3 fs-24">{{ item.media.title }}</text>
+					<view class="br-8 b-f6 flex align-center of-h">
+						<image :src="item.media.thumb" mode="aspectFill" class="h-120 w-200" />
+						<view
+							class="flex flex-direction padding-left-sm padding-top-xs padding-bottom-xs h-120 justify-between"
+						>
+							<!-- <text class="fc-b-3 f-hide-2 fs-24">{{ item.media.title }}</text> -->
+							<view class="f-hide w-450">
+								<text class="fc-b-3 fs-24">{{ item.media.title }}</text>
+							</view>
+							<text class="fc-b-9 fs-16">{{ item.media.addtime }}</text>
 						</view>
-						<text class="fc-b-9 fs-16">{{ item.media.addtime }}</text>
 					</view>
 				</view>
 			</view>

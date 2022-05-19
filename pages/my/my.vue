@@ -23,6 +23,7 @@
 
 <script>
 	import ExpHeader from './my/ExpHeader/ExpHeader.vue'
+	import { checkIsAnchor } from '@/api/my'
 
 	export default {
 		data() {
@@ -53,21 +54,60 @@
 		},
 		methods: {
 			go(val) {
-				console.log('ok')
 				if (this.isEmpty(this.token)) {
 					uni.navigateTo({
 						url: '/pages/login/login',
 					})
 				} else {
-					uni.navigateTo({
-						url: '/pages/my/' + val,
-					})
+					if (val === 'apply/apply') {
+						this.checkIsAnchor()
+					} else {
+						uni.navigateTo({
+							url: '/pages/my/' + val,
+						})
+					}
 				}
 			},
 			logOut() {
 				this.$store
 					.dispatch('LogOut', { token: this.token, uid: this.uid })
 					.then((res) => {})
+			},
+
+			checkIsAnchor() {
+				checkIsAnchor(this.uid, this.token)
+					.then((res) => {
+						console.log('this', res.info.status)
+						let ret = this.toNum(res.info.status)
+						switch (ret) {
+							case -1:
+								uni.navigateTo({
+									url: '/pages/my/' + 'apply/apply',
+								})
+								break
+							case 0:
+								console.log('nav')
+								uni.navigateTo({
+									url: '/pages/my/' + 'apply/waiting',
+								})
+								break
+							case 1:
+								uni.navigateTo({
+									url: '/pages/my/' + 'apply/success',
+								})
+								break
+							case 2:
+								uni.navigateTo({
+									url: '/pages/my/' + 'apply/fail' + '?msg=' + res.info.msg,
+								})
+								break
+							default:
+								break
+						}
+					})
+					.catch((err) => {
+						console.log(err)
+					})
 			},
 		},
 	}

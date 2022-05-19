@@ -3,8 +3,10 @@
 		<view class="ava-120 bg-red flex align-center justify-center margin-top-lg"
 			><text class="iconfont icon-cha fs-60 fc-b-f"></text
 		></view>
-		<view class="margin-top-lg w-400 msg"><text>Application failed</text></view>
-		<view class="w-400 margin-bottom-lg btn bg-green"
+		<view class="margin-top-lg w-400 msg"
+			><text>Application failed. {{ msg ? 'Reason: ' + msg : '' }}</text></view
+		>
+		<view class="w-400 margin-bottom-lg btn bg-green" @tap="go('apply')"
 			><text>Apply again</text>
 		</view>
 	</view>
@@ -13,7 +15,19 @@
 <script>
 	export default {
 		data() {
-			return {}
+			return {
+				msg: '',
+			}
+		},
+		onLoad(option) {
+			this.msg = option.msg
+		},
+		methods: {
+			go(val) {
+				uni.navigateTo({
+					url: 'apply',
+				})
+			},
 		},
 	}
 </script>

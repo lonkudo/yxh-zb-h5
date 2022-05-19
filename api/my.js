@@ -226,8 +226,8 @@ export function getMessages(obj) {
 export function checkIsAnchor(uid, token) {
 	return request({
 		url: '?service=User.CheckIsLive',
-		method: 'GET',
-		params: {
+		method: 'POST',
+		data: {
 			uid,
 			token,
 		},

@@ -102,8 +102,12 @@
 		{
 			"path": "pages/my/apply/apply",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Apply for Host",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
 			}
 		},
 		{

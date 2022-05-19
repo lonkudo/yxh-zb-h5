@@ -27,7 +27,7 @@
 							><text class="fs-20">{{ time.time }}</text></view
 						>
 						<view class="b-f padding-xs list">
-							<list-swipe-action
+							<my-swipe-action
 								:show="item.show"
 								:index="index"
 								:myData="time.list"
@@ -53,7 +53,7 @@
 										}}</text></view
 									>
 								</view>
-							</list-swipe-action>
+							</my-swipe-action>
 						</view>
 					</view>
 				</scroll-view>
@@ -69,7 +69,7 @@
 							><text class="fs-20">{{ time.time }}</text></view
 						>
 						<view class="b-f padding-xs list">
-							<list-swipe-action
+							<my-swipe-action
 								:show="item.show"
 								:index="index"
 								:myData="time.list"
@@ -100,7 +100,7 @@
 										}}</text>
 									</view>
 								</view>
-							</list-swipe-action>
+							</my-swipe-action>
 						</view>
 					</view>
 				</scroll-view>
@@ -112,7 +112,7 @@
 <script>
 	import newsData from './data.js'
 	import videoData from './dataVideo.js'
-	import listSwipeAciton from '@/components/list-swipe-action/list-swipe-action.vue'
+	import MySwipeAciton from '@/components/my-swipe-action/my-swipe-action.vue'
 	import { swiperAutoHeight, swiperUTabs, userComputed } from '@/mixin'
 
 	import { getMyCollection, delMyCollection } from '@/api/my'
@@ -120,7 +120,7 @@
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs, userComputed],
 		components: {
-			listSwipeAciton,
+			MySwipeAciton,
 		},
 		data() {
 			return {

@@ -49,7 +49,7 @@
 	 * @example <u-swipe-action btn-text="收藏">...</u-swipe-action>
 	 */
 	export default {
-		name: 'list-swipe-action',
+		name: 'my-swipe-action',
 		props: {
 			// index值，用于得知点击删除的是哪个按钮
 			index: {

@@ -1,15 +1,15 @@
 <template>
   <view class="demo-layout league-item">
     <view class="img-box">
-      <image mode="aspectFit" :src="item.logo" alt="" />
+      <image mode="aspectFit" :src="infoItem.logo" alt="" />
     </view>
-    <text>{{ item.name }}</text>
+    <text>{{ infoItem.name }}</text>
   </view>
 </template>
 <script>
 export default {
-  name: "Item",
-  props: ["item"],
+  name: "InfoItem",
+  props: ["infoItem"],
 };
 </script>
 <style lang="scss" scoped>

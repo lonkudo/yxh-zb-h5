@@ -42,7 +42,7 @@
 	import data from './data.js'
 	import MyButtonReverse from '@/components/MyButtonReverse/MyButtonReverse.vue'
 	import { getFeedback, sendFeedback } from '@/api/my'
-	import NoContent from '@/components/NoData/NoData.vue'
+	import NoContent from '@/components/NoContent/NoContent.vue'
 
 	export default {
 		components: {

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-	import SearchPageHeader from './search/SearchPageHeader/SearchPageHeader.vue'
+	import SearchPageHeader from './searchRet/SearchPageHeader/SearchPageHeader.vue'
 	import FindTitle from './search/FindTitle/FindTitle.vue'
 	import Attention from './search/Attention/Attention.vue'
 	import RecommendNews from './search/RecommendNews/RecommendNews.vue'

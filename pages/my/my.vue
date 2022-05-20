@@ -35,7 +35,7 @@
 					{ name: 'feedback', label: 'Feedback', url: 'feedback/feedback' },
 					{ name: 'messages', label: 'Messages', url: 'messages/messages' },
 					{ name: 'report', label: 'Report', url: 'report/report' },
-					{ name: 'About', label: 'about', url: 'about/about' },
+					{ name: 'about', label: 'About', url: 'about/about' },
 				],
 			}
 		},

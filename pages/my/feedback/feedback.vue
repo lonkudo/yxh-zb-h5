@@ -36,14 +36,41 @@
 <script>
 	import data from './data.js'
 	import MyButtonReverse from '@/components/MyButtonReverse/MyButtonReverse.vue'
+	import { getFeedback, sendFeedback } from '@/api/my'
+
 	export default {
 		components: {
 			MyButtonReverse,
 		},
+		onLoad() {
+			console.log('onLoad')
+			this.getFeedback()
+		},
 		data() {
 			return {
-				feedbackList: data,
+				feedbackList: [],
+				feedbackPage: {
+					p: 0,
+					show: true,
+				},
 			}
+		},
+		methods: {
+			getFeedback() {
+				this.feedbackPage.p += 1
+				getFeedback({ p: this.feedbackPage.p, uid: this.uid, token: this.token })
+					.then((res) => {
+						if (res.code === 0) {
+							this.feedbackList = this.feedbackList.concat(res.info)
+							if (res.info.length === 0) {
+								this.feedbackPage.show = false
+							}
+						}
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
 		},
 	}
 </script>

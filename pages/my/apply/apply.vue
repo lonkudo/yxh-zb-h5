@@ -18,11 +18,9 @@
 								:file-list="fileList"
 								upload-text=""
 								:customBtn="true"
-								@tap="uploadFunc(item.ref)"
 								width="300"
 								height="170"
 								:form-data="passParams()"
-								:header="{ 'x-token': '321' }"
 								:multiple="false"
 								v-model="form[item.ref]"
 								:prop="item.ref"
@@ -81,7 +79,9 @@
 				</view>
 			</u-form-item>
 		</u-form>
-		<u-button @click="submit">提交</u-button>
+		<u-button @click="submit" class="margin-left-lg margin-right-lg"
+			>submit</u-button
+		>
 	</view>
 </template>
 
@@ -125,12 +125,6 @@
 		},
 		onLoad() {},
 		methods: {
-			uploadFunc(ref) {
-				console.log('this.$refs', this.$refs[ref])
-				// this.$refs[ref].upload()
-				// this.$refs[ref].upload()
-				console.log('taped')
-			},
 			passParams() {
 				return {
 					uid: this.uid,

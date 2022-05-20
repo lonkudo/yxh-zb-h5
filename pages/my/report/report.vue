@@ -39,6 +39,12 @@
 							</view>
 							<view class="flex justify-between">
 								<text class="fs-24 fc-b-9">{{ item.addtime }}</text>
+								<view
+									:class="['flex align-center justify-center', statusClass(item.status)]"
+									><text class="fc-g fs-18 padding-left-sm padding-right-sm">{{
+										item.status | statusText
+									}}</text></view
+								>
 							</view>
 						</view>
 					</view>
@@ -47,10 +53,28 @@
 			<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
 				<scroll-view scroll-y :id="'content-wrap' + 1">
 					<view
-						class="flex flex-direction"
-						v-for="(time, idx) in wasReportedList"
+						class="flex flex-direction b-f padding-sm"
+						v-for="(item, idx) in wasReportedList"
 						:key="'v' + idx"
 					>
+						<view class="flex margin-bottom-xs"> </view>
+						<text class="fs-24 fc-b-9">Content reported by users:</text>
+						<view class="margin-bottom-xs margin-top-xs"
+							><text>{{ item.content }}</text></view
+						>
+						<view class="margin-bottom-lg">
+							<text class="fs-24 fc-b-9">Report Type: </text>
+							<text class="fs-18 fc-b-3 padding-left-sm">{{ item.type }}</text>
+						</view>
+						<view class="flex margin-bottom-xs align-center justify-between">
+							<text class="fs-24 fc-b-9">Punishment:</text>
+
+							<view class="margin-bottom-xs"
+								><text class="fs-24 fc-b-3"
+									>{{ item.status_str }} until {{ item.bantime }}</text
+								></view
+							>
+						</view>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -81,6 +105,7 @@
 		},
 		onLoad() {
 			this.getMyReport()
+			this.getWasReported()
 		},
 		methods: {
 			getMyReport() {
@@ -120,8 +145,71 @@
 						console.log(err)
 					})
 			},
+			statusClass(val) {
+				switch (val) {
+					case '0':
+						return 'btn btn-green'
+						break
+					case '1':
+						return 'btn btn-grey'
+						break
+					case '2':
+						return ''
+						break
+					case '3':
+						return ''
+						break
+					case '4':
+						return ''
+						break
+					case '5':
+						return ''
+						break
+					default:
+						break
+				}
+			},
+		},
+		filters: {
+			statusText: function (val) {
+				switch (val) {
+					case '0':
+						return 'unhandled'
+						break
+					case '1':
+						return 'handled'
+						break
+					case '2':
+						return 'others'
+						break
+					case '3':
+						return 'forbit to comment'
+						break
+					case '4':
+						return 'prohibit'
+						break
+					case '5':
+						return 'block user'
+						break
+					default:
+						break
+				}
+			},
 		},
 	}
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+	.btn {
+		height: 40rpx;
+		border-radius: 20rpx;
+	}
+	.btn-green {
+		background-color: #e9f7f1;
+		color: #52b57a;
+	}
+	.btn-grey {
+		background-color: #999;
+		color: #333;
+	}
+</style>

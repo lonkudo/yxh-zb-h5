@@ -1,5 +1,6 @@
 <template>
 	<view
+		@tap="onTap"
 		:class="['image-info', borderRound]"
 		:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
 	>
@@ -106,6 +107,11 @@
 						return false
 						break
 				}
+			},
+		},
+		methods: {
+			onTap() {
+				this.$emit('onTap')
 			},
 		},
 	}

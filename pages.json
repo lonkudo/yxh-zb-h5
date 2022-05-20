@@ -247,6 +247,20 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
+		},
+		{
+			"path": "pages/discover/detail/newsDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/discover/detail/videoDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"globalStyle": {

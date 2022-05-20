@@ -17,7 +17,6 @@
 		},
 		methods: {},
 		onLoad() {
-			console.log('site', site)
 			site()
 				.then((res) => {
 					this.aboutUrl = res.info.about_us_url

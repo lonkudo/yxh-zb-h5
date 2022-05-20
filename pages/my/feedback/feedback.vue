@@ -14,20 +14,25 @@
 		</u-navbar>
 		<scroll-view scroll-y="true">
 			<view class="flex flex-direction b-f">
-				<view
-					v-for="(item, index) in feedbackList"
-					:key="index"
-					class="padding-xs flex justify-between feedback-item align-center"
-				>
-					<view class="flex flex-direction justify-between">
-						<text class="f-hide w-550 fs-20">{{ item.content }}</text>
-						<text class="fc-b-9 margin-top-sm fs-20">{{ item.addtime }}</text>
+				<template v-if="feedbackList.length > 0">
+					<view
+						v-for="(item, index) in feedbackList"
+						:key="index"
+						class="padding-xs flex justify-between feedback-item align-center"
+					>
+						<view class="flex flex-direction justify-between">
+							<text class="f-hide w-550 fs-20">{{ item.content }}</text>
+							<text class="fc-b-9 margin-top-sm fs-20">{{ item.addtime }}</text>
+						</view>
+						<my-button-reverse
+							:text="'Processing'"
+							:falseText="'Processed'"
+						></my-button-reverse>
 					</view>
-					<my-button-reverse
-						:text="'Processing'"
-						:falseText="'Processed'"
-					></my-button-reverse>
-				</view>
+				</template>
+				<template v-else>
+					<no-content></no-content>
+				</template>
 			</view>
 		</scroll-view>
 	</view>
@@ -37,13 +42,14 @@
 	import data from './data.js'
 	import MyButtonReverse from '@/components/MyButtonReverse/MyButtonReverse.vue'
 	import { getFeedback, sendFeedback } from '@/api/my'
+	import NoContent from '@/components/NoData/NoData.vue'
 
 	export default {
 		components: {
 			MyButtonReverse,
+			NoContent,
 		},
 		onLoad() {
-			console.log('onLoad')
 			this.getFeedback()
 		},
 		data() {

@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-direction align-center b-f">
 		<image
-			src="/static/styles/png/NoContent@2x.png"
+			src="../../static/styles/png/NoContent@2x.png"
 			class="my-img"
 			mode="aspectFit"
 		/>
@@ -11,15 +11,16 @@
 
 <script>
 	export default {
-		name:"NoContent",
+		name: 'NoContent',
 		data() {
-			return {
-				
-			};
-		}
+			return {}
+		},
 	}
 </script>
 
 <style lang="scss">
-
+	.my-img {
+		width: 407rpx;
+		height: 407rpx;
+	}
 </style>

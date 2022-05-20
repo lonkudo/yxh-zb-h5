@@ -16,9 +16,6 @@
 			<text>{{ item.label }}</text>
 			<text class="iconfont icon-right margin-left-auto fc-b-9"></text>
 		</view>
-		<u-button @click="submit" class="margin-left-lg margin-right-lg"
-			>submit</u-button
-		>
 	</view>
 </template>
 

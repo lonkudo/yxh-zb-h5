@@ -18,64 +18,77 @@
 		>
 			<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
 				<scroll-view scroll-y :id="'content-wrap' + 0">
-					<view
-						class="flex flex-direction b-f"
-						v-for="(item, idx) in myReportList"
-						:key="'t' + idx"
-					>
-						<view class="flex flex-direction padding-sm">
-							<view class="flex margin-bottom-xs">
-								<text class="fs-24 fc-b-9">Report a Review of </text>
-								<text class="fs-18 fc-b-3 padding-left-sm"
-									>{{ item.touserinfo.user_nicename }} :</text
+					<template v-if="myReportList.length > 0">
+						<view
+							class="flex flex-direction b-f"
+							v-for="(item, idx) in myReportList"
+							:key="'t' + idx"
+						>
+							<view class="flex flex-direction padding-sm">
+								<view class="flex margin-bottom-xs">
+									<text class="fs-24 fc-b-9">Report a Review of </text>
+									<text class="fs-18 fc-b-3 padding-left-sm"
+										>{{ item.touserinfo.user_nicename }} :</text
+									>
+								</view>
+								<view class="margin-bottom-xs"
+									><text>{{ item.content }}</text></view
 								>
+								<view class="margin-bottom-lg">
+									<text class="fs-24 fc-b-9">Report Type: </text>
+									<text class="fs-18 fc-b-3 padding-left-sm">{{ item.type }}</text>
+								</view>
+								<view class="flex justify-between">
+									<text class="fs-24 fc-b-9">{{ item.addtime }}</text>
+									<view
+										:class="[
+											'flex align-center justify-center',
+											statusClass(item.status),
+										]"
+										><text class="fc-g fs-18 padding-left-sm padding-right-sm">{{
+											item.status | statusText
+										}}</text></view
+									>
+								</view>
 							</view>
-							<view class="margin-bottom-xs"
+						</view>
+					</template>
+					<template v-else>
+						<no-content></no-content>
+					</template>
+				</scroll-view>
+			</swiper-item>
+			<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
+				<scroll-view scroll-y :id="'content-wrap' + 1">
+					<template v-if="wasReportedList.lenght > 0">
+						<view
+							class="flex flex-direction b-f padding-sm"
+							v-for="(item, idx) in wasReportedList"
+							:key="'v' + idx"
+						>
+							<view class="flex margin-bottom-xs"> </view>
+							<text class="fs-24 fc-b-9">Content reported by users:</text>
+							<view class="margin-bottom-xs margin-top-xs"
 								><text>{{ item.content }}</text></view
 							>
 							<view class="margin-bottom-lg">
 								<text class="fs-24 fc-b-9">Report Type: </text>
 								<text class="fs-18 fc-b-3 padding-left-sm">{{ item.type }}</text>
 							</view>
-							<view class="flex justify-between">
-								<text class="fs-24 fc-b-9">{{ item.addtime }}</text>
-								<view
-									:class="['flex align-center justify-center', statusClass(item.status)]"
-									><text class="fc-g fs-18 padding-left-sm padding-right-sm">{{
-										item.status | statusText
-									}}</text></view
+							<view class="flex margin-bottom-xs align-center justify-between">
+								<text class="fs-24 fc-b-9">Punishment:</text>
+
+								<view class="margin-bottom-xs"
+									><text class="fs-24 fc-b-3"
+										>{{ item.status_str }} until {{ item.bantime }}</text
+									></view
 								>
 							</view>
 						</view>
-					</view>
-				</scroll-view>
-			</swiper-item>
-			<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
-				<scroll-view scroll-y :id="'content-wrap' + 1">
-					<view
-						class="flex flex-direction b-f padding-sm"
-						v-for="(item, idx) in wasReportedList"
-						:key="'v' + idx"
-					>
-						<view class="flex margin-bottom-xs"> </view>
-						<text class="fs-24 fc-b-9">Content reported by users:</text>
-						<view class="margin-bottom-xs margin-top-xs"
-							><text>{{ item.content }}</text></view
-						>
-						<view class="margin-bottom-lg">
-							<text class="fs-24 fc-b-9">Report Type: </text>
-							<text class="fs-18 fc-b-3 padding-left-sm">{{ item.type }}</text>
-						</view>
-						<view class="flex margin-bottom-xs align-center justify-between">
-							<text class="fs-24 fc-b-9">Punishment:</text>
-
-							<view class="margin-bottom-xs"
-								><text class="fs-24 fc-b-3"
-									>{{ item.status_str }} until {{ item.bantime }}</text
-								></view
-							>
-						</view>
-					</view>
+					</template>
+					<template v-else>
+						<no-content></no-content>
+					</template>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -85,8 +98,12 @@
 <script>
 	import { myReport, wasReported } from '@/api/my'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
+	import NoContent from '@/components/NoContent/NoContent.vue'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
+		components: {
+			NoContent,
+		},
 		data() {
 			return {
 				activeName: 'report',

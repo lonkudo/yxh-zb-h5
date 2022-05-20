@@ -18,91 +18,101 @@
 		>
 			<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
 				<scroll-view scroll-y :id="'content-wrap' + 0">
-					<view
-						class="flex flex-direction"
-						v-for="(time, idx) in collectionList"
-						:key="'t' + idx"
-					>
-						<view class="margin-xs"
-							><text class="fs-20">{{ time.time }}</text></view
+					<template v-if="collectionList.length > 0">
+						<view
+							class="flex flex-direction"
+							v-for="(time, idx) in collectionList"
+							:key="'t' + idx"
 						>
-						<view class="b-f padding-xs list">
-							<my-swipe-action
-								:show="item.show"
-								:index="index"
-								:myData="time.list"
-								@click="click"
-								@open="open(index, idx, collectionList, 'news')"
-								:options="options"
-								v-for="(item, index) in time.list"
-								:key="index"
-								btn-width="180"
-								:type="2"
+							<view class="margin-xs"
+								><text class="fs-20">{{ time.time }}</text></view
 							>
-								<view class="flex">
-									<image
-										:src="item.mediaw.img"
-										mode="aspectFill"
-										class="br-8"
-										style="width: 180rpx; height: 100rpx"
-									/>
-									<view class="margin-left-xs flex flex-direction justify-between"
-										><text class="f-hide w-500 fs-20">{{ item.mediaw.caption }}</text
-										><text class="fc-b-9 fs-20">{{
-											item.mediaw.create_time | formatGiven('yyyy-MM-dd hh:ss')
-										}}</text></view
-									>
-								</view>
-							</my-swipe-action>
+							<view class="b-f padding-xs list">
+								<my-swipe-action
+									:show="item.show"
+									:index="index"
+									:myData="time.list"
+									@click="click"
+									@open="open(index, idx, collectionList, 'news')"
+									:options="options"
+									v-for="(item, index) in time.list"
+									:key="index"
+									btn-width="180"
+									:type="2"
+								>
+									<view class="flex">
+										<image
+											:src="item.mediaw.img"
+											mode="aspectFill"
+											class="br-8"
+											style="width: 180rpx; height: 100rpx"
+										/>
+										<view class="margin-left-xs flex flex-direction justify-between"
+											><text class="f-hide w-500 fs-20">{{ item.mediaw.caption }}</text
+											><text class="fc-b-9 fs-20">{{
+												item.mediaw.create_time | formatGiven('yyyy-MM-dd hh:ss')
+											}}</text></view
+										>
+									</view>
+								</my-swipe-action>
+							</view>
 						</view>
-					</view>
+					</template>
+					<template v-else>
+						<no-collection></no-collection>
+					</template>
 				</scroll-view>
 			</swiper-item>
 			<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
 				<scroll-view scroll-y :id="'content-wrap' + 1">
-					<view
-						class="flex flex-direction"
-						v-for="(time, idx) in videoList"
-						:key="'v' + idx"
-					>
-						<view class="margin-xs"
-							><text class="fs-20">{{ time.time }}</text></view
+					<template v-if="videoList.length > 0">
+						<view
+							class="flex flex-direction"
+							v-for="(time, idx) in videoList"
+							:key="'v' + idx"
 						>
-						<view class="b-f padding-xs list">
-							<my-swipe-action
-								:show="item.show"
-								:index="index"
-								:myData="time.list"
-								@click="click"
-								@open="open(index, idx, videoList, 'video')"
-								:options="options"
-								v-for="(item, index) in time.list"
-								:key="index"
-								btn-width="200"
-								:type="1"
+							<view class="margin-xs"
+								><text class="fs-20">{{ time.time }}</text></view
 							>
-								<view class="flex">
-									<image
-										:src="item.mediaw.thumb"
-										mode="aspectFill"
-										class="br-8"
-										style="width: 280rpx; height: 130rpx"
-									/>
-									<view class="margin-left-xs flex flex-direction justify-end"
-										><text class="f-hide w-400 fs-20 margin-auto">{{
-											item.mediaw.title
-										}}</text
-										><text class="fc-b-9 fs-20">{{
-											item.user_name || 'user does not exist'
-										}}</text>
-										<text class="fc-b-9 fs-20">{{
-											item.mediaw.addtime | formatGiven('yyyy-MM-dd hh:ss')
-										}}</text>
+							<view class="b-f padding-xs list">
+								<my-swipe-action
+									:show="item.show"
+									:index="index"
+									:myData="time.list"
+									@click="click"
+									@open="open(index, idx, videoList, 'video')"
+									:options="options"
+									v-for="(item, index) in time.list"
+									:key="index"
+									btn-width="200"
+									:type="1"
+								>
+									<view class="flex">
+										<image
+											:src="item.mediaw.thumb"
+											mode="aspectFill"
+											class="br-8"
+											style="width: 280rpx; height: 130rpx"
+										/>
+										<view class="margin-left-xs flex flex-direction justify-end"
+											><text class="f-hide w-400 fs-20 margin-auto">{{
+												item.mediaw.title
+											}}</text
+											><text class="fc-b-9 fs-20">{{
+												item.user_name || 'user does not exist'
+											}}</text>
+											<text class="fc-b-9 fs-20">{{
+												item.mediaw.addtime | formatGiven('yyyy-MM-dd hh:ss')
+											}}</text>
+										</view>
 									</view>
-								</view>
-							</my-swipe-action>
+								</my-swipe-action>
+							</view>
 						</view>
-					</view>
+					</template>
+					<template v-else>
+						<no-collection></no-collection>
+					</template>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -113,14 +123,16 @@
 	import newsData from './data.js'
 	import videoData from './dataVideo.js'
 	import MySwipeAciton from '@/components/my-swipe-action/my-swipe-action.vue'
-	import { swiperAutoHeight, swiperUTabs, userComputed } from '@/mixin'
+	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 
 	import { getMyCollection, delMyCollection } from '@/api/my'
 
+	import NoCollection from '@/components/NoCollection/NoCollection.vue'
 	export default {
-		mixins: [swiperAutoHeight, swiperUTabs, userComputed],
+		mixins: [swiperAutoHeight, swiperUTabs],
 		components: {
 			MySwipeAciton,
+			NoCollection,
 		},
 		data() {
 			return {

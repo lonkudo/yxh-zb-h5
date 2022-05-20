@@ -1,18 +1,23 @@
 <template>
 	<scroll-view scroll-y="true">
 		<view>
-			<view
-				v-for="(item, index) in sysMesList"
-				:key="index"
-				class="flex flex-direction b-f margin-top-sm padding-sm"
-			>
-				<view class="margin-bottom-sm"
-					><text class="fc-b-9 fs-24">{{ item.addtime }}</text></view
-				>
+			<template v-if="sysMesList.length > 0">
 				<view
-					><text class="fc-b-3 fs-36">{{ item.content }}</text></view
+					v-for="(item, index) in sysMesList"
+					:key="index"
+					class="flex flex-direction b-f margin-top-sm padding-sm"
 				>
-			</view>
+					<view class="margin-bottom-sm"
+						><text class="fc-b-9 fs-24">{{ item.addtime }}</text></view
+					>
+					<view
+						><text class="fc-b-3 fs-36">{{ item.content }}</text></view
+					>
+				</view>
+			</template>
+			<template v-else>
+				<no-message></no-message>
+			</template>
 		</view>
 	</scroll-view>
 </template>
@@ -20,8 +25,10 @@
 <script>
 	import { getMessages, readMsg } from '@/api/my'
 	import { commentFunc, addCommentLike } from '@/api/news'
+	import NoMessage from '../../../components/NoMessage/NoMessage.vue'
 
 	export default {
+		components: { NoMessage },
 		data() {
 			return {
 				messagePage: {

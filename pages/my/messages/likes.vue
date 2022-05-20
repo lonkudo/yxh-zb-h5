@@ -1,48 +1,53 @@
 <template>
 	<scroll-view scroll-y="true">
 		<view>
-			<view
-				v-for="(item, index) in likesList"
-				:key="index"
-				class="flex flex-direction b-f margin-top-sm padding-sm"
-			>
-				<view class="flex align-center">
-					<image
-						:src="item.user.avatar"
-						mode="aspectFill"
-						class="ava-60 margin-right-xs"
-					/>
-					<view class="flex flex-direction justify-between">
-						<text class="fs-20 fc-b-3">{{ item.user.user_nicename }}</text>
-						<view
-							><text class="fs-20 fc-b-9">{{ item.addtime }}</text></view
-						>
+			<template v-if="likesList.length > 0">
+				<view
+					v-for="(item, index) in likesList"
+					:key="index"
+					class="flex flex-direction b-f margin-top-sm padding-sm"
+				>
+					<view class="flex align-center">
+						<image
+							:src="item.user.avatar"
+							mode="aspectFill"
+							class="ava-60 margin-right-xs"
+						/>
+						<view class="flex flex-direction justify-between">
+							<text class="fs-20 fc-b-3">{{ item.user.user_nicename }}</text>
+							<view
+								><text class="fs-20 fc-b-9">{{ item.addtime }}</text></view
+							>
+						</view>
 					</view>
-				</view>
-				<view class="margin-top-sm margin-bottom-sm f-hide w-700">
-					<text>{{
-						item.leixing === '1' ? 'Like the comment' : 'Unlike the comment'
-					}}</text>
-				</view>
-				<view class="br-8 b-f6">
-					<view class="flex margin-bottom-xs align-center"
-						><text class="fc-blue fs-24">{{ item.user.user_nicename }} :</text
-						><text class="margin-left-xs fs-24">{{ item.content }}</text></view
-					>
-					<view class="br-8 b-f6 flex align-center of-h">
-						<image :src="item.media.thumb" mode="aspectFill" class="h-120 w-200" />
-						<view
-							class="flex flex-direction padding-left-sm padding-top-xs padding-bottom-xs h-120 justify-between"
+					<view class="margin-top-sm margin-bottom-sm f-hide w-700">
+						<text>{{
+							item.leixing === '1' ? 'Like the comment' : 'Unlike the comment'
+						}}</text>
+					</view>
+					<view class="br-8 b-f6">
+						<view class="flex margin-bottom-xs align-center"
+							><text class="fc-blue fs-24">{{ item.user.user_nicename }} :</text
+							><text class="margin-left-xs fs-24">{{ item.content }}</text></view
 						>
-							<!-- <text class="fc-b-3 f-hide-2 fs-24">{{ item.media.title }}</text> -->
-							<view class="f-hide w-450">
-								<text class="fc-b-3 fs-24">{{ item.media.title }}</text>
+						<view class="br-8 b-f6 flex align-center of-h">
+							<image :src="item.media.thumb" mode="aspectFill" class="h-120 w-200" />
+							<view
+								class="flex flex-direction padding-left-sm padding-top-xs padding-bottom-xs h-120 justify-between"
+							>
+								<!-- <text class="fc-b-3 f-hide-2 fs-24">{{ item.media.title }}</text> -->
+								<view class="f-hide w-450">
+									<text class="fc-b-3 fs-24">{{ item.media.title }}</text>
+								</view>
+								<text class="fc-b-9 fs-16">{{ item.media.addtime }}</text>
 							</view>
-							<text class="fc-b-9 fs-16">{{ item.media.addtime }}</text>
 						</view>
 					</view>
 				</view>
-			</view>
+			</template>
+			<template v-else>
+				<no-message></no-message>
+			</template>
 		</view>
 	</scroll-view>
 </template>
@@ -50,8 +55,10 @@
 <script>
 	import { getMessages, readMsg } from '@/api/my'
 	import { commentFunc, addCommentLike } from '@/api/news'
+	import NoMessage from '../../../components/NoMessage/NoMessage.vue'
 
 	export default {
+		components: { NoMessage },
 		data() {
 			return {
 				messagePage: {

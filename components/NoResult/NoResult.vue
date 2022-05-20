@@ -1,5 +1,5 @@
 <template>
-	<view class="flex flex-direction align-center b-f">
+	<view class="flex flex-direction align-center b-f h-500">
 		<image
 			src="/static/styles/png/NoResult@2x.png"
 			class="my-img"
@@ -11,15 +11,11 @@
 
 <script>
 	export default {
-		name:"NoResult",
+		name: 'NoResult',
 		data() {
-			return {
-				
-			};
-		}
+			return {}
+		},
 	}
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

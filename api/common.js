@@ -1,6 +1,6 @@
 import Request from '@/utils/request'
 
-const request = new Request()
+const request = new Request().http
 import user from '@/store/modules/user'
 
 //  获取关注列表

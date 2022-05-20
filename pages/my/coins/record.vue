@@ -1,33 +1,40 @@
 <template>
 	<scroll-view scroll-y="true">
 		<view class="b-f">
-			<view
-				v-for="(item, index) in goldLogs"
-				:key="index"
-				class="flex align-center padding-xs padding-top-sm padding-bottom-sm"
-			>
-				<view class="flex flex-direction w-130 align-center">
-					<text class="fc-b-9 fs-20">{{ item.dateformat.date }}</text>
-					<text class="fc-b-9 fs-20">{{ item.dateformat.time }}</text>
-				</view>
-				<view class="flex align-center">
-					<view
-						:class="['ava-60 flex align-center justify-center', bgColor(item.type)]"
-						><text :class="['iconfont  fc-b-f fs-36', iconType(item.type)]"></text
-					></view>
-					<text class="margin-left-xs">{{ item.type | giftType }}</text>
-				</view>
-				<text class="margin-left-auto"
-					>{{ item.mod === '1' ? '+' : '-' }}{{ item.coin }}</text
+			<template v-if="goldLogs.length > 0">
+				<view
+					v-for="(item, index) in goldLogs"
+					:key="index"
+					class="flex align-center padding-xs padding-top-sm padding-bottom-sm"
 				>
-			</view>
+					<view class="flex flex-direction w-130 align-center">
+						<text class="fc-b-9 fs-20">{{ item.dateformat.date }}</text>
+						<text class="fc-b-9 fs-20">{{ item.dateformat.time }}</text>
+					</view>
+					<view class="flex align-center">
+						<view
+							:class="['ava-60 flex align-center justify-center', bgColor(item.type)]"
+							><text :class="['iconfont  fc-b-f fs-36', iconType(item.type)]"></text
+						></view>
+						<text class="margin-left-xs">{{ item.type | giftType }}</text>
+					</view>
+					<text class="margin-left-auto"
+						>{{ item.mod === '1' ? '+' : '-' }}{{ item.coin }}</text
+					>
+				</view>
+			</template>
+			<template v-else>
+				<no-content></no-content>
+			</template>
 		</view>
 	</scroll-view>
 </template>
 
 <script>
 	import { goldLog } from '@/api/my'
+	import NoContent from '../../../components/NoContent/NoContent.vue'
 	export default {
+		components: { NoContent },
 		data() {
 			return {
 				goldLogs: [],

@@ -128,6 +128,12 @@
 				// console.log('close', e)
 			},
 			change(e) {
+				console.log('change')
+				setTimeout(() => {
+					this.$nextTick(() => {
+						this.setSwiperHeight()
+					})
+				}, 300)
 				// console.log('change', e)
 			},
 			// scroll-view到底部加载更多

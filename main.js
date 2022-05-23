@@ -20,6 +20,8 @@ import toNum from '@/utils/toNum.js'
 Vue.prototype.toNum = toNum
 import initScrollHeight from '@/utils/initScrollHeight.js'
 Vue.prototype.initScrollHeight = initScrollHeight
+import guard from '@/utils/guard.js'
+Vue.prototype.guard = guard
 
 import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
 

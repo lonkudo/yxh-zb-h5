@@ -1,5 +1,8 @@
 <template>
-	<view class="flex flex-direction align-center b-f h-500">
+	<view
+		class="flex flex-direction align-center b-f"
+		:style="{ height: height + 'rpx' }"
+	>
 		<image
 			src="/static/styles/png/NoContent@2x.png"
 			class="my-img"
@@ -12,6 +15,12 @@
 <script>
 	export default {
 		name: 'NoContent',
+		props: {
+			height: {
+				type: Number,
+				default: 500,
+			},
+		},
 		data() {
 			return {}
 		},

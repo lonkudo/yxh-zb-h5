@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-direction">
 		<search-header class="top"></search-header>
-		<scroll-view scroll-y="true" class="middle b-f6">
+		<scroll-view scroll-y="true" class="middle b-f6" @scrolltolower="call">
 			<recommend-slider></recommend-slider>
 			<system-informs-slider :noticeList="noticeList"></system-informs-slider>
 			<home-title :title="'Popular game'"></home-title>
@@ -52,6 +52,9 @@
 			this.getHomeIndex()
 		},
 		methods: {
+			call() {
+				console.log('call')
+			},
 			getHomeIndex() {
 				getHomeIndex(
 					1,

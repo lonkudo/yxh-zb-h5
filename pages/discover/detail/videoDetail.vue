@@ -18,8 +18,7 @@
 					:current="swiperCurrent"
 					@transition="transition"
 					@animationfinish="animationfinish"
-					@change="changeSwiper"
-					:style="{ height: swiperHeight + 'px' }"
+					:style="{ height: myHeight + 'rpx' }"
 				>
 					<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
 						<scroll-view
@@ -129,90 +128,145 @@
 						@touchmove.stop=""
 						:style="{ height: myHeight + 'rpx' }"
 					>
-						<scroll-view
-							scroll-y
-							:id="'content-wrap' + 1"
-							:style="{ height: myHeight + 'rpx' }"
-							@scrolltolower="addMore"
-						>
-							<view class="flex flex-direction padding-xs b-f">
-								<view
-									class="comment flex margin-bottom-sm"
-									v-for="(item, index) in commentList"
-									:key="index"
+						<view :style="{ height: myHeight + 'rpx' }">
+							<template v-if="commentList.length > 0">
+								<scroll-view
+									scroll-y
+									:id="'content-wrap' + 1"
+									:style="{ height: myHeight2 + 'rpx' }"
+									@scrolltolower="addMore"
 								>
-									<view>
-										<image :src="item.userinfo.avatar" mode="" class="ava-60" />
-									</view>
-									<view class="flex flex-direction margin-left-xs">
-										<text class="fc-b-6 fs-20">{{ item.userinfo.user_nicename }}</text>
-										<text
-											class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660"
-											>{{ item.content }}</text
-										>
-										<view class="flex justify-end align-center w-660 margin-bottom-sm">
-											<text class="fc-b-9 fs-20 margin-right-auto">{{
-												item.datetime
-											}}</text>
-											<view class="flex align-center margin-right-lg">
-												<text class="iconfont icon-pinglun fc-b-3"></text>
-												<text class="fc-b-9 fs-20">reply</text>
-											</view>
-											<view class="flex align-center">
-												<text class="iconfont icon-dianzan fc-b-3"></text>
-												<text class="fc-b-9 fs-20">{{ item.likes }}</text>
-											</view>
-										</view>
+									<view class="flex flex-direction padding-xs b-f">
 										<view
-											class="br-8 padding-xs b-f6 flex flex-direction"
-											v-if="item.replylist.length > 0"
+											class="comment flex margin-bottom-sm"
+											v-for="(item, index) in commentList"
+											:key="index"
 										>
-											<view
-												class="flex flex-direction"
-												v-for="(reply, index) in item.replylist"
-												:key="'r' + index"
-											>
-												<text class="fc-b-9 fs-20">
-													{{ reply.userinfo.user_nicename }}:
-												</text>
+											<view>
+												<image :src="item.userinfo.avatar" mode="" class="ava-60" />
+											</view>
+											<view class="flex flex-direction margin-left-xs">
+												<text class="fc-b-6 fs-20">{{ item.userinfo.user_nicename }}</text>
 												<text
-													class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs"
+													class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660"
+													>{{ item.content }}</text
 												>
-													{{ reply.content }}
-												</text>
-												<view class="flex justify-end align-center margin-bottom-sm">
+												<view class="flex justify-end align-center w-660 margin-bottom-sm">
 													<text class="fc-b-9 fs-20 margin-right-auto">{{
 														item.datetime
 													}}</text>
-													<view class="flex align-center margin-right-lg">
+													<view
+														class="flex align-center margin-right-lg"
+														@tap="chooseReply(item)"
+													>
 														<text class="iconfont icon-pinglun fc-b-3"></text>
 														<text class="fc-b-9 fs-20">reply</text>
 													</view>
-													<view class="flex align-center">
-														<text class="iconfont icon-dianzan fc-b-3"></text>
-														<text class="fc-b-9 fs-20">{{ reply.likes }}</text>
+													<view class="flex align-center" @tap="likeComment(item)">
+														<text
+															:class="[
+																'iconfont ',
+																item.islike === '1'
+																	? 'fc-g icon-dianzan1'
+																	: 'fc-b-3 icon-dianzan',
+															]"
+														></text>
+														<text class="fc-b-9 fs-20">{{ item.likes }}</text>
 													</view>
 												</view>
+												<view
+													class="br-8 padding-xs b-f6 flex flex-direction"
+													v-if="item.replylist.length > 0"
+												>
+													<view
+														class="flex flex-direction"
+														v-for="(reply, index) in item.replylist"
+														:key="'r' + index"
+													>
+														<view class="flex align-center">
+															<text class="fc-b-9 fs-20">
+																{{ reply.userinfo.user_nicename }}
+															</text>
+															<template
+																v-if="parseInt(reply.commentid) !== parseInt(reply.parentid)"
+															>
+																<text class="fc-b-3 margin-left-xs margin-right-xs">reply</text
+																><text class="fc-b-9"
+																	>{{ reply.touserinfo.user_nicename }} :</text
+																>
+															</template>
+															<template v-else>
+																<text>:</text>
+															</template>
+														</view>
+														<text
+															class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs"
+														>
+															{{ reply.content }}
+														</text>
+														<view class="flex justify-end align-center margin-bottom-sm">
+															<text class="fc-b-9 fs-20 margin-right-auto">{{
+																item.datetime
+															}}</text>
+															<view
+																class="flex align-center margin-right-lg"
+																@tap="chooseReply(item, reply)"
+															>
+																<text class="iconfont icon-pinglun fc-b-3"></text>
+																<text class="fc-b-9 fs-20">reply</text>
+															</view>
+															<view class="flex align-center" @tap="likeComment(reply)">
+																<text
+																	:class="[
+																		'iconfont ',
+																		reply.islike === '1'
+																			? 'fc-g icon-dianzan1'
+																			: 'fc-b-3 icon-dianzan',
+																	]"
+																></text>
+																<text class="fc-b-9 fs-20">{{ reply.likes }}</text>
+															</view>
+														</view>
+													</view>
+													<text
+														class="fc-b-3"
+														v-if="
+															parseInt(item.replys) > 3 &&
+															item.replylist.length !== parseInt(item.replys)
+														"
+														@tap="getReplys(item)"
+														>View all {{ item.replys }} replies</text
+													>
+												</view>
 											</view>
-											<text
-												v-if="
-													parseInt(item.replys) > 3 &&
-													item.replylist.length !== parseInt(item.replys)
-												"
-												@tap="getReplys(item)"
-												>View all {{ item.replys }} replies</text
-											>
 										</view>
 									</view>
+								</scroll-view>
+							</template>
+							<template v-else>
+								<no-content :height="myHeight"></no-content>
+							</template>
+							<view
+								class="bottom-input-group b-f padding-sm flex align-center justify-between"
+							>
+								<view class="flex input-con b-f6 align-center">
+									<input
+										type="text"
+										:placeholder="inputMsg"
+										v-model="inputContent"
+										placeholder-style="color:#aaa"
+										class="w-550"
+									/>
 								</view>
+								<text class="fc-b-3 margin-right-sm" @tap="send">send</text>
 							</view>
-						</scroll-view>
+						</view>
 					</swiper-item>
 				</swiper>
 			</view>
 		</template>
 		<template v-else>
-			<no-content></no-content>
+			<no-content :height="screenHeight"></no-content>
 		</template>
 	</view>
 </template>
@@ -241,21 +295,30 @@
 			return {
 				videoData: {},
 				menu: [{ name: 'Introduction' }, { name: 'Comments' }],
-				commentList: commentData.commentlist, // 一级评论列表，用来渲染
+				commentList: [], // 一级评论列表，用来渲染
 				commentPage: 1,
 				commentObj: {},
 				myHeight: 0,
+				myHeight2: 0,
+				screenHeight: 0,
 				videoid: 0,
+				inputMsg: 'comments',
+				inputContent: '',
+				chosen: {},
+				MEDIA_TYPE: 1, // 1视频 2新闻
 			}
 		},
 		async onLoad(options) {
 			// console.log(this.videoData)
-			this.getVideoDetails(options.id, this.uid)
-			this.videoid = options.id
-			this.getComments(this.uid, this.videoid, this.commentPage, 1)
-
+			this.screenHeight = await this.initScrollHeight(0)
 			this.myHeight = await this.initScrollHeight(544)
-			console.log('aa', this.myHeight)
+			this.myHeight2 = await this.initScrollHeight(644)
+
+			this.videoid = options.id
+			await this.getVideoDetails(options.id, this.uid)
+			this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+
+			console.log('aaaaa', this.myHeight)
 		},
 		methods: {
 			getVideoDetails: async function (videoid, uid) {
@@ -298,11 +361,11 @@
 			},
 			addMore() {
 				this.commentPage += 1
-				this.getComments(this.uid, this.videoid, this.commentPage, 1)
+				this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
 				console.log('pulldown')
 			},
 			getReplys(item) {
-				getReplys(this.uid, item.id, 1, 1)
+				getReplys(this.uid, item.id, 1, this.MEDIA_TYPE)
 					.then((res) => {
 						item.replylist = res.info
 					})
@@ -310,6 +373,125 @@
 						console.log(err)
 					})
 			},
+			chooseReply(cInfo, rInfo) {
+				this.guard()
+				console.log('---333----333----333----333----333---')
+				if (rInfo === undefined) {
+					this.inputMsg = 'reply ' + cInfo.userinfo.user_nicename
+				} else {
+					this.inputMsg = 'reply ' + rInfo.userinfo.user_nicename
+				}
+				const infoObj = {
+					// parentid 是用来筛选一级id的字段。 commentid是 二级评论里面用来找他回复了谁的id
+					commentid: rInfo?.id || cInfo.commentid, // 我回复了这个评论，所以提交的commentid 是当前这个评论的id
+					touid: rInfo?.uid || cInfo.uid, // 我回复了这个评论，所以提交的touid是当前这个评论的uid
+					parentid: cInfo.id, // parentid 是所属的一级评论的id
+					type: 1,
+				}
+				this.chosen = infoObj
+			},
+			postComment(args) {
+				this.guard()
+				this.commentFunc({ videoid: this.videoid, content: this.inputContent })
+			},
+			commentFunc(obj) {
+				const uid = this.uid
+				const token = this.token
+				Object.assign(obj, {
+					uid,
+					token,
+					type: this.MEDIA_TYPE,
+					videoid: this.videoid,
+				})
+				commentFunc(obj)
+					.then((res) => {
+						if (res.code === 1010) return this.$u.toast(res.msg)
+						if (res.code === 400) return this.$u.toast('login first')
+						this.commentList = []
+						this.commentPage = 1
+						this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+						this.$u.toast('Comment posted!')
+						this.inputContent = ''
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			send() {
+				if (this.inputContent.trim().length === 0)
+					return this.$u.toast("Content can't be empty")
+				if (this.inputMsg === 'comments') {
+					this.postComment()
+				} else {
+					this.postReply()
+				}
+			},
+			/* 回复评论 */
+			postReply() {
+				this.guard()
+				const uid = this.uid
+				const token = this.token
+				const replyObj = Object.assign(this.chosen, {
+					uid,
+					token,
+					videoid: this.videoid,
+					content: this.inputContent,
+				})
+				commentFunc(replyObj)
+					.then((res) => {
+						if (res.code === 1010) return this.$u.toast(res.msg)
+						this.commentPage = 1
+						this.commentList = []
+						this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+						this.$u.toast('Reply succeed!')
+						this.inputMsg = 'comments'
+						this.inputContent = ''
+						this.chosen = {}
+					})
+					.catch((err) => {
+						this.$u.toast('Please reply after login')
+						console.log(err)
+					})
+			},
+			likeComment(item) {
+				this.guard()
+				this.addCommentLike(item.id, this.MEDIA_TYPE, item.parentid, item) //  id,type,parentid
+				const uid = window.localStorage.getItem('uid') || 0
+				// this.getComments(uid, this.curNewsId, this.commentPage, 2)
+			},
+			/* 添加喜欢（点赞） */
+			addCommentLike(selfid, type, fatherid, item) {
+				const uid = this.uid
+				const token = this.token
+				addCommentLike(uid, token, selfid, type)
+					.then((res) => {
+						console.log('res.info', res)
+						item.likes = res.info.likes
+						item.islike = res.info.islike
+						if (item.islike === '1') {
+							this.$u.toast('liked')
+						} else {
+							this.$u.toast('unliked')
+						}
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			// fixScrollHeight(object) {
+			// 	let { top, bottom } = object
+			// 	if (!top) {
+			// 		top = 0
+			// 	} else {
+			// 		top = top + 'rpx'
+			// 	}
+			// 	if (!bottom) {
+			// 		bottom = 0
+			// 	} else {
+			// 		bottom = bottom + 'rpx'
+			// 	}
+			// 	return { position: 'fixed', top: top, bottom: bottom }
+			// },
 		},
 	}
 </script>
@@ -353,5 +535,25 @@
 		// position: fixed;
 		// top: 0rpx;
 		// bottom: 0rpx;
+	}
+	.bottom-input-group {
+		position: relative;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 100rpx;
+		.input-con {
+			height: 50rpx;
+			width: 600rpx;
+			border-radius: 25rpx;
+			line-height: 50rpx;
+			padding: 0 20rpx;
+		}
+		.input-con > input {
+			color: #333;
+			font-size: 30rpx;
+			&::placeholder {
+			}
+		}
 	}
 </style>

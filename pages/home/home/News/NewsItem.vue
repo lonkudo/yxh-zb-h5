@@ -1,5 +1,5 @@
 <template>
-	<view class="news-item margin-xs padding-xs b-f br-8">
+	<view class="news-item margin-xs padding-xs b-f br-8" @tap="go(newsInfo)">
 		<view class="flex justify-between">
 			<view
 				class="flex flex-direction justify-between padding-top-xs padding-bottom-xs"
@@ -25,6 +25,13 @@
 		props: ['newsInfo'],
 		data() {
 			return {}
+		},
+		methods: {
+			go(info) {
+				uni.navigateTo({
+					url: 'detail/newsDetail?id=' + info.id,
+				})
+			},
 		},
 	}
 </script>

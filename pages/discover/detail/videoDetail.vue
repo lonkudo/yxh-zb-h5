@@ -322,18 +322,25 @@
 			this.myHeight2 = await this.initScrollHeight(644)
 
 			this.videoid = options.id
-			await this.getVideoDetails(options.id, this.uid)
-			this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
-
-			console.log('aaaaa', this.myHeight)
+			if (this.isEmpty(this.uid)) {
+				await this.getVideoDetails(options.id, '100')
+			} else {
+				await this.getVideoDetails(options.id, this.uid)
+			}
+			await this.getComments(
+				this.uid,
+				this.videoid,
+				this.commentPage,
+				this.MEDIA_TYPE
+			)
 		},
 		methods: {
 			getVideoDetails: async function (videoid, uid) {
 				await getVideoDetails(videoid, uid).then((res) => {
 					// console.log(res);
-					console.log('getres', res)
+					// console.log('getres', res)s
 					this.videoData = res.info
-					console.log('this', this.videoData)
+					// console.log('this', this.videoData)
 					// const info = res.info
 					// this.videoItem = info.detail
 					// this.initPlayer(info.detail.href_w, false)

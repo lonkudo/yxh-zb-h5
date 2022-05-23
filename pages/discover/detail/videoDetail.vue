@@ -47,6 +47,8 @@
 											class="margin-left-auto"
 											:text="'Follow'"
 											:false-text="'Followed'"
+											:initActive="isattent === '1'"
+											@onTap="guanzhu"
 											mana
 										></my-button>
 									</view>
@@ -66,31 +68,29 @@
 										}}</text>
 									</view>
 									<view class="flex align-center justify-between">
-										<view>
+										<view @tap="addLike">
 											<text
 												:class="[
 													'iconfont fs-30 ',
-													videoData.detail.islike === '1'
-														? 'fc-g icon-dianzan1'
-														: 'fc-b-6 icon-dianzan',
+													islike === '1' ? 'fc-g icon-dianzan1' : 'fc-b-6 icon-dianzan',
 												]"
 											></text>
-											<text class="fc-b-6 fs-24">{{ videoData.detail.likes }}</text>
+											<text class="fc-b-6 fs-24">{{ likeNum }}</text>
 										</view>
-										<view>
+										<view @tap="addCollection">
 											<text
 												:class="[
 													'iconfont fs-30 ',
-													videoData.detail.iscollection === '1'
+													iscollection === '1'
 														? 'fc-red icon-shoucangxiao'
 														: 'fc-b-6 icon-shoucang',
 												]"
 											></text>
-											<text class="fc-b-6 fs-24">{{ videoData.detail.collection }}</text>
+											<text class="fc-b-6 fs-24">{{ collection }}</text>
 										</view>
-										<view>
+										<view @tap="share">
 											<text class="iconfont fc-b-6 fs-30 icon-zhuanfa"></text>
-											<text class="fc-b-6 fs-24">{{ videoData.detail.shares }}</text>
+											<!-- <text class="fc-b-6 fs-24">{{ videoData.detail.shares }}</text> -->
 										</view>
 									</view>
 								</view>
@@ -99,6 +99,7 @@
 									<view
 										class="flex margin-top-sm"
 										v-for="(item, index) in videoData.recommend"
+										@tap="go('related', item)"
 									>
 										<image
 											:src="item.thumb"
@@ -283,6 +284,7 @@
 		getReplys,
 		addCommentLike,
 	} from '@/api/news'
+	import { setAttent } from '@/api/live'
 
 	import NoContent from '@/components/NoContent/NoContent.vue'
 	export default {
@@ -302,6 +304,11 @@
 				myHeight2: 0,
 				screenHeight: 0,
 				videoid: 0,
+				iscollection: '',
+				collection: '',
+				isLike: '',
+				likeNum: '',
+				isattent: '',
 				inputMsg: 'comments',
 				inputContent: '',
 				chosen: {},
@@ -330,9 +337,11 @@
 					// const info = res.info
 					// this.videoItem = info.detail
 					// this.initPlayer(info.detail.href_w, false)
-					// this.islike = res.info.detail.islike.toString()
-					// this.likeNum = res.info.detail.likes
-					// this.iscollection = res.info.detail.iscollection.toString()
+					this.islike = res.info.detail.islike.toString()
+					this.likeNum = res.info.detail.likes
+					this.iscollection = res.info.detail.iscollection.toString()
+					this.collection = res.info.detail.collection.toString()
+					this.isattent = res.info.detail.isattent
 					// this.videoList = info.recommend
 					// this.addTrace('see')
 					this.$nextTick(() => {
@@ -405,8 +414,7 @@
 				})
 				commentFunc(obj)
 					.then((res) => {
-						if (res.code === 1010) return this.$u.toast(res.msg)
-						if (res.code === 400) return this.$u.toast('login first')
+						if (res.code !== 0) return this.$u.toast(res.msg)
 						this.commentList = []
 						this.commentPage = 1
 						this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
@@ -439,7 +447,7 @@
 				})
 				commentFunc(replyObj)
 					.then((res) => {
-						if (res.code === 1010) return this.$u.toast(res.msg)
+						if (res.code !== 0) return this.$u.toast(res.msg)
 						this.commentPage = 1
 						this.commentList = []
 						this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
@@ -477,6 +485,79 @@
 					.catch((err) => {
 						console.log(err)
 					})
+			},
+			addCollection() {
+				this.guard()
+				const token = this.token
+				const uid = this.uid
+				addCollection({
+					token,
+					uid,
+					mediaid: this.videoid,
+					type: this.MEDIA_TYPE,
+				})
+					.then((res) => {
+						// islike 1点赞  0 未点赞
+						let info = res.info
+						if (res.info.iscollection === '1') {
+							this.$u.toast('collection added')
+						} else {
+							this.$u.toast('collection removed')
+						}
+						this.collection = res.info.collection
+						this.iscollection = res.info.iscollection
+					})
+					.catch((err) => {
+						this.$u.toast('login first')
+					})
+			},
+			addLike() {
+				this.guard()
+				const token = this.token
+				const uid = this.uid
+				addLike({ token, uid, videoid: this.videoid, type: this.MEDIA_TYPE })
+					.then((res) => {
+						// islike 1点赞  0 未点赞
+						let info = res.info
+						this.islike = info.islike
+						this.likeNum = info.likes
+						if (info.islike === '1') {
+							this.$u.toast('liked')
+							// this.addTrace('like')
+						} else {
+							this.$u.toast('unliked')
+							// this.addTrace('unlike')
+						}
+					})
+					.catch((err) => {
+						this.$u.toast('login first')
+					})
+			},
+			share() {
+				this.$u.toast('download app to share')
+			},
+			guanzhu() {
+				this.guard()
+				let token = this.token
+				let uid = this.uid
+				let touid = this.videoData.detail.userinfo.id
+				console.log('---11----11----11----11----11---')
+				setAttent(uid, token, touid).then((res) => {
+					if (res.code !== 0) return this.$u.toast(res.msg)
+					if (res.info.isattent == '1') {
+						this.$u.toast('followed')
+					} else {
+						this.$u.toast('unfollowed')
+					}
+					this.isattent = res.info.isattent
+				})
+			},
+			go(path, item) {
+				if (path === 'related') {
+					uni.navigateTo({
+						url: 'videoDetail?id=' + item.id,
+					})
+				}
 			},
 			// fixScrollHeight(object) {
 			// 	let { top, bottom } = object

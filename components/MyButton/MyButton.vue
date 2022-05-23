@@ -41,6 +41,8 @@
 			handleTap: function () {
 				if (!this.mana) {
 					this.isActive = !this.isActive
+				} else {
+					this.isActive = this.initActive
 				}
 				this.$emit('onTap')
 			},

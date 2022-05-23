@@ -1,28 +1,39 @@
 <template>
 	<view class="b-f">
-		<scroll-view
-			scroll-y=""
-			:style="{ height: myHeight + 'rpx' }"
-			@scrolltolower="addMore"
-		>
-			<view class="flex flex-direction padding-sm"> </view>
-		</scroll-view>
-		<view
-			class="bottom-input-group b-f padding-sm flex align-center justify-between"
-		>
-			<view class="flex input-con b-f6 align-center">
-				<input
-					type="text"
-					:placeholder="inputMsg"
-					v-model="inputContent"
-					placeholder-style="color:#aaa"
-					class="w-400"
-				/>
+		<template v-if="!this.isEmpty(newsDetails)">
+			<scroll-view
+				scroll-y=""
+				:style="{ height: myHeight + 'rpx' }"
+				@scrolltolower="addMore"
+			>
+				<view class="flex flex-direction padding-sm">
+					<text class="fs-30 fw-9">{{ newsDetails.caption }}</text>
+					<text class="fs-20 fc-b-9 margin-bottom-sm">{{
+						newsDetails.create_time
+					}}</text>
+					<view>{{ newsDetails.particular }}</view>
+				</view>
+			</scroll-view>
+			<view
+				class="bottom-input-group b-f padding-sm flex align-center justify-between"
+			>
+				<view class="flex input-con b-f6 align-center">
+					<input
+						type="text"
+						:placeholder="inputMsg"
+						v-model="inputContent"
+						placeholder-style="color:#aaa"
+						class="w-400"
+					/>
+				</view>
+				<view><text class="iconfont icon-dianzan"></text></view>
+				<view><text class="iconfont icon-shoucang"></text></view>
+				<view><text class="iconfont icon-zhuanfa"></text></view>
 			</view>
-			<view><text class="iconfont icon-dianzan"></text></view>
-			<view><text class="iconfont icon-shoucang"></text></view>
-			<view><text class="iconfont icon-zhuanfa"></text></view>
-		</view>
+		</template>
+		<template v-else>
+			<no-content :height="screenHeight"></no-content>
+		</template>
 	</view>
 </template>
 
@@ -35,7 +46,9 @@
 		getComments,
 		getReplys,
 	} from '@/api/news'
+	import NoContent from '../../../components/NoContent/NoContent.vue'
 	export default {
+		components: { NoContent },
 		data() {
 			return {
 				newsData: {},
@@ -55,10 +68,12 @@
 				chosen: {},
 				MEDIA_TYPE: 1, // 1视频 2新闻
 				myHeight: 0,
+				screenHeight: 0,
 			}
 		},
 		async onLoad(options) {
 			this.myHeight = await this.initScrollHeight(100)
+			this.screenHeight = await this.initScrollHeight(0)
 			if (this.isEmpty(this.uid)) {
 				await this.getNewsDetails(options.id, '100')
 			} else {
@@ -74,38 +89,23 @@
 							this.newsDetails = res.info.details
 							// this.showAuthor = true
 							// // 富文本转义
-							// if (this.newsDetails.particular.length !== 0) {
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&amp;/g,
-							// 		'&'
-							// 	)
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&lt;/g,
-							// 		'<'
-							// 	)
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&gt;/g,
-							// 		'>'
-							// 	)
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&nbsp;/g,
-							// 		' '
-							// 	)
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&#39;/g,
-							// 		"'"
-							// 	)
-							// 	this.newsDetails.particular = this.newsDetails.particular.replace(
-							// 		/&quot;/g,
-							// 		'"'
-							// 	)
-							// }
-							// console.log(this.newsDetails)
+							if (this.newsDetails.particular.length !== 0) {
+								this.newsDetails.particular = this.newsDetails.particular
+									.replace(/&amp;/g, '&')
+									.replace(/&lt;/g, '<')
+									.replace(/&gt;/g, '>')
+									.replace(/&nbsp;/g, ' ')
+									.replace(/&#39;/g, "'")
+									.replace(/&quot;/g, '"')
+									.replace(/<p>/g, '<text>')
+									.replace(/<\/p>/g, '</text>')
+							}
+							console.log(this.newsDetails.particular)
 							// this.curNewsId = id
 							// this.curNewsType = res.info.details.type
-							// this.islike = res.info.details.islike.toString()
-							// this.likeNum = res.info.details.likes
-							// this.iscollection = res.info.details.iscollection.toString()
+							this.islike = res.info.details.islike.toString()
+							this.likeNum = res.info.details.likes
+							this.iscollection = res.info.details.iscollection.toString()
 							// this.addTrace('see')
 							resolve(res)
 						})

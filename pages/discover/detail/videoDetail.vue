@@ -22,7 +22,12 @@
 					:style="{ height: swiperHeight + 'px' }"
 				>
 					<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
-						<scroll-view scroll-y :id="'content-wrap' + 0" class="fix-bottom">
+						<scroll-view
+							scroll-y
+							:id="'content-wrap' + 0"
+							class="fix-bottom"
+							:style="{ height: myHeight + 'rpx' }"
+						>
 							<view class="flex flex-direction">
 								<view class="b-f padding-xs flex flex-direction margin-bottom-sm">
 									<view class="flex margin-bottom-sm">
@@ -118,8 +123,17 @@
 							</view>
 						</scroll-view>
 					</swiper-item>
-					<swiper-item class="swiper-item" :key="1" @touchmove.stop="">
-						<scroll-view scroll-y :id="'content-wrap' + 1" style="height: 300rpx">
+					<swiper-item
+						class="swiper-item"
+						:key="1"
+						@touchmove.stop=""
+						:style="{ height: myHeight + 'rpx' }"
+					>
+						<scroll-view
+							scroll-y
+							:id="'content-wrap' + 1"
+							:style="{ height: myHeight + 'rpx' }"
+						>
 							<view class="flex flex-direction padding-xs b-f">
 								<view
 									class="comment flex margin-bottom-sm"
@@ -224,18 +238,16 @@
 				commentList: commentData.commentlist, // 一级评论列表，用来渲染
 				commentPage: 1,
 				commentObj: {},
+				myHeight: 0,
 			}
 		},
-		onLoad(options) {
+		async onLoad(options) {
 			// console.log(this.videoData)
-			console.log('options', options.id)
 			this.getVideoDetails(options.id, this.uid)
 			this.getComments(this.uid, options.id, this.commentPage, 1)
 
-			this.initScrollHeight()
-			this.$nextTick(() => {
-				this.setSwiperHeight()
-			})
+			this.myHeight = await this.initScrollHeight(544)
+			console.log('aa', this.myHeight)
 		},
 		methods: {
 			getVideoDetails: async function (videoid, uid) {
@@ -275,19 +287,6 @@
 					.catch((err) => {
 						console.log(err)
 					})
-			},
-			initScrollHeight() {
-				uni.getSystemInfo({
-					success: function (res) {
-						console.log(res.model)
-						console.log(res.pixelRatio)
-						console.log(res.windowWidth)
-						console.log(res.windowHeight)
-						console.log(res.language)
-						console.log(res.version)
-						console.log(res.platform)
-					},
-				})
 			},
 		},
 	}
@@ -329,8 +328,8 @@
 		line-height: 28rpx;
 	}
 	.fix-bottom {
-		position: fixed;
-		top: 0rpx;
-		bottom: 0rpx;
+		// position: fixed;
+		// top: 0rpx;
+		// bottom: 0rpx;
 	}
 </style>

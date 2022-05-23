@@ -18,6 +18,8 @@ import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty
 import toNum from '@/utils/toNum.js'
 Vue.prototype.toNum = toNum
+import initScrollHeight from '@/utils/initScrollHeight.js'
+Vue.prototype.initScrollHeight = initScrollHeight
 
 import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
 

@@ -133,6 +133,7 @@
 							scroll-y
 							:id="'content-wrap' + 1"
 							:style="{ height: myHeight + 'rpx' }"
+							@scrolltolower="addMore"
 						>
 							<view class="flex flex-direction padding-xs b-f">
 								<view
@@ -193,7 +194,12 @@
 													</view>
 												</view>
 											</view>
-											<text v-if="parseInt(item.replys) > 3"
+											<text
+												v-if="
+													parseInt(item.replys) > 3 &&
+													item.replylist.length !== parseInt(item.replys)
+												"
+												@tap="getReplys(item)"
 												>View all {{ item.replys }} replies</text
 											>
 										</view>
@@ -239,12 +245,14 @@
 				commentPage: 1,
 				commentObj: {},
 				myHeight: 0,
+				videoid: 0,
 			}
 		},
 		async onLoad(options) {
 			// console.log(this.videoData)
 			this.getVideoDetails(options.id, this.uid)
-			this.getComments(this.uid, options.id, this.commentPage, 1)
+			this.videoid = options.id
+			this.getComments(this.uid, this.videoid, this.commentPage, 1)
 
 			this.myHeight = await this.initScrollHeight(544)
 			console.log('aa', this.myHeight)
@@ -277,12 +285,26 @@
 				getComments(uid, videoid, p, type)
 					.then((res) => {
 						this.commentObj = res.info
-						this.commentList = res.info.commentlist
+						this.commentList = this.commentList.concat(res.info.commentlist)
 						this.$nextTick(() => {
 							this.setSwiperHeight()
 						})
 						// this.total = parseInt(res.info.comments)
 						console.log('commentObj', this.commentObj)
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			addMore() {
+				this.commentPage += 1
+				this.getComments(this.uid, this.videoid, this.commentPage, 1)
+				console.log('pulldown')
+			},
+			getReplys(item) {
+				getReplys(this.uid, item.id, 1, 1)
+					.then((res) => {
+						item.replylist = res.info
 					})
 					.catch((err) => {
 						console.log(err)

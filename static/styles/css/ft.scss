@@ -145,6 +145,14 @@
 	-webkit-line-clamp: 2;
 	line-height: 28rpx;
 }
+.f-hide-3 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-height: 33rpx;
+}
 .f-center {
 	text-align: center !important;
 }

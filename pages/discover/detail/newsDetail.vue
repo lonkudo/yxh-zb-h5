@@ -58,9 +58,10 @@
 						</view>
 						<view class="flex flex-direction margin-left-xs">
 							<text class="fc-b-6 fs-20">{{ item.userinfo.user_nicename }}</text>
-							<text class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660">{{
-								item.content
-							}}</text>
+							<text
+								class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660 f-hide-3"
+								>{{ item.content }}</text
+							>
 							<view class="flex justify-end align-center w-660 margin-bottom-sm">
 								<text class="fc-b-9 fs-20 margin-right-auto">{{ item.datetime }}</text>
 								<view
@@ -104,7 +105,7 @@
 										</template>
 									</view>
 									<text
-										class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs"
+										class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs f-hide-2"
 									>
 										{{ reply.content }}
 									</text>
@@ -144,6 +145,7 @@
 							</view>
 						</view>
 					</view>
+					<u-loadmore :status="status" :icon-type="iconType" :load-text="loadText" />
 				</view>
 			</scroll-view>
 			<view
@@ -213,6 +215,7 @@
 				commentList: [], // 一级评论列表，用来渲染
 				commentPage: 1,
 				commentObj: {},
+				total: 0,
 				videoid: 0, // 新闻id
 				iscollection: '',
 				collection: '',
@@ -225,6 +228,13 @@
 				MEDIA_TYPE: 2, // 1视频 2新闻
 				myHeight: 0,
 				screenHeight: 0,
+				status: 'loadmore',
+				iconType: 'flower',
+				loadText: {
+					loadmore: 'pull up to load more',
+					loading: 'loading',
+					nomore: 'no more data',
+				},
 			}
 		},
 		async onLoad(options) {
@@ -244,7 +254,22 @@
 				this.MEDIA_TYPE
 			)
 		},
+
 		methods: {
+			addMore() {
+				console.log('bottom')
+				if (this.commentPage >= this.total / 20) return (this.status = 'nomore')
+				this.status = 'loading'
+				this.commentPage = ++this.commentPage
+				setTimeout(() => {
+					let uid = 100
+					if (!this.isEmpty(this.uid)) uid = this.uid
+					this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+					if (this.commentPage >= this.total / 20) this.status = 'nomore'
+					else this.status = 'loading'
+				}, 2000)
+			},
+
 			getNewsDetails(id, uid) {
 				return new Promise((resolve, reject) => {
 					getNewsDetails(id, uid)
@@ -285,9 +310,9 @@
 						.finally(() => {})
 				})
 			},
-			addMore() {
-				console.log('addMore')
-			},
+			// addMore() {
+			// 	console.log('addMore')
+			// },
 			go(path, item) {
 				if (path === 'related') {
 					uni.navigateTo({
@@ -301,18 +326,19 @@
 					.then((res) => {
 						this.commentObj = res.info
 						this.commentList = this.commentList.concat(res.info.commentlist)
-						// this.total = parseInt(res.info.comments)
+						this.total = parseInt(res.info.comments)
+
 						console.log('commentObj', this.commentObj)
 					})
 					.catch((err) => {
 						console.log(err)
 					})
 			},
-			addMore() {
-				this.commentPage += 1
-				this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
-				console.log('pulldown')
-			},
+			// addMore() {
+			// 	this.commentPage += 1
+			// 	this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+			// 	console.log('pulldown')
+			// },
 			getReplys(item) {
 				getReplys(this.uid, item.id, 1, this.MEDIA_TYPE)
 					.then((res) => {

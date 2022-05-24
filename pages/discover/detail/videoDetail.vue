@@ -149,7 +149,7 @@
 											<view class="flex flex-direction margin-left-xs">
 												<text class="fc-b-6 fs-20">{{ item.userinfo.user_nicename }}</text>
 												<text
-													class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660"
+													class="comment-content fc-b-3 fs-28 margin-top-xs h-100 w-660 f-hide-3"
 													>{{ item.content }}</text
 												>
 												<view class="flex justify-end align-center w-660 margin-bottom-sm">
@@ -201,7 +201,7 @@
 															</template>
 														</view>
 														<text
-															class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs"
+															class="reply-content fc-b-3 fs-20 h-66 w-640 padding-top-xs padding-bottom-xs f-hide-2"
 														>
 															{{ reply.content }}
 														</text>
@@ -242,6 +242,12 @@
 											</view>
 										</view>
 									</view>
+									<u-loadmore
+										:status="status"
+										:icon-type="iconType"
+										:load-text="loadText"
+										bg-color="#fff"
+									/>
 								</scroll-view>
 							</template>
 							<template v-else>
@@ -312,6 +318,14 @@
 				inputContent: '',
 				chosen: {},
 				MEDIA_TYPE: 1, // 1视频 2新闻
+				status: 'loadmore',
+				iconType: 'flower',
+				loadText: {
+					loadmore: 'pull up to load more',
+					loading: 'loading',
+					nomore: 'no more data',
+				},
+				loadingFlag: false,
 			}
 		},
 		async onLoad(options) {
@@ -332,6 +346,9 @@
 				this.commentPage,
 				this.MEDIA_TYPE
 			)
+		},
+		onShow() {
+			console.log('onshow')
 		},
 		methods: {
 			getVideoDetails: async function (videoid, uid) {
@@ -367,17 +384,30 @@
 						this.$nextTick(() => {
 							this.setSwiperHeight()
 						})
-						// this.total = parseInt(res.info.comments)
+						this.total = parseInt(res.info.comments)
 						console.log('commentObj', this.commentObj)
+						this.loadingFlag = false
 					})
 					.catch((err) => {
 						console.log(err)
 					})
 			},
 			addMore() {
-				this.commentPage += 1
-				this.getComments(this.uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
-				console.log('pulldown')
+				console.log('bottom')
+				if (this.loadingFlag) return
+				if (this.commentPage >= this.total / 20) return (this.status = 'nomore')
+				console.log('---1----1----1----1----1---')
+				this.status = 'loading'
+				this.loadingFlag = true
+				this.commentPage = ++this.commentPage
+				setTimeout(() => {
+					let uid = 100
+					if (!this.isEmpty(this.uid)) uid = this.uid
+					this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
+					console.log('this.total', this.total, this.commentPage, this.total / 20)
+					if (this.commentPage >= this.total / 20) this.status = 'nomore'
+					else this.status = 'loading'
+				}, 2000)
 			},
 			getReplys(item) {
 				getReplys(this.uid, item.id, 1, this.MEDIA_TYPE)
@@ -470,7 +500,7 @@
 			likeComment(item) {
 				this.guard()
 				this.addCommentLike(item.id, this.MEDIA_TYPE, item.parentid, item) //  id,type,parentid
-				const uid = window.localStorage.getItem('uid') || 0
+				// const uid = window.localStorage.getItem('uid') || 0
 				// this.getComments(uid, this.curNewsId, this.commentPage, 2)
 			},
 			/* 添加喜欢（点赞） */

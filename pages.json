@@ -27,7 +27,11 @@
 		{
 			"path": "pages/discover/detail/newsDetail",
 			"style": {
-				"navigationBarTitleText": "",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "News Detail",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default",
 				"enablePullDownRefresh": false
 			}
 		},

@@ -274,8 +274,7 @@
 
 <script>
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
-	import data from './data.js'
-	import commentData from './commentData'
+
 	import MyButton from '@/components/MyButton/MyButton.vue'
 	import { getVideoDetails, addLike, addCollection } from '@/api/video'
 	import {
@@ -402,7 +401,7 @@
 					commentid: rInfo?.id || cInfo.commentid, // 我回复了这个评论，所以提交的commentid 是当前这个评论的id
 					touid: rInfo?.uid || cInfo.uid, // 我回复了这个评论，所以提交的touid是当前这个评论的uid
 					parentid: cInfo.id, // parentid 是所属的一级评论的id
-					type: 1,
+					type: this.MEDIA_TYPE,
 				}
 				this.chosen = infoObj
 			},

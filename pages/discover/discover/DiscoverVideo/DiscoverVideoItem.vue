@@ -36,7 +36,6 @@
 				uni.navigateTo({
 					url: 'detail/videoDetail?id=' + info.id,
 				})
-				console.log('info', info)
 			},
 		},
 	}

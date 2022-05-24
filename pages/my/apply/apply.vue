@@ -217,7 +217,6 @@
 	.upload-item {
 		padding: 0;
 		> view {
-			background-color: pink;
 			display: flex;
 			flex-direction: column;
 			align-items: center;

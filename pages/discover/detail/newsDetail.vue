@@ -238,8 +238,8 @@
 			}
 		},
 		async onLoad(options) {
-			this.myHeight = await this.initScrollHeight(100)
-			this.screenHeight = await this.initScrollHeight(0)
+			this.myHeight = this.initScrollHeight(100)
+			this.screenHeight = this.initScrollHeight(0)
 
 			this.videoid = options.id
 			if (this.isEmpty(this.uid)) {
@@ -248,6 +248,7 @@
 				await this.getNewsDetails(options.id, this.uid)
 			}
 			await this.getComments(
+				// 加await 来避免showToast被顶替
 				this.uid,
 				this.videoid,
 				this.commentPage,

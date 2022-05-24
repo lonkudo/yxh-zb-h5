@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-direction">
 		<search-header class="top"></search-header>
-		<scroll-view scroll-y="true" class="middle b-f6" @scrolltolower="call">
+		<scroll-view scroll-y="true" class="middle b-f6">
 			<recommend-slider></recommend-slider>
 			<system-informs-slider :noticeList="noticeList"></system-informs-slider>
 			<home-title :title="'Popular game'"></home-title>

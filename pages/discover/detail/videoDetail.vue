@@ -330,9 +330,9 @@
 		},
 		async onLoad(options) {
 			// console.log(this.videoData)
-			this.screenHeight = await this.initScrollHeight(0)
-			this.myHeight = await this.initScrollHeight(544)
-			this.myHeight2 = await this.initScrollHeight(644)
+			this.screenHeight = this.initScrollHeight(0)
+			this.myHeight = this.initScrollHeight(544)
+			this.myHeight2 = this.initScrollHeight(644)
 
 			this.videoid = options.id
 			if (this.isEmpty(this.uid)) {

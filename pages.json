@@ -331,12 +331,6 @@
 				"iconPath": "static/styles/tab/tab-my@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
 				"text": "My"
-			},
-			{
-				"pagePath": "pages/search/search",
-				"iconPath": "static/styles/tab/tab-my@2x.png",
-				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
-				"text": "My"
 			}
 		]
 	},

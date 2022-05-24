@@ -50,6 +50,7 @@
 								@close="close"
 								@open="open"
 								class="hu-collapse"
+								ref="collapse"
 							>
 								<u-collapse-item
 									:title="league.name"
@@ -142,7 +143,7 @@
 				}, 300)
 			},
 			change(e) {
-				console.log('change')
+				console.log('change', this.$refs.collapse)
 				setTimeout(() => {
 					this.$nextTick(() => {
 						this.setSwiperHeight()

@@ -1,5 +1,5 @@
 <template>
-	<view class="b-f br-5 live-item flex flex-direction">
+	<view class="b-f br-5 live-item flex flex-direction" @tap="go('live')">
 		<view class="hot"
 			><text class="fc-b-f fs-16 b-t iconfont icon-remen">2302</text></view
 		>
@@ -23,6 +23,22 @@
 		props: ['liveInfo'],
 		data() {
 			return {}
+		},
+		methods: {
+			go(val) {
+				if (val === 'live') {
+					uni.navigateTo({
+						url:
+							'/pages/live/live?' +
+							'liveuid=' +
+							this.liveInfo.uid +
+							'&game_id=' +
+							this.liveInfo.game_id +
+							'&stream=' +
+							this.liveInfo.stream,
+					})
+				}
+			},
 		},
 	}
 </script>

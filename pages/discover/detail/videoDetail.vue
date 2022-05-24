@@ -1,8 +1,19 @@
 <template>
 	<view>
 		<template v-if="!this.isEmpty(videoData)">
+			<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
+				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
+				><text class="fc-b-f">{{ videoData.detail.title }}</text>
+			</view>
 			<view class="video-container">
-				<video id="myVideo" :src="videoData.detail.href" object-fit=""></video>
+				<video
+					id="myVideo"
+					:src="videoData.detail.href"
+					object-fit="contain"
+					@play="showBack = false"
+					@pause="showBack = true"
+					@ended="showBack = true"
+				></video>
 			</view>
 			<view>
 				<u-tabs-swiper
@@ -326,6 +337,7 @@
 					nomore: 'no more data',
 				},
 				loadingFlag: false,
+				showBack: true,
 			}
 		},
 		async onLoad(options) {
@@ -351,6 +363,9 @@
 			console.log('onshow')
 		},
 		methods: {
+			test: function () {
+				console.log('test')
+			},
 			getVideoDetails: async function (videoid, uid) {
 				await getVideoDetails(videoid, uid).then((res) => {
 					// console.log(res);
@@ -594,6 +609,11 @@
 						url: 'videoDetail?id=' + item.id,
 					})
 				}
+				if ((path = 'back')) {
+					uni.navigateBack({
+						delta: 1,
+					})
+				}
 			},
 			// fixScrollHeight(object) {
 			// 	let { top, bottom } = object
@@ -672,5 +692,11 @@
 			&::placeholder {
 			}
 		}
+	}
+	.goback {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 10;
 	}
 </style>

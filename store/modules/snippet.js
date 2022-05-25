@@ -11,8 +11,8 @@ const snippet = {
 
 	mutations: {
 		add_sni: function (state, str) {
-			const timestamp = new Date()
-			state.snippetList.push({ time: timestamp, msg: str })
+			const timestamp = Date.now()
+			state.snippetList.push({ timestamp: timestamp, msg: str, show: false })
 			uni.setStorage({
 				key: 'snippetList',
 				data: state.snippetList,
@@ -24,6 +24,18 @@ const snippet = {
 			})
 			state.snippetList.splice(index, 1)
 			uni.setStorageSync('snippetList', state.snippetList)
+		},
+		show_sni: function (state, obj) {
+			state.snippetList.forEach((element) => {
+				console.log('timstamp', element.timestamp, obj.timestamp)
+				if (element.timestamp === obj.timestamp) {
+					console.log('---1----1----1----1----1---')
+					element.show = !element.show
+				} else {
+					console.log('---2----2----2----2----2---')
+					element.show = false
+				}
+			})
 		},
 	},
 }

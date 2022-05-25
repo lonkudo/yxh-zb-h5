@@ -162,7 +162,7 @@
 				>
 					<text @tap="showSnippet = false">Close</text>
 					<text>Snippet</text>
-					<text class="fc-g">Set</text>
+					<text class="fc-g" @tap="go('snippet')">Set</text>
 				</view>
 				<scroll-view scroll-y="" style="height: 440rpx">
 					<view>
@@ -244,9 +244,14 @@
 						url: 'videoDetail?id=' + item.id,
 					})
 				}
-				if ((path = 'back')) {
+				if (path === 'back') {
 					uni.navigateBack({
 						delta: 1,
+					})
+				}
+				if (path === 'snippet') {
+					uni.navigateTo({
+						url: 'snippet/snippet',
 					})
 				}
 			},

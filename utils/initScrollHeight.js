@@ -9,7 +9,7 @@ export default function (height) {
 	var Height = uni.getSystemInfoSync().screenHeight
 	var Width = uni.getSystemInfoSync().screenWidth
 
-	console.log('initScorll', Height, Width)
+	// console.log('initScorll', Height, Width)
 	const unit = Width / 750
 	return Math.floor(Height / unit) - height
 }

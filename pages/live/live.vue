@@ -46,10 +46,22 @@
 							><text>mmsg textmsg textmsg textmsg textmsg textsg text</text></view
 						>
 					</scroll-view>
-					<view class="h-80 b-f6 flex align-center">
-						<view></view>
-
-						<view></view>
+					<view
+						class="h-80 b-f6 flex align-center justify-between padding-left-sm padding-right-sm"
+					>
+						<view class="btn ava-60 btn-snippet"></view>
+						<view
+							class="flex input-con b-f align-center padding-left-sm padding-right-sm h-60"
+						>
+							<input
+								type="text"
+								:placeholder="'Enter Chat Content'"
+								v-model="inputContent"
+								placeholder-style="color:#aaa"
+								class="w-500 fs-20"
+							/>
+						</view>
+						<view class="btn ava-80 btn-gift"></view>
 					</view>
 				</view>
 			</swiper-item>
@@ -79,7 +91,7 @@
 </template>
 
 <script>
-	import { getLiveDetail } from '@/api/live'
+	import { getLiveDetail, enterLiveRoom } from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -89,7 +101,9 @@
 				stream: '',
 				game_id: '',
 				liveDetail: {},
+				roomInfo: {},
 				myHeight: 0,
+				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
 					{ name: 'Squad' },
@@ -97,9 +111,10 @@
 					{ name: 'Contribution' },
 				],
 				showBack: true,
+				ws: null,
 			}
 		},
-		onLoad(options) {
+		async onLoad(options) {
 			this.myHeight = this.initScrollHeight(544)
 			this.chatHeight = this.initScrollHeight(624)
 			console.log('options', options)
@@ -108,6 +123,9 @@
 			this.stream = options.stream
 			this.game_id = options.game_id
 			this.getLiveDetail()
+			await this.enterLiveRoom()
+			console.log('---5----5----5----5----5---,', this.roomInfo)
+			this.createChatServerClient()
 		},
 		methods: {
 			getLiveDetail() {
@@ -121,6 +139,24 @@
 						console.log(err)
 					})
 			},
+			async enterLiveRoom() {
+				let uid = this.isEmpty(this.uid) ? 100 : this.uid
+				let token = this.isEmpty(this.token) ? 'not logined' : this.token
+				await enterLiveRoom(uid, token, this.liveuid, this.stream)
+					.then((res) => {
+						this.roomInfo = res.info[0]
+						console.log(res, 'res')
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+					.finally(() => {
+						return new Promise((resolve) => {
+							resolve()
+						})
+					})
+			},
+			createChatServerClient() {},
 		},
 	}
 </script>
@@ -139,5 +175,16 @@
 	#myVideo {
 		width: 100%;
 		height: 100%;
+	}
+	.btn {
+		background-size: 60rpx 60rpx;
+	}
+	.btn-snippet {
+		background-image: url('/static/styles/png/snippet.png');
+	}
+	.btn-gift {
+		background-image: url('/static/styles/png/gift.png');
+		background-repeat: no-repeat;
+		background-position: 10rpx 10rpx;
 	}
 </style>

@@ -162,23 +162,22 @@ export function teamFormation(data) {
 }
 
 /**
- * 
+ *
  * @param {*} game_id 比赛id
- * @returns 
+ * @returns
  */
 export function getIntelligence(game_id) {
 	return request({
 		url: '?service=Live.GetIntelligence',
 		method: 'POST',
-		data: {game_id},
+		data: { game_id },
 	})
 }
-
 
 /* 切换直播间 */
 export function changeRoom(data) {
 	return request({
-		url: '?service=Live.ChangeRoom       ',
+		url: '?service=Live.ChangeRoom',
 		method: 'POST',
 		data: data,
 	})
@@ -240,7 +239,7 @@ export function getWeather(data) {
 
 /**
  * 获取广告
- * @returns 
+ * @returns
  */
 export function getAdvert() {
 	return request({

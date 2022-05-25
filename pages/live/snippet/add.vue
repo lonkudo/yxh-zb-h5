@@ -44,12 +44,17 @@
 		},
 		methods: {
 			saveSnippet() {
-				if (this.value.trim().length === 0)
-					return this.$u.toast("content can't be empty")
-				this.$store.commit('add_sni', this.value)
-				this.value = ''
-				uni.navigateTo({
-					url: 'snippet',
+				setTimeout(() => {
+					if (this.value.trim().length === 0)
+						return this.$u.toast("content can't be empty")
+					this.$store.commit('add_sni', this.value)
+					this.value = ''
+				}, 50)
+				// uni.navigateTo({
+				// 	url: 'snippet',
+				// })
+				uni.navigateBack({
+					delta: 1,
 				})
 			},
 		},

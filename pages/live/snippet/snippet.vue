@@ -1,17 +1,13 @@
 <template>
 	<view>
 		<u-navbar
-			:is-back="false"
+			:is-back="true"
 			:title="'Feedback'"
 			:title-bold="true"
 			:title-color="'#000'"
 			:back-icon-color="'#000'"
 			:back-icon-size="40"
 		>
-			<text
-					class="margin-right-sm fc-b-0 iconfont icon-left fs-36 margin-left-sm"
-				></text
-			></navigator>
 			<navigator :url="'add'" slot="right"
 				><text class="margin-right-sm fc-g iconfont icon-add-bold"></text
 			></navigator>

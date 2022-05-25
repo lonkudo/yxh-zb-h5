@@ -178,7 +178,6 @@
 								>{{ item.msg }}</text
 							>
 						</view>
-						<button @tap="addSnippet">增加</button>
 					</view>
 				</scroll-view>
 			</view>

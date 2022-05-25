@@ -11,7 +11,7 @@
 			><text class="iconfont icon-sousuo fs-32 margin-right-sm"></text
 			><input type="text" placeholder="Search"
 		/></view>
-		<view class="margin-left-sm margin-right-sm" @tap="go('back')"
+		<view class="margin-left-sm margin-right-sm"
 			><text class="iconfont icon-qiandao fs-40"></text
 		></view>
 	</view>
@@ -24,11 +24,6 @@
 				if (val === 'search') {
 					uni.navigateTo({
 						url: '/pages/search/search',
-					})
-				}
-				if (val === 'back') {
-					uni.navigateBack({
-						delta: 1,
 					})
 				}
 			},

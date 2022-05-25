@@ -20,6 +20,7 @@
 			site()
 				.then((res) => {
 					this.aboutUrl = res.info.about_us_url
+					console.log('about', res)
 				})
 				.catch((err) => {
 					console.log(err)

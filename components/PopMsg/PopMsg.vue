@@ -1,8 +1,8 @@
 <template>
 	<view class="popMsg">
-		<view>
+		<view v-for="(item, index) in tempList" :key="index">
 			<view>
-				<text class="fc-b-f">{{ 'kjrewk' }}</text>
+				<text class="fc-b-f">{{ item }} </text>
 			</view>
 		</view>
 	</view>
@@ -16,7 +16,7 @@
 		addItem(item) {
 			const tmpItem = new TempItem(item, this)
 			this.tempList.push(tmpItem)
-			console.log('this.tempList', this.tempList)
+			// console.log('this.tempList', this.tempList)
 		}
 		removeItem(tmpItem) {
 			const index = this.tempList.findIndex((ele) => {
@@ -24,7 +24,7 @@
 			})
 			this.tempList[index] = null
 			this.tempList.splice(index, 1)
-			console.log('this.tempList', this.tempList)
+			// console.log('this.tempList', this.tempList)
 		}
 		resetCountdown(tempItem) {
 			const index = this.tempList.findIndex((ele, index) => {
@@ -76,17 +76,23 @@
 		}
 		down() {
 			this.countdown -= 1
-			console.log('down', this.countdown, this.item)
+			// console.log('down', this.countdown, this.item)
 		}
 		reset() {
 			this.countdown = 5
-			console.log('reset', this.countdown)
+			// console.log('reset', this.countdown)
 		}
 		get id() {
 			return this.item.id
 		}
 		get giftId() {
 			return this.item.giftId
+		}
+		get giftNum() {
+			return this.item.giftInfo.giftNum
+		}
+		get giftName() {
+			return this.item.giftInfo.giftName
 		}
 		addGiftNum(giftNum) {
 			this.item.giftInfo.giftNum += giftNum
@@ -97,7 +103,7 @@
 			this.reset()
 		}
 		destory() {
-			console.log('this', this.myTemp)
+			// console.log('this', this.myTemp)
 			this.myTemp.removeItem(this)
 		}
 	}
@@ -116,22 +122,34 @@
 		},
 		data() {
 			return {
-				tempList: [],
+				myTemp: null,
 			}
 		},
 		created() {
 			const tmp = new Temp()
+			this.myTemp = tmp
 			GiftPoolBus.$on('push', (item) => {
+				// console.log('---2----2----2----2----2---')
+				// console.log('item', item)
 				tmp.dealItem(item)
 			})
-			setInterval(() => {
-				console.log(tmp.tempList)
-			}, 1000)
+			// setInterval(() => {
+			// 	console.log(tmp.tempList)
+			// }, 1000)
 			const item = {
 				id: 321,
 				giftId: 999,
 				giftInfo: { giftNum: 50, giftName: 'hello' },
 			}
+		},
+		computed: {
+			tempList: function () {
+				let arr = []
+				this.myTemp.tempList.forEach((element) => {
+					arr.push(element.id)
+				})
+				return arr
+			},
 		},
 	}
 </script>

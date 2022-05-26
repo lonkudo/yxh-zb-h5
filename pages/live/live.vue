@@ -386,21 +386,21 @@
 								this.$store.dispatch('GetInfo', { uid: this.uid, token: this.token })
 							}
 
-							GiftPoolBus.$emit('text', 'rjekw')
-							console.log('---4----4----4----4----4---')
-							GiftPoolBus.$emit('push', {
-								id: this.userInfo.id,
-								giftId: giftInfo.id,
-								userInfo: {
-									user_nicename: this.userInfo.user_nicename,
-									avatar: this.userInfo.avatar,
-								},
-								giftInfo: {
-									giftNum: giftNum,
-									giftIcon: giftInfo.gifticon,
-									giftName: giftInfo.giftname,
-								},
-							})
+							// GiftPoolBus.$emit('text', 'rjekw')
+							// console.log('---4----4----4----4----4---')
+							// GiftPoolBus.$emit('push', {
+							// 	id: this.userInfo.id,
+							// 	giftId: giftInfo.id,
+							// 	userInfo: {
+							// 		user_nicename: this.userInfo.user_nicename,
+							// 		avatar: this.userInfo.avatar,
+							// 	},
+							// 	giftInfo: {
+							// 		giftNum: giftNum,
+							// 		giftIcon: giftInfo.gifticon,
+							// 		giftName: giftInfo.giftname,
+							// 	},
+							// })
 							// this.getCoin()
 							// this.giftNum = 1
 							// value.active = false
@@ -502,10 +502,25 @@
 					// console.log('mes', mes)
 				})
 				this.ws.on('broadcastingListen', (mes) => {
-					// console.log('---1----1----1----1----1---')
-					// console.log('mes', mes)
+					console.log('---1----1----1----1----1---')
+					let pMes = JSON.parse(mes)
+					if (pMes.msg[0]._method_ === 'SendGift') {
+						GiftPoolBus.$emit('push', {
+							id: pMes.msg[0].uid,
+							giftId: pMes.msg[0].ct.giftid,
+							userInfo: {
+								user_nicename: pMes.msg[0].uname,
+								avatar: pMes.msg[0].uhead,
+							},
+							giftInfo: {
+								giftNum: pMes.msg[0].ct.giftcount,
+								giftIcon: pMes.msg[0].ct.gifticon,
+								giftName: pMes.msg[0].ct.giftname,
+							},
+						})
+					}
 					// console.log('---2----23---2----2----2---')
-					this.chatList.push(JSON.parse(mes))
+					this.chatList.push(pMes)
 				})
 				this.ws.on('disconnect', (e) => {
 					console.log('断开链接', e)

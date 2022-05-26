@@ -129,7 +129,7 @@
 								@confirm="inputSend"
 							/>
 						</view>
-						<view class="btn ava-80 btn-gift"></view>
+						<view class="btn ava-80 btn-gift" @tap="getGiftList"></view>
 					</view>
 				</view>
 			</swiper-item>
@@ -155,8 +155,9 @@
 			>
 			</swiper-item>
 		</swiper>
+		<!-- 快捷语弹框 -->
 		<u-popup v-model="showSnippet" mode="bottom">
-			<view style="height: 500rpx">
+			<view style="height: 600rpx">
 				<view
 					class="flex align-center h-60 justify-between padding-left-sm padding-right-sm b-f6"
 				>
@@ -164,7 +165,7 @@
 					<text>Snippet</text>
 					<text class="fc-g" @tap="go('snippet')">Set</text>
 				</view>
-				<scroll-view scroll-y="" style="height: 440rpx">
+				<scroll-view scroll-y="" style="height: 540rpx">
 					<view>
 						<view v-for="item in snippetList" :key="item.timestamp" class="margin-sm">
 							<text
@@ -182,16 +183,89 @@
 				</scroll-view>
 			</view>
 		</u-popup>
+		<!-- 礼物弹框 -->
+		<u-popup v-model="showGift" mode="bottom">
+			<view style="height: 600rpx">
+				<view
+					class="flex align-center h-60 justify-between padding-left-sm padding-right-sm b-f"
+				>
+					<u-tabs-swiper
+						:list="[{ name: 'Gift' }]"
+						swiperWidth="750"
+						active-color="#02b875"
+					></u-tabs-swiper>
+				</view>
+				<swiper
+					class="swiper"
+					:indicator-dots="true"
+					:autoplay="false"
+					style="height: 440rpx"
+					indicator-active-color="#02b875"
+				>
+					<swiper-item v-for="(list, index) in giftlist" :key="'l' + index">
+						<view class="flex flex-wrap align-center padding-sm">
+							<view
+								:style="{
+									border: giftId === item.id ? '2rpx solid #02b875' : '2rpx solid #fff',
+									width: '166rpx',
+									height: '170rpx',
+								}"
+								class="flex flex-direction align-center margin-left-xs margin-bottom-sm p-r"
+								v-for="(item, idx) in list"
+								:key="item.id"
+								@tap="giftId = item.id"
+							>
+								<view
+									class="p-a top-10 left-5 bg-red br-8 flex align-center"
+									style="padding: 5rpx 1rpx"
+									v-if="item.mark === '1'"
+								>
+									<text class="fs-14 fc-b-f">Hot</text></view
+								>
+								<image :src="item.gifticon" mode="" class="ava-80" />
+								<text class="fs-20">{{ item.giftname }}</text>
+								<view class="flex align-center">
+									<view class="padding-top-xs"
+										><text class="fs-20 fc-b-9">{{ item.needcoin }}</text></view
+									>
+									<coin class="sm-2" style="width: 30rpx; height: 30rpx"></coin>
+								</view>
+							</view>
+						</view>
+					</swiper-item>
+				</swiper>
+				<view style="height: 100rpx" class="flex align-center">
+					<view class="flex align-center">
+						<coin
+							class="sm-3 margin-right-xs"
+							style="width: 30rpx; height: 30rpx; margin-top: -22rpx"
+						></coin>
+						<text class="fs-24 margin-right-sm">1893210</text>
+					</view>
+					<text class="fc-g fs-24" @tap="go('coin')">Gain ></text>
+					<view
+						class="margin-left-auto margin-right-sm h-50 bg-green flex justify-between padding-left-sm padding-right-sm w-200 align-center"
+						style="border-radius: 25rpx"
+					>
+						<text class="fc-b-0 fs-24">100</text>
+						<text class="fc-b-f fs-24">Send</text>
+					</view>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
-	import { getLiveDetail, enterLiveRoom } from '@/api/live'
+	import { getLiveDetail, enterLiveRoom, getGiftList } from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
+	import create2DArray from '@/utils/create2DArray.js'
+	import Coin from '@/components/Coin/Coin.vue'
+
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level },
+		components: { Level, Coin },
 		data() {
 			return {
 				liveuid: '',
@@ -211,6 +285,9 @@
 				showBack: true,
 				ws: null,
 				showSnippet: false,
+				showGift: false,
+				giftlist: [],
+				giftId: '',
 			}
 		},
 		async onLoad(options) {
@@ -251,6 +328,11 @@
 				if (path === 'snippet') {
 					uni.navigateTo({
 						url: 'snippet/snippet',
+					})
+				}
+				if (path === 'coin') {
+					uni.navigateTo({
+						url: '/pages/my/coins/coins',
 					})
 				}
 			},
@@ -350,6 +432,27 @@
 				broadcastObj.token = window.localStorage.getItem('token')
 				this.ws.emit('broadcast', broadcastObj)
 				this.inputContent = ''
+			},
+			getGiftList() {
+				/* 获取礼物列表 */
+				console.log('---gift----gift----gift----gift----gift---')
+				this.guard()
+				const uid = this.uid
+				const token = this.token
+				getGiftList({ uid, token })
+					.then((res) => {
+						if (res.code == 0) {
+							res.info.giftlist.forEach((item, index) => {
+								item.active = false
+							})
+							this.giftlist = create2DArray(res.info.giftlist, 8)
+							console.log('giftList', this.giftlist)
+							this.showGift = true
+						}
+					})
+					.catch(() => {
+						this.$u.toast('error')
+					})
 			},
 		},
 	}

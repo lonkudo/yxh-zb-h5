@@ -1,11 +1,23 @@
-.w-300 {
-	width: 300rpx !important;
+.w-100 {
+	width: 100rpx !important;
 }
 .w-130 {
 	width: 130rpx !important;
 }
 .w-150 {
 	width: 150rpx !important;
+}
+.w-200 {
+	width: 200rpx !important;
+}
+.w-230 {
+	width: 230rpx !important;
+}
+.w-250 {
+	width: 250rpx !important;
+}
+.w-300 {
+	width: 300rpx !important;
 }
 .w-350 {
 	width: 350rpx !important;
@@ -34,29 +46,20 @@
 .w-660 {
 	width: 660rpx !important;
 }
-.w-200 {
-	width: 200rpx !important;
-}
-.w-250 {
-	width: 250rpx !important;
-}
-.w-230 {
-	width: 230rpx !important;
-}
 .w-700 {
 	width: 700rpx !important;
-}
-.w-100 {
-	width: 100rpx !important;
-}
-.w-150 {
-	width: 100rpx !important;
 }
 .w100 {
 	width: 100% !important;
 }
+.h-40 {
+	height: 40rpx !important;
+}
 .h-42 {
 	height: 42rpx !important;
+}
+.h-50 {
+	height: 50rpx !important;
 }
 .h-60 {
 	height: 60rpx !important;
@@ -164,4 +167,15 @@
 
 .of-h {
 	overflow: hidden !important;
+}
+
+/* sm-1 到 10 sm-2 就是 0.2 sm-9 就是0.9 */
+.sm-2 {
+	transform: scale(0.2) !important;
+}
+.sm-3 {
+	transform: scale(0.3) !important;
+}
+.sm-4 {
+	transform: scale(0.4) !important;
 }

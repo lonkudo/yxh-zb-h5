@@ -213,7 +213,10 @@
 								class="flex flex-direction align-center margin-left-xs margin-bottom-sm p-r"
 								v-for="(item, idx) in list"
 								:key="item.id"
-								@tap="giftId = item.id"
+								@tap="
+									giftId = item.id
+									giftInfo = item
+								"
 							>
 								<view
 									class="p-a top-10 left-5 bg-red br-8 flex align-center"
@@ -240,17 +243,19 @@
 							class="sm-3 margin-right-xs"
 							style="width: 30rpx; height: 30rpx; margin-top: -22rpx"
 						></coin>
-						<text class="fs-24 margin-right-sm">1893210</text>
+						<text class="fs-24 margin-right-sm">{{ this.coin }}</text>
 					</view>
 					<text class="fc-g fs-24" @tap="go('coin')">Gain ></text>
 					<view
 						class="margin-left-auto margin-right-sm h-50 bg-green flex justify-between padding-left-sm padding-right-sm align-center"
 						style="border-radius: 25rpx"
 					>
-						<text class="fc-b-0 fs-24" @tap="showGiftNum = true">{{
-							curGiftNum
-						}}</text>
-						<text class="fc-b-f fs-24 margin-left-lg">Send</text>
+						<text class="fc-b-0 fs-24" @tap="showGiftNum = true">{{ giftNum }}</text>
+						<text
+							class="fc-b-f fs-24 margin-left-lg"
+							@tap="sendGift(giftId, giftInfo, giftNum)"
+							>Send</text
+						>
 					</view>
 				</view>
 			</view>
@@ -261,19 +266,28 @@
 			:cancel-btn="false"
 			@click="changeGiftNum"
 		></u-action-sheet>
+		<pop-msg></pop-msg>
 	</view>
 </template>
 
 <script>
-	import { getLiveDetail, enterLiveRoom, getGiftList } from '@/api/live'
+	import {
+		getLiveDetail,
+		enterLiveRoom,
+		getGiftList,
+		sendGift,
+		getCoin,
+	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
 	import create2DArray from '@/utils/create2DArray.js'
 	import Coin from '@/components/Coin/Coin.vue'
+	import PopMsg from '@/components/PopMsg/PopMsg.vue'
+	import { GiftPoolBus } from '@/utils/bus.js'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level, Coin },
+		components: { Level, Coin, PopMsg },
 		data() {
 			return {
 				liveuid: '',
@@ -296,9 +310,16 @@
 				showGift: false,
 				giftlist: [],
 				giftId: '',
-				curGiftNum: 1,
+				giftInfo: {},
+				giftNum: 1,
 				showGiftNum: false,
 				giftNumOptions: [{ text: 1 }, { text: 10 }, { text: 100 }],
+				giftdonghuainfo: {
+					url: '',
+					user_nicename: '',
+				},
+				coin: 0,
+				pool: [], // 赠送礼物的消息池
 			}
 		},
 		async onLoad(options) {
@@ -322,8 +343,97 @@
 			},
 		},
 		methods: {
+			getCoin() {
+				/* 获取账户金币余额金币 */
+				getCoin(this.uid, this.token).then((res) => {
+					if (res.code == 0) {
+						this.coin = parseInt(res.info.coin)
+					}
+				})
+			},
+			sendGift(giftId, giftInfo, giftNum) {
+				/* 赠送礼物 */
+				this.guard()
+				if (!giftId) return this.$u.toast('please choose a type of gift')
+				// 最好还是别用this传值，万一有延时就错误了，
+
+				// this.pool.push()
+				// setTimeout(() => {
+				// 	this.pool.pop()
+				// }, 5000)
+				console.log('pool', this.pool)
+
+				if (this.coin < parseInt(giftInfo.needcoin) * parseInt(giftNum)) {
+					this.$u.toast(
+						'Insufficient gold coins, please do the task to get more gold coins'
+					)
+					return
+				} else {
+					sendGift({
+						uid: this.uid,
+						token: this.token,
+						liveuid: this.liveuid,
+						stream: this.stream,
+						giftid: this.giftId,
+						giftcount: giftNum,
+					}).then((res) => {
+						if (res.code == 0) {
+							//  刷新排行榜数据
+							// this.getRankList()
+							// console.log('res', res)
+							this.coin = parseInt(res.info.coin)
+							if (this.userInfo.level !== res.info.level) {
+								this.$store.dispatch('GetInfo', { uid: this.uid, token: this.token })
+							}
+
+							GiftPoolBus.$emit('text', 'rjekw')
+							console.log('---4----4----4----4----4---')
+							GiftPoolBus.$emit('push', {
+								id: this.userInfo.id,
+								giftId: giftInfo.id,
+								userInfo: {
+									user_nicename: this.userInfo.user_nicename,
+									avatar: this.userInfo.avatar,
+								},
+								giftInfo: {
+									giftNum: giftNum,
+									giftIcon: giftInfo.gifticon,
+									giftName: giftInfo.giftname,
+								},
+							})
+							// this.getCoin()
+							// this.giftNum = 1
+							// value.active = false
+							// 发送礼物
+							let broadcastObj = {
+								msg: [],
+								token: this.token,
+							}
+							let obj = {}
+							obj.roomnum = this.roomInfo.roomnum
+							obj.equipment = ''
+							obj.msgtype = '1'
+							obj.uhead = this.userInfo.avatar
+							obj.evensend = '0'
+							obj.ct = JSON.stringify(res.info)
+							obj._method_ = 'SendGift'
+							obj.uid = this.uid
+							obj.level = this.userInfo.level
+							obj.uname = this.userInfo.user_nicename
+							obj.vip_type = '0'
+							obj.livename = '000'
+							obj.action = '0'
+							broadcastObj.msg.push(obj)
+							this.ws.emit('broadcast', broadcastObj)
+						} else {
+							this.$u.toast(res.msg)
+						}
+					})
+				}
+			},
 			changeGiftNum(index) {
-				this.curGiftNum = this.giftNumOptions[index].text
+				/* 更改礼物数量 */
+				this.giftNum = this.giftNumOptions[index].text
 			},
 			go(path, item) {
 				/* 跳转 */
@@ -365,7 +475,7 @@
 				await enterLiveRoom(uid, token, this.liveuid, this.stream)
 					.then((res) => {
 						this.roomInfo = res.info[0]
-						console.log(res, 'res')
+						// console.log(res, 'res')
 					})
 					.catch((err) => {
 						console.log(err)
@@ -389,12 +499,12 @@
 					this.ws.emit('conn', roomObj)
 				})
 				this.ws.on('message', (mes) => {
-					console.log('mes', mes)
+					// console.log('mes', mes)
 				})
 				this.ws.on('broadcastingListen', (mes) => {
-					console.log('---1----1----1----1----1---')
-					console.log('mes', mes)
-					console.log('---2----23---2----2----2---')
+					// console.log('---1----1----1----1----1---')
+					// console.log('mes', mes)
+					// console.log('---2----23---2----2----2---')
 					this.chatList.push(JSON.parse(mes))
 				})
 				this.ws.on('disconnect', (e) => {
@@ -418,7 +528,7 @@
 				})
 			},
 			inputSend() {
-				console.log('inputSend')
+				// console.log('inputSend')
 				if (this.inputContent.trim().length > 0) {
 					this.sendMsg(this.inputContent)
 				} else {
@@ -447,10 +557,11 @@
 			},
 			getGiftList() {
 				/* 获取礼物列表 */
-				console.log('---gift----gift----gift----gift----gift---')
 				this.guard()
 				const uid = this.uid
 				const token = this.token
+				if (this.giftlist.length !== 0) return (this.showGift = true)
+				this.getCoin()
 				getGiftList({ uid, token })
 					.then((res) => {
 						if (res.code == 0) {
@@ -458,7 +569,7 @@
 								item.active = false
 							})
 							this.giftlist = create2DArray(res.info.giftlist, 8)
-							console.log('giftList', this.giftlist)
+							// console.log('giftList', this.giftlist)
 							this.showGift = true
 						}
 					})

@@ -95,6 +95,7 @@ export function getCoin(uid, token) {
 		url: '?service=Live.getCoin',
 		method: 'POST',
 		data: { uid, token },
+		hideLoading: true,
 	})
 }
 
@@ -104,6 +105,7 @@ export function getRankList(stream) {
 		url: '?service=Live.getRankList',
 		method: 'POST',
 		data: { stream },
+		hideLoading: true,
 	})
 }
 
@@ -122,6 +124,7 @@ export function sendGift(data) {
 		url: '?service=Live.SendGift',
 		method: 'POST',
 		data: data,
+		hideLoading: true,
 	})
 }
 

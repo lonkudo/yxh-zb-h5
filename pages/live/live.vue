@@ -244,15 +244,23 @@
 					</view>
 					<text class="fc-g fs-24" @tap="go('coin')">Gain ></text>
 					<view
-						class="margin-left-auto margin-right-sm h-50 bg-green flex justify-between padding-left-sm padding-right-sm w-200 align-center"
+						class="margin-left-auto margin-right-sm h-50 bg-green flex justify-between padding-left-sm padding-right-sm align-center"
 						style="border-radius: 25rpx"
 					>
-						<text class="fc-b-0 fs-24">100</text>
-						<text class="fc-b-f fs-24">Send</text>
+						<text class="fc-b-0 fs-24" @tap="showGiftNum = true">{{
+							curGiftNum
+						}}</text>
+						<text class="fc-b-f fs-24 margin-left-lg">Send</text>
 					</view>
 				</view>
 			</view>
 		</u-popup>
+		<u-action-sheet
+			:list="giftNumOptions"
+			v-model="showGiftNum"
+			:cancel-btn="false"
+			@click="changeGiftNum"
+		></u-action-sheet>
 	</view>
 </template>
 
@@ -288,6 +296,9 @@
 				showGift: false,
 				giftlist: [],
 				giftId: '',
+				curGiftNum: 1,
+				showGiftNum: false,
+				giftNumOptions: [{ text: 1 }, { text: 10 }, { text: 100 }],
 			}
 		},
 		async onLoad(options) {
@@ -311,10 +322,11 @@
 			},
 		},
 		methods: {
-			addSnippet() {
-				this.$store.commit('add_sni', 'my str')
+			changeGiftNum(index) {
+				this.curGiftNum = this.giftNumOptions[index].text
 			},
 			go(path, item) {
+				/* 跳转 */
 				if (path === 'related') {
 					uni.navigateTo({
 						url: 'videoDetail?id=' + item.id,

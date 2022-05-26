@@ -29,7 +29,10 @@
 			>
 				<view class="margin-sm flex justify-between">
 					<text class="fc-b-6 fs-24 f-hide w-500">{{ item.msg }}</text>
-					<text class="fc-g fs-30 iconfont icon-bianji"></text>
+					<text
+						class="fc-g fs-30 iconfont icon-bianji"
+						@tap="go('add', item)"
+					></text>
 				</view>
 			</u-swipe-action>
 		</scroll-view>
@@ -66,6 +69,13 @@
 			},
 			open(item) {
 				this.$store.commit('show_sni', item)
+			},
+			go(path, item) {
+				if (path === 'add') {
+					uni.navigateTo({
+						url: 'add?item=' + JSON.stringify(item),
+					})
+				}
 			},
 		},
 	}

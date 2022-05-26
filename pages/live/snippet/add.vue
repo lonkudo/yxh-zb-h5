@@ -37,19 +37,31 @@
 				border: true,
 				height: 100,
 				autoHeight: true,
+				item: null,
 			}
 		},
-		onLoad() {
+		onLoad(options) {
 			this.myHeight = this.initScrollHeight(88)
+			console.log('options', options)
+			if (options.item) {
+				this.item = JSON.parse(options.item)
+				this.value = this.item.msg
+			}
 		},
 		methods: {
 			saveSnippet() {
-				setTimeout(() => {
-					if (this.value.trim().length === 0)
-						return this.$u.toast("content can't be empty")
-					this.$store.commit('add_sni', this.value)
-					this.value = ''
-				}, 50)
+				if (this.value.trim().length === 0)
+					return this.$u.toast("content can't be empty")
+
+				if (this.item) {
+					this.item.msg = this.value
+					this.$store.commit('mod_sni', this.item)
+				} else {
+					setTimeout(() => {
+						this.$store.commit('add_sni', this.value)
+						this.value = ''
+					}, 50)
+				}
 				// uni.navigateTo({
 				// 	url: 'snippet',
 				// })

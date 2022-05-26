@@ -1,9 +1,3 @@
-console.log(
-	'aa',
-
-	uni.getStorageSync('snippetList') || '[]'
-)
-
 const snippet = {
 	state: {
 		snippetList: uni.getStorageSync('snippetList') || [],
@@ -36,6 +30,14 @@ const snippet = {
 					element.show = false
 				}
 			})
+		},
+		mod_sni: function (state, obj) {
+			const index = state.snippetList.findIndex((ele) => {
+				console.log(ele, obj)
+				return ele.timestamp === obj.timestamp
+			})
+			state.snippetList[index].msg = obj.msg
+			uni.setStorageSync('snippetList', state.snippetList)
 		},
 	},
 }

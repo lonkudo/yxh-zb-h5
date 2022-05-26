@@ -43,23 +43,22 @@
 			}
 		}
 		dealItem(item) {
-			const tempItem = this.findItem(item)
+			const index = this.tempList.findIndex((ele, index) => {
+				console.log('ele')
+				return ele.id === item.id
+			})
 			/* 先查找暂存数组里面有没有这个item */
-			if (tempItem === null) {
+			if (index === -1) {
 				/* 没有就添加item */
 				this.addItem(item)
 			} else {
 				/* 有的话获取到tempItem和新item比对 */
-				if (tempItem.giftId === item.giftId) {
-					tempItem.countdown = 5
-					tempItem.giftInfo.giftNum += item.giftInfo.giftNum
-					console.log('tempItem')
+				if (this.tempList[index].giftId === item.giftId) {
+					this.tempList[index].addGiftNum(item.giftInfo.giftNum)
 				} else {
-					tempItem.countdown = 5
-					tempItem.giftInfo = item.giftInfo
+					this.tempList[index].changeGift(item.giftInfo)
 				}
 			}
-			console.log('aaaaaaa', this.tempList, 'bbbbbbb', tempItem, 'cccccc', item)
 		}
 	}
 	class TempItem {
@@ -83,17 +82,19 @@
 			this.countdown = 5
 			console.log('reset', this.countdown)
 		}
-		get Id() {
-			return item.id
+		get id() {
+			return this.item.id
 		}
 		get giftId() {
-			return item.giftId
+			return this.item.giftId
 		}
 		addGiftNum(giftNum) {
 			this.item.giftInfo.giftNum += giftNum
+			this.reset()
 		}
 		changeGift(giftInfo) {
 			this.item.giftInfo = giftInfo
+			this.reset()
 		}
 		destory() {
 			console.log('this', this.myTemp)
@@ -121,8 +122,11 @@
 		created() {
 			const tmp = new Temp()
 			GiftPoolBus.$on('push', (item) => {
-				tmp.addItem(item)
+				tmp.dealItem(item)
 			})
+			setInterval(() => {
+				console.log(tmp.tempList)
+			}, 1000)
 			const item = {
 				id: 321,
 				giftId: 999,

@@ -1,10 +1,10 @@
 <template>
 	<view class="popMsg">
-		<view v-for="(item, index) in tempList" :key="index">
-			<view>
-				<text class="fc-b-f">{{ item }} </text>
+		<transition-group name="slide">
+			<view v-for="(item, index) in tempList" :key="index" style="display: block">
+				<pop-msg-item :info="item" class="margin-bottom-xs"></pop-msg-item>
 			</view>
-		</view>
+		</transition-group>
 	</view>
 </template>
 
@@ -44,7 +44,7 @@
 		}
 		dealItem(item) {
 			const index = this.tempList.findIndex((ele, index) => {
-				console.log('ele')
+				// console.log('ele')
 				return ele.id === item.id
 			})
 			/* 先查找暂存数组里面有没有这个item */
@@ -53,10 +53,12 @@
 				this.addItem(item)
 			} else {
 				/* 有的话获取到tempItem和新item比对 */
+				console.log('giftId', this.tempList[index].giftId, item.giftId)
 				if (this.tempList[index].giftId === item.giftId) {
 					this.tempList[index].addGiftNum(item.giftInfo.giftNum)
 				} else {
-					this.tempList[index].changeGift(item.giftInfo)
+					console.log('---3----3----3----3----3---')
+					this.tempList[index].changeGift(item)
 				}
 			}
 		}
@@ -88,18 +90,14 @@
 		get giftId() {
 			return this.item.giftId
 		}
-		get giftNum() {
-			return this.item.giftInfo.giftNum
-		}
-		get giftName() {
-			return this.item.giftInfo.giftName
-		}
 		addGiftNum(giftNum) {
 			this.item.giftInfo.giftNum += giftNum
 			this.reset()
 		}
-		changeGift(giftInfo) {
-			this.item.giftInfo = giftInfo
+		changeGift(item) {
+			console.log('---11----11----11----11----11---')
+			this.item = JSON.parse(JSON.stringify(item))
+			console.log('---22----22----22----22----22---')
 			this.reset()
 		}
 		destory() {
@@ -109,8 +107,10 @@
 	}
 
 	import { GiftPoolBus } from '@/utils/bus.js'
+	import PopMsgItem from './PopMsgItem.vue'
 	export default {
 		name: 'PopMsg',
+		components: { PopMsgItem },
 		computed: {},
 		props: {
 			pool: {
@@ -123,30 +123,21 @@
 		data() {
 			return {
 				myTemp: null,
+				show: false,
 			}
 		},
 		created() {
 			const tmp = new Temp()
 			this.myTemp = tmp
 			GiftPoolBus.$on('push', (item) => {
-				// console.log('---2----2----2----2----2---')
-				// console.log('item', item)
 				tmp.dealItem(item)
 			})
-			// setInterval(() => {
-			// 	console.log(tmp.tempList)
-			// }, 1000)
-			const item = {
-				id: 321,
-				giftId: 999,
-				giftInfo: { giftNum: 50, giftName: 'hello' },
-			}
 		},
 		computed: {
 			tempList: function () {
 				let arr = []
 				this.myTemp.tempList.forEach((element) => {
-					arr.push(element.id)
+					arr.push(element.item)
 				})
 				return arr
 			},
@@ -157,10 +148,76 @@
 <style lang="scss">
 	.popMsg {
 		position: fixed;
-		top: 500rpx;
+		top: 400rpx;
 		left: 0;
 		right: 0;
-		bottom: 300rpx;
+		bottom: 100rpx;
 		background-color: rgba(0, 0, 0, 0.1);
+		z-index: 10;
 	}
+	.slide-enter-active {
+		animation: slidein 0.5s;
+	}
+	.slide-leave-active {
+		// 激活状态的效果
+		animation: slideout 0.5s;
+	}
+	@keyframes slidein {
+		from {
+			margin-left: -100%;
+			width: 300%;
+		}
+
+		to {
+			margin-left: 0%;
+			width: 100%;
+		}
+	}
+	@keyframes slideout {
+		from {
+			margin-left: 0%;
+			width: 100%;
+		}
+		to {
+			margin-left: -100%;
+			width: 300%;
+		}
+	}
+	.bounce-enter-active {
+		animation: bounce-in 500ms;
+	}
+	.bounce-leave-active {
+		animation: bounce-in 500ms reverse;
+	}
+	@keyframes bounce-in {
+		0% {
+			transform: scale(0);
+		}
+		50% {
+			transform: scale(1.25);
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+	.fade-enter-active {
+		animation: bounce-in 500ms;
+	}
+	.fade-leave-active {
+		animation: bounce-in 500ms reverse;
+	}
+	.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+		opacity: 0;
+	}
+
+	// .slide-enter-from, // 起始和最终离开的效果
+	// .slide-leave-to {
+	// 	margin-left: -100%;
+	// 	width: 300%;
+	// }
+	// .slide-enter-to,
+	// .slide-leave-from {
+	// 	margin-left: 0%;
+	// 	width: 100%;
+	// }
 </style>

@@ -31,10 +31,10 @@
 			@animationfinish="animationfinish"
 			:style="{ height: myHeight + 'rpx' }"
 		>
-			<swiper-item class="swiper-item" :key="0" @touchmove.stop="">
+			<swiper-item class="swiper-item" :key="'Chat'" @touchmove.stop="">
 				<view
 					class="b-f flex flex-direction"
-					:id="'content-wrap' + 1"
+					:id="'content-wrap' + 'Chat'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
 					<scroll-view
@@ -135,24 +135,31 @@
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
-				:key="1"
+				:key="'Squad'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<team-formation :myHeight="myHeight" :game_id="game_id"></team-formation>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
-				:key="2"
+				:key="'Analyse'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<scroll-view scroll-y="" :id="'content-wrap' + 'Analyse'"
+					>analyse</scroll-view
+				>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
-				:key="3"
+				:key="'Contributon'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<scroll-view scroll-y="" :id="'content-wrap' + 'Contributon'"
+					>jkfds</scroll-view
+				>
 			</swiper-item>
 		</swiper>
 		<!-- 快捷语弹框 -->
@@ -277,6 +284,12 @@
 		getGiftList,
 		sendGift,
 		getCoin,
+		getBattleHistory,
+		getPointsRecord,
+		getFutureGames,
+		teamFormation,
+		getWeather,
+		getBattleHistoryOfThem,
 	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
@@ -284,10 +297,11 @@
 	import Coin from '@/components/Coin/Coin.vue'
 	import PopMsg from '@/components/PopMsg/PopMsg.vue'
 	import { GiftPoolBus } from '@/utils/bus.js'
+	import TeamFormation from './components/TeamFormation.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level, Coin, PopMsg },
+		components: { Level, Coin, PopMsg, TeamFormation },
 		data() {
 			return {
 				liveuid: '',
@@ -320,6 +334,12 @@
 				},
 				coin: 0,
 				pool: [], // 赠送礼物的消息池
+				/* 阵容信息 */
+				battleObj: {}, // 对战历史
+				battleOfThemList: [], // 对战历史
+				pointObj: {}, // 积分近况
+				futureObj: {}, // 未来比赛
+				squadFlag: false, // 如果有阵容信息，则展示阵容信息
 			}
 		},
 		async onLoad(options) {
@@ -331,6 +351,12 @@
 			this.getLiveDetail()
 			await this.enterLiveRoom()
 			this.createChatServerClient()
+			/*  */
+			this.getBattleHistory(this.game_id) // 获取到数据以后初始化对战历史
+			this.getPointsRecord(this.game_id)
+			this.getFutureGames(this.game_id)
+			this.getBattleHistoryOfThem(this.game_id) // 获取到数据以后初始化对战历史
+			this.getWeather(this.game_id) // 获取天气
 		},
 		async onShow() {},
 		onUnload() {
@@ -590,6 +616,56 @@
 					})
 					.catch(() => {
 						this.$u.toast('error')
+					})
+			},
+			getBattleHistoryOfThem(match_id) {
+				getBattleHistoryOfThem({ match_id })
+					.then((res) => {
+						this.battleOfThemList = res.info.list
+						// console.log("");
+						// console.log("this.battleOfThemList", this.battleOfThemList);
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			getPointsRecord(match_id) {
+				getPointsRecord({ match_id })
+					.then((res) => {
+						this.pointObj = res.info
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			getFutureGames(match_id) {
+				getFutureGames({ match_id })
+					.then((res) => {
+						// console.log('this.pppp.future', res)
+						this.futureObj = res.info
+						// console.log('this.potinList.future', this.futureObj)
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+
+			getBattleHistory(match_id) {
+				getBattleHistory({ match_id })
+					.then((res) => {
+						this.battleObj = res.info
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			getWeather(match_id) {
+				getWeather({ match_id })
+					.then((res) => {
+						this.env = res.info
+					})
+					.catch((err) => {
+						console.log(err)
 					})
 			},
 		},

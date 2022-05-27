@@ -53,7 +53,7 @@
 <style lang="scss">
 	.popMsg {
 		position: fixed;
-		top: 400rpx;
+		top: 540rpx;
 		left: 0;
 		right: 0;
 		bottom: 100rpx;

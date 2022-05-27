@@ -28,7 +28,7 @@
 					this.$nextTick(() => {
 						this.play()
 					})
-					console.log('newVal', newValue.countdown)
+					// console.log('newVal', newValue.countdown)
 				},
 				immediate: true,
 				deep: true,
@@ -51,16 +51,6 @@
 					})
 				})
 			},
-		},
-		created() {},
-		beforeUpdate() {
-			console.log('update')
-		},
-		destory() {
-			console.log('destory')
-		},
-		beforeDestory() {
-			console.log('before')
 		},
 	}
 </script>

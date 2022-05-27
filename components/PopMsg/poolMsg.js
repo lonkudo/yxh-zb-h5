@@ -42,7 +42,7 @@ export class Temp {
 			this.addItem(item)
 		} else {
 			/* 有的话获取到tempItem和新item比对 */
-			console.log('giftId', this.tempList[index].giftId, item.giftId)
+			// console.log('giftId', this.tempList[index].giftId, item.giftId)
 			if (this.tempList[index].giftId === item.giftId) {
 				this.tempList[index].addGiftNum(item.giftInfo.giftNum)
 			} else {

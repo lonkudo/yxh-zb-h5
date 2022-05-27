@@ -136,7 +136,7 @@
 				else this.isUserEmpty = true
 			},
 			checkPass(e) {
-				console.log('checkPass')
+				// console.log('checkPass')
 				if (this.loginForm.user_pass) this.isPassEmpty = false
 				else this.isPassEmpty = true
 			},
@@ -176,7 +176,7 @@
 				if (this.loginForm.loginType === 'code') {
 					const regCode = new RegExp(/^\d{6}$/)
 					let isCode = regCode.test(this.loginForm.user_pass)
-					console.log('ret', regCode.test(this.loginForm.user_pass))
+					// console.log('ret', regCode.test(this.loginForm.user_pass))
 					if (!isCode) {
 						uni.showToast({
 							title: 'Verification Code' + 'should be 6 digits',
@@ -232,9 +232,9 @@
 		},
 		computed: {
 			isActive: function () {
-				console.log('userLogin', this.loginForm.user_login.length)
+				// console.log('userLogin', this.loginForm.user_login.length)
 				if (this.loginForm.user_login.length === 10) {
-					console.log('in true')
+					// console.log('in true')
 					return true
 				} else {
 					return false

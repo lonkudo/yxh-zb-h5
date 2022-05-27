@@ -42,7 +42,7 @@
 		},
 		onLoad(options) {
 			this.myHeight = this.initScrollHeight(88)
-			console.log('options', options)
+			// console.log('options', options)
 			if (options.item) {
 				this.item = JSON.parse(options.item)
 				this.value = this.item.msg

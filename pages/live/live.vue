@@ -74,7 +74,7 @@
 								"
 							>
 								<level
-									:level="item.msg[0].level"
+									:level="item.msg[0].ct.level"
 									v-if="item.msg[0].ct.level !== '0'"
 								></level>
 								<text class="margin-left-xs fc-g fs-24">
@@ -96,7 +96,7 @@
 							<!-- 用户离开直播间 -->
 							<template v-else-if="item.msg[0]._method_ === 'disconnect'">
 								<level
-									:level="item.msg[0].level"
+									:level="item.msg[0].ct.level"
 									v-if="item.msg[0].ct.level !== '0'"
 								></level>
 								<text class="margin-left-xs fc-g fs-24">
@@ -328,15 +328,15 @@
 			this.game_id = options.game_id
 			this.myHeight = this.initScrollHeight(544)
 			this.chatHeight = this.initScrollHeight(624)
-		},
-		async onShow() {
 			this.getLiveDetail()
 			await this.enterLiveRoom()
 			this.createChatServerClient()
 		},
-		onHide() {
+		async onShow() {},
+		onUnload() {
 			this.ws.disconnect()
 		},
+		onHide() {},
 		computed: {
 			snippetList: function () {
 				return this.$store.state.snippet.snippetList
@@ -361,7 +361,7 @@
 				// setTimeout(() => {
 				// 	this.pool.pop()
 				// }, 5000)
-				console.log('pool', this.pool)
+				// console.log('pool', this.pool)
 
 				if (this.coin < parseInt(giftInfo.needcoin) * parseInt(giftNum)) {
 					this.$u.toast(
@@ -502,8 +502,8 @@
 					// console.log('mes', mes)
 				})
 				this.ws.on('broadcastingListen', (mes) => {
-					console.log('---1----1----1----1----1---')
 					let pMes = JSON.parse(mes)
+					console.log('pMes', pMes)
 					if (pMes.msg[0]._method_ === 'SendGift') {
 						GiftPoolBus.$emit('push', {
 							id: pMes.msg[0].uid,

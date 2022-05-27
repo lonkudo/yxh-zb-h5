@@ -37,7 +37,6 @@ import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 
 import io from '@/uni_modules/socket.io-client'
-console.log('io', io)
 Vue.prototype.io = io
 
 Vue.config.productionTip = false

@@ -147,9 +147,7 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<scroll-view scroll-y="" :id="'content-wrap' + 'Analyse'"
-					>analyse</scroll-view
-				>
+				<analyse :myHeight="myHeight" :game_id="game_id"></analyse>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -284,12 +282,6 @@
 		getGiftList,
 		sendGift,
 		getCoin,
-		getBattleHistory,
-		getPointsRecord,
-		getFutureGames,
-		teamFormation,
-		getWeather,
-		getBattleHistoryOfThem,
 	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
@@ -298,10 +290,11 @@
 	import PopMsg from '@/components/PopMsg/PopMsg.vue'
 	import { GiftPoolBus } from '@/utils/bus.js'
 	import TeamFormation from './components/TeamFormation.vue'
+	import Analyse from './components/Analyse'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level, Coin, PopMsg, TeamFormation },
+		components: { Level, Coin, PopMsg, TeamFormation, Analyse },
 		data() {
 			return {
 				liveuid: '',
@@ -352,11 +345,6 @@
 			await this.enterLiveRoom()
 			this.createChatServerClient()
 			/*  */
-			this.getBattleHistory(this.game_id) // 获取到数据以后初始化对战历史
-			this.getPointsRecord(this.game_id)
-			this.getFutureGames(this.game_id)
-			this.getBattleHistoryOfThem(this.game_id) // 获取到数据以后初始化对战历史
-			this.getWeather(this.game_id) // 获取天气
 		},
 		async onShow() {},
 		onUnload() {
@@ -616,56 +604,6 @@
 					})
 					.catch(() => {
 						this.$u.toast('error')
-					})
-			},
-			getBattleHistoryOfThem(match_id) {
-				getBattleHistoryOfThem({ match_id })
-					.then((res) => {
-						this.battleOfThemList = res.info.list
-						// console.log("");
-						// console.log("this.battleOfThemList", this.battleOfThemList);
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getPointsRecord(match_id) {
-				getPointsRecord({ match_id })
-					.then((res) => {
-						this.pointObj = res.info
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getFutureGames(match_id) {
-				getFutureGames({ match_id })
-					.then((res) => {
-						// console.log('this.pppp.future', res)
-						this.futureObj = res.info
-						// console.log('this.potinList.future', this.futureObj)
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-
-			getBattleHistory(match_id) {
-				getBattleHistory({ match_id })
-					.then((res) => {
-						this.battleObj = res.info
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getWeather(match_id) {
-				getWeather({ match_id })
-					.then((res) => {
-						this.env = res.info
-					})
-					.catch((err) => {
-						console.log(err)
 					})
 			},
 		},

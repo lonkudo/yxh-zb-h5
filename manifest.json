@@ -85,7 +85,7 @@
 				"/appapi": {
 					"target": "http://39.103.165.5/appapi",
 					"changeOrigin": true,
-					"ws": false,
+					"ws": true,
 					"secure": false,
 					"pathRewrite": {
 						"^/appapi": "/"

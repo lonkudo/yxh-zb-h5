@@ -1,107 +1,45 @@
 <template>
-	<scroll-view scroll-y="" :id="'content-wrap' + 'Analyse'">
+	<scroll-view
+		scroll-y
+		:id="'content-wrap' + 'Analyse'"
+		:style="{ height: myHeight + 'rpx' }"
+	>
 		<weather :game_id="game_id"></weather>
+		<battle-of-them
+			:game_id="game_id"
+			@receiveInfo="receiveInfo"
+		></battle-of-them>
+		<template v-if="!this.isEmpty(teamInfo)">
+			<league-stand :game_id="game_id" :teamInfo="teamInfo"></league-stand>
+			<battle-record :game_id="game_id"></battle-record>
+			<future-games :game_id="game_id"></future-games>
+		</template>
+		<template v-else>loading</template>
 	</scroll-view>
 </template>
 
 <script>
-	import {
-		getBattleHistory,
-		getPointsRecord,
-		getFutureGames,
-		getBattleHistoryOfThem,
-	} from '@/api/live'
 	import Weather from './Weather.vue'
+	import BattleOfThem from './BattleOfThem.vue'
+	import LeagueStand from './LeagueStand.vue'
+	import BattleRecord from './BattleRecord.vue'
+	import FutureGames from './FutureGames.vue'
 	export default {
 		name: 'Analyse',
-		components: { Weather },
+		components: { Weather, BattleOfThem, LeagueStand, BattleRecord, FutureGames },
 		props: ['myHeight', 'game_id'],
 		data() {
 			return {
-				battleObj: {}, // 对战历史
-				battleOfThemList: [], // 对战历史
-				pointObj: {}, // 积分近况
-				futureObj: {}, // 未来比赛
+				teamInfo: {},
 			}
 		},
-		computed: {
-			weatherImgUrl: function () {
-				if (JSON.stringify(this.env) === '{}') return this.weatherPic[4].pic
-				let index = 0
-				if (this.env.weather === 0) {
-					return this.weatherPic[0].pic
-				} else {
-					index = this.env.weather - 1
-					return this.weatherPic[index].pic
-				}
-			},
-			weatherName: function () {
-				if (JSON.stringify(this.env) === '{}') return this.weatherPic[0].name
-				let index = 0
-				if (this.env.weather === 0) {
-					return 'no info'
-				} else {
-					index = this.env.weather - 1
-					return this.weatherPic[index].name
-				}
-			},
-		},
-		created() {
-			this.getBattleHistory(this.game_id) // 获取到数据以后初始化对战历史
-			this.getPointsRecord(this.game_id)
-			this.getFutureGames(this.game_id)
-			this.getBattleHistoryOfThem(this.game_id) // 获取到数据以后初始化对战历史
-			this.getWeather(this.game_id) // 获取天气
-		},
+		computed: {},
+		created() {},
 		methods: {
-			getBattleHistoryOfThem(match_id) {
-				getBattleHistoryOfThem({ match_id })
-					.then((res) => {
-						console.log('his', res)
-						this.battleOfThemList = res.info.list
-						// console.log("this.battleOfThemList", this.battleOfThemList);
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getPointsRecord(match_id) {
-				getPointsRecord({ match_id })
-					.then((res) => {
-						this.pointObj = res.info
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getFutureGames(match_id) {
-				getFutureGames({ match_id })
-					.then((res) => {
-						// console.log('this.pppp.future', res)
-						this.futureObj = res.info
-						// console.log('this.potinList.future', this.futureObj)
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getBattleHistory(match_id) {
-				getBattleHistory({ match_id })
-					.then((res) => {
-						this.battleObj = res.info
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
-			getWeather(match_id) {
-				getWeather({ match_id })
-					.then((res) => {
-						this.env = res.info
-					})
-					.catch((err) => {
-						console.log(err)
-					})
+			receiveInfo(val) {
+				console.log('val', val)
+				console.log('---1----1----1----1----1---')
+				this.teamInfo = val
 			},
 		},
 	}

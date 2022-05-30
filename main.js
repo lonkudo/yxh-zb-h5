@@ -13,6 +13,7 @@ Vue.use(uView)
 
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)
+Vue.prototype.formatGiven = formatGiven
 
 import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty

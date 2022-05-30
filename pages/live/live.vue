@@ -84,14 +84,19 @@
 							</template>
 							<!-- 用户赠送礼物 -->
 							<template v-else-if="item.msg[0]._method_ === 'SendGift'">
-								<level
-									:level="item.msg[0].level"
-									v-if="item.msg[0].ct.level !== '0'"
-								></level>
-								<text class="margin-left-xs fc-g fs-24"> {{ item.msg[0].uname }}:</text>
-								<text class="margin-left-sm fc-red fs-24">{{
-									item.msg[0].ct.giftname + ' x' + item.msg[0].ct.giftcount
-								}}</text>
+								<view class="flex align-center">
+									<level
+										:level="item.msg[0].level"
+										v-if="item.msg[0].ct.level !== '0'"
+									></level>
+									<text class="margin-left-xs fc-g fs-24">
+										{{ item.msg[0].uname }}:</text
+									>
+									<image :src="item.msg[0].ct.gifticon" mode="" class="w-40 h-40" />
+									<text class="fc-red fs-24">
+										{{ ' x' + item.msg[0].ct.giftcount }}</text
+									>
+								</view>
 							</template>
 							<!-- 用户离开直播间 -->
 							<template v-else-if="item.msg[0]._method_ === 'disconnect'">
@@ -155,9 +160,7 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<scroll-view scroll-y="" :id="'content-wrap' + 'Contributon'"
-					>jkfds</scroll-view
-				>
+				<contribution :myHeight="myHeight" :stream="stream"></contribution>
 			</swiper-item>
 		</swiper>
 		<!-- 快捷语弹框 -->
@@ -291,10 +294,11 @@
 	import { GiftPoolBus } from '@/utils/bus.js'
 	import TeamFormation from './components/TeamFormation.vue'
 	import Analyse from './components/Analyse'
+	import Contribution from './components/Contribution.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level, Coin, PopMsg, TeamFormation, Analyse },
+		components: { Level, Coin, PopMsg, TeamFormation, Analyse, Contribution },
 		data() {
 			return {
 				liveuid: '',
@@ -516,7 +520,8 @@
 					// console.log('mes', mes)
 				})
 				this.ws.on('broadcastingListen', (mes) => {
-					let pMes = JSON.parse(mes)
+					console.log('Mes', typeof mes[0])
+					let pMes = JSON.parse(mes[0])
 					console.log('pMes', pMes)
 					if (pMes.msg[0]._method_ === 'SendGift') {
 						GiftPoolBus.$emit('push', {

@@ -11,8 +11,8 @@
 		></battle-of-them>
 		<template v-if="!this.isEmpty(teamInfo)">
 			<league-stand :game_id="game_id" :teamInfo="teamInfo"></league-stand>
-			<battle-record :game_id="game_id"></battle-record>
-			<future-games :game_id="game_id"></future-games>
+			<battle-record :game_id="game_id" :teamInfo="teamInfo"></battle-record>
+			<future-games :game_id="game_id" :teamInfo="teamInfo"></future-games>
 		</template>
 		<template v-else>loading</template>
 	</scroll-view>

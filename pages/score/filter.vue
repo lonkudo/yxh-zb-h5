@@ -1,6 +1,6 @@
 <template>
 	<u-index-list :scrollTop="scrollTop" class="b-f">
-		<checkbox-group>
+		<checkbox-group @change="eventChecked">
 			<view v-for="(event, index) in indexList" :key="index">
 				<u-index-anchor :index="event.title" style="background-color: #fff" />
 				<view class="flex flex-wrap">
@@ -18,8 +18,8 @@
 							<checkbox
 								:value="item.id"
 								:checked="item.isSelected"
-								@change="eventChecked"
 								style="display: none"
+								:id="item.id"
 							></checkbox>
 							<view class="f-hide">{{ item.name }}</view>
 						</view>
@@ -95,8 +95,9 @@
 					val.checked = true
 				})
 			},
-			eventChecked(e) {
+			eventChecked(e, detail) {
 				console.log('item', e)
+				console.log('item', e.detail.value)
 			},
 		},
 	}
@@ -150,7 +151,7 @@
 	.compe-item.in-active {
 		background-color: #fff;
 		color: #999;
-		border: 1rpx solide #999;
+		border: 1rpx solid #999;
 	}
 	.u-index-anchor {
 		background-color: #fff !important;

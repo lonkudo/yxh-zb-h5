@@ -1,0 +1,68 @@
+export default {
+	id: '3669676',
+	competition_id: '457',
+	home_team_id: '20491',
+	away_team_id: '63659',
+	match_time: '1653875700',
+	home_scores: [2, 0, 0, 2, 11, 0, 0],
+	away_scores: [1, 1, 0, 2, 4, 0, 0],
+	status_id: '8',
+	home_position: '13',
+	away_position: '11',
+	animation:
+		'https://tracker-g.aiscore.com/football/animate?profile=YOvEiPHNNhaHB&id=3669676&lang=en',
+	video: 'https://play.zkshuye.cn/live/sd-1-3669676.m3u8',
+	odds: {
+		asia_text: 1,
+		bs_text: '2.5/3',
+		chupan: {
+			asia: [1653807252, '', 0.88, 1, 0.97, 1, 0, '0-0'],
+			eu: [1653807252, '', 1.53, 4.33, 6.5, 1, 0, '0-0'],
+			bs: [1653807252, '', 0.93, 2.5, 0.93, 1, 0, '0-0'],
+			cr: [1653806948, '', 0.975, 10, 0.825, 1, 0, '0-0'],
+		},
+		jishi: {
+			asia: [1653840079, '', 0.97, 1, 0.88, 1, 0, '0-0'],
+			eu: [1653839550, '', 1.6, 4.2, 5.5, 1, 0, '0-0'],
+			bs: [1653840098, '', 1, 2.75, 0.85, 1, 0, '0-0'],
+			cr: [1653806948, '', 0.975, 10, 0.825, 1, 0, '0-0'],
+		},
+		gunqiu: {
+			asia: [],
+			eu: [],
+			bs: [],
+			cr: [],
+		},
+	},
+	home_name: 'Seattle Sounders',
+	home_logo:
+		'https://cdn.sportnanoapi.com/football/team/ed962d3f5e2ce55c2e7d8685cfe5a61e.png',
+	away_name: 'Charlotte FC',
+	away_logo:
+		'https://cdn.sportnanoapi.com/football/team/5c01731e3c513a3797c85b95c436e0d9.png',
+	competition_name: 'USA MLS',
+	time: 0,
+	live: [
+		{
+			id: '3669676',
+			title: 'video',
+			thumb: 'http://39.103.165.5//upload/video_thumb.png?v1',
+			uid: 2,
+			stream: '3_3669676',
+			islive: 1,
+			user_nicename: 'Official Live',
+			avatar: 'http://39.103.165.5//upload/video_avatar.png?v1',
+		},
+		{
+			id: '3669676',
+			title: 'animation',
+			thumb: 'http://39.103.165.5//upload/animation_thumb.png?v1',
+			uid: 3,
+			stream: '3_3669676',
+			islive: 1,
+			user_nicename: 'Official animation',
+			avatar: 'http://39.103.165.5//upload/animation_avatar.png?v1',
+		},
+	],
+	is_appointment: 0,
+}

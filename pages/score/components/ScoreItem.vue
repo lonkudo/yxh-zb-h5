@@ -1,14 +1,15 @@
 <template>
-	<view class="flex flex-direction b-f padding-xs padding-top-sm">
+	<view
+		class="flex flex-direction b-f padding-xs padding-top-sm"
+		v-if="!this.isEmpty(info)"
+	>
 		<view class="fs-14">
 			<view class="flex align-center justify-center">
 				<view class="flex align-center w-300 justify-start">
 					<text
-						class="fw-6 fc-blue margin-right-xs"
+						class="fw-6 fc-blue margin-right-xs f-hide"
 						:style="{
 							maxWidth: '210rpx',
-							overflow: 'hidden',
-							textOverflow: 'ellipsis',
 						}"
 					>
 						{{ info.competition_name }}</text
@@ -16,7 +17,9 @@
 					<text class="fc-b-9">{{ info.match_time | formatGiven('hh:ss') }}</text>
 				</view>
 				<!-- <view class="flex align-center fc-g">{{ getStatus(info.status_id) }}</view> -->
-				<view class="flex align-center fc-g w-150 justify-center">Not Started</view>
+				<view class="flex align-center fc-g w-150 justify-center"
+					><slot>Not Started</slot></view
+				>
 				<view class="flex align-center w-300 justify-end">
 					<view class="flex align-center">
 						<text class="fc-b-9">Half</text>
@@ -36,7 +39,7 @@
 		<view class="fs-24 margin-top-xs margin-bottom-xs">
 			<view class="flex align-center">
 				<view class="flex align-center justify-end w-300">
-					<view class="margin-right-auto w-40">
+					<view class="margin-right-auto w-40" v-if="control[3]">
 						<text
 							:class="[
 								'iconfont icon-lingdang fs-40  ',
@@ -46,51 +49,68 @@
 					</view>
 					<view class="flex align-center margin-left-xs">
 						<view class="flex align-center">
-							<text class="bg-red fc-b-f fs-14 margin-right-xs" v-if="control[0]">{{
-								info.home_scores[2]
-							}}</text>
-							<text class="bg-gold fc-b-f fs-14 margin-right-xs" v-if="control[1]">{{
-								info.home_scores[3]
-							}}</text>
-							<text class="fc-b-9 fs-14 margin-right-xs" v-if="control[2]">{{
-								'[' + info.home_position + ']'
-							}}</text>
+							<text
+								class="bg-red fc-b-f fs-14 margin-right-xs"
+								v-if="control[0] && info.home_scores[2]"
+								>{{ info.home_scores[2] }}</text
+							>
+							<text
+								class="bg-gold fc-b-f fs-14 margin-right-xs"
+								v-if="control[1] && info.home_scores[3]"
+								>{{ info.home_scores[3] }}</text
+							>
+							<text
+								class="fc-b-9 fs-14 margin-right-xs"
+								v-if="control[2] && info.home_position"
+								>{{ '[' + info.home_position + ']' }}</text
+							>
 						</view>
-						<view class="w-150 text-right">
+						<view class="text-right f-hide-2" :style="{ maxWidth: '150rpx' }">
 							<text class="fw-6">{{ info.home_name }} </text></view
 						>
 					</view>
 				</view>
 				<!-- <view class="flex align-center fc-g">{{ getStatus(info.status_id) }}</view> -->
 				<view class="flex align-center w-150 justify-center"
-					><text class="fc-red fw-6"
+					><text class="fc-red fw-6 fs-30"
 						>{{ info.home_scores[0] }} - {{ info.away_scores[0] }}</text
 					></view
 				>
-				<view class="flex align-center justify-end w-300">
+				<view class="flex align-center justify-start w-300">
 					<view class="w-150 text-left">
-						<text class="fw-6">{{ info.away_name }} </text></view
+						<text class="fw-6 f-hide-2" :style="{ maxWidth: '150rpx' }"
+							>{{ info.away_name }}
+						</text></view
 					>
 					<view class="flex align-center margin-right-xs">
 						<view class="flex align-center">
-							<text class="fc-b-9 fs-14 margin-left-xs" v-if="control[2]">{{
-								'[' + info.away_position + ']'
-							}}</text>
-							<text class="bg-gold fc-b-f fs-14 margin-left-xs" v-if="control[1]">{{
-								info.away_scores[3]
-							}}</text>
-							<text class="bg-red fc-b-f fs-14 margin-left-xs" v-if="control[0]">{{
-								info.away_scores[2]
-							}}</text>
+							<text
+								class="fc-b-9 fs-14 margin-left-xs"
+								v-if="control[2] && info.away_position"
+								>{{ '[' + info.away_position + ']' }}</text
+							>
+							<text
+								class="bg-gold fc-b-f fs-14 margin-left-xs"
+								v-if="control[1] && info.away_scores[3]"
+								>{{ info.away_scores[3] }}</text
+							>
+							<text
+								class="bg-red fc-b-f fs-14 margin-left-xs"
+								v-if="control[0] && info.away_scores[2]"
+								>{{ info.away_scores[2] }}</text
+							>
 						</view>
 					</view>
-					<view class="margin-left-auto w-40">
+					<view class="margin-left-auto w-40" v-if="control[4]">
 						<text class="iconfont icon-shipin fs-40 fc-g"></text>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="fs-14 margin-bottom-xs flex align-center fc-b-9">
+		<view
+			class="fs-14 margin-bottom-xs flex align-center fc-b-9"
+			v-if="info.odds.asia_text"
+		>
 			<view class="w-350 text-right">
 				<text>{{ info.odds.asia_text }}</text>
 			</view>
@@ -112,21 +132,25 @@
 			control: {
 				type: Array,
 				default() {
-					return [0, 1, 1]
+					return [1, 1, 1, 1, 1] // 红牌 黄牌 排名 铃铛 视频
+				},
+			},
+			info: {
+				type: Object,
+				default() {
+					return {}
 				},
 			},
 		},
 		data() {
-			return {
-				info: pData,
-			}
+			return {}
 		},
 		created() {
-			console.log('this', this)
+			// console.log('this', this)
 		},
 		methods: {
 			getStatus: function (val) {
-				console.log('this', this)
+				// console.log('this', this)
 				let num = this.toNum(val)
 				if (val === 1) {
 					return 'Not Started'

@@ -94,7 +94,7 @@
 					} else {
 						item.isActive = false
 					}
-					console.log('item', item, this.today)
+					// console.log('item', item, this.today)
 					this.datelist.unshift(item)
 				}
 			},

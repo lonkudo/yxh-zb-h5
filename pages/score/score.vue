@@ -39,9 +39,30 @@
 					:style="{ height: myHeight + 'rpx' }"
 				>
 					<view class="b-f margin-top-sm list">
-						<score-item></score-item>
-						<score-item></score-item>
-						<button @tap="show">show</button>
+						<score-item
+							:control="[1, 1, 1, 0, 1]"
+							:info="item"
+							v-for="(item, index) in ongoingObj.ongoing"
+							:key="'oon' + index"
+						>
+							<slot name="default">ongoing</slot>
+						</score-item>
+						<score-item
+							:control="[1, 1, 1, 1, 0]"
+							:info="item"
+							v-for="(item, index) in ongoingObj.future"
+							:key="'ofu' + index"
+						>
+							<slot name="default">Not Started</slot>
+						</score-item>
+						<score-item
+							:control="[1, 1, 1, 0, 1]"
+							:info="item"
+							v-for="(item, index) in ongoingObj.finished"
+							:key="'ofi' + index"
+						>
+							<slot name="default">End</slot>
+						</score-item>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -98,6 +119,8 @@
 	import TimeSearch from '@/components/TimeSearch/TimeSearch.vue'
 	import ReverseTimeSearch from '@/components/TimeSearch/ReverseTimeSearch.vue'
 	import { DateBus } from '@/utils/bus.js'
+	import { getScores, addAppointment } from '@/api/score'
+
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
 		components: { ScoreItem, TimeSearch, ReverseTimeSearch },
@@ -117,11 +140,84 @@
 					compe_id: [],
 				},
 				oldCateIndex: {
-					time: 0,
+					time: -1,
 					date: 0,
 					compe_id: [],
 				},
 				eventsList: [],
+				ongoingStatus: {
+					ongoing: false,
+					finished: false,
+					future: false,
+				},
+				ongoingList: [],
+				ongoingObj: {
+					ongoing: [],
+					finished: [],
+					future: [],
+				},
+				ongoingPage: {
+					ongoing: {
+						p: 1,
+						num: 100,
+						type: 1, // 1即时，2完场，3未开赛<
+						time: '',
+						compe_id: [],
+					},
+					future: {
+						p: 1,
+						num: 100,
+						type: 3, // 1即时，2完场，3未开赛<
+						time: '',
+						compe_id: [],
+					},
+					finished: {
+						p: 1,
+						num: 100,
+						type: 2, // 1即时，2完场，3未开赛<
+						time: '',
+						compe_id: [],
+					},
+				},
+				scoresPage: {
+					p: 1,
+					num: 20,
+					type: 1, // 1即时，2完场，3未开赛<
+					time: '',
+					compe_id: [],
+				},
+				finishedPage: {
+					p: 1,
+					num: 20,
+					type: 2, // 1即时，2完场，3未开赛<
+					time: '',
+					compe_id: [],
+					isAll: false,
+				},
+				futurePage: {
+					p: 1,
+					num: 20,
+					type: 3, // 1即时，2完场，3未开赛<
+					time: '',
+					compe_id: [],
+					isAll: false,
+				},
+				finishedList: [],
+				futureList: [],
+				appointmentList: [],
+				appointmentPage: {
+					p: 0,
+					num: 50,
+					isAll: false,
+					compe_id: [],
+				},
+				eventForm: {
+					eventSelected: [],
+				},
+				compePage: {
+					type: 1,
+					time: '',
+				},
 			}
 		},
 		onLoad() {
@@ -140,110 +236,67 @@
 			cateIndex: {
 				handler: function (newValue, oldValue) {
 					/* 当cateIndex发生改变的时候去重新获取数据。 */
-					// console.log( 'compare',this.oldCateIndex)
-					// console.log('compare', newValue)
+					console.log(this.oldCateIndex.time, 'compare', newValue.time)
+					console.log('---11----11----11----11----11---')
 					if (this.oldCateIndex.time !== newValue.time) {
 						/* 第一行发生改变，第二行切换成all，并且获取对应数据。因为修改对象，它的索引不变所以新旧值相同，所以要另外起一个变量进行对比。 */
-						newValue.date = 0
+						console.log('---22----22----22----22----22---')
 						if (newValue.time === 0) {
-							// this.changeId('')
-							// this.initOngoing()
+							this.changeId('')
+							this.initOngoing()
 						} else if (newValue.time === 1) {
-							// this.initFinished('')
+							this.initFinished('')
 						} else if (newValue.time === 2) {
-							// this.initFuture('')
+							this.initFuture('')
 						} else if (newValue.time === 3) {
-							// this.appointmentPage.p = 0
-							// this.appointmentList = []
-							// this.reservationNext()
+							this.appointmentPage.p = 0
+							this.appointmentList = []
+							this.reservationNext()
 						}
 						if (newValue.time !== 3) {
-							// this.compePage.type = newValue.time + 1
+							this.compePage.type = newValue.time + 1
 							// this.getCompe()
-							// this.selectable = true
+							this.selectable = true
 						} else {
-							// this.selectable = false
+							this.selectable = false
 						}
-					}
-					if (this.oldCateIndex.date !== newValue.date) {
-						/* 第二行发生改变，检测第一行，然后进行对应数据的init */
-						if (newValue.date === 0) {
-							// this.eventsList = this.allEvents
-						} else {
-							// this.eventsList = [this.recommendNew[newValue.date - 1].id]
-						}
-						if (newValue.time === 0) {
-							/* 两层判断，第一层判断第一行菜单，第二行判断第二层菜单 */
-							if (newValue.date === 0) {
-								// this.changeId('')
-								// this.initOngoing()
-							} else {
-								// this.changeId(this.recommendNew[newValue.date - 1].id)
-								// this.initOngoing()
-							}
-						} else if (newValue.time === 1) {
-							if (newValue.date === 0) {
-								// this.initFinished('')
-							} else {
-								// this.initFinished(this.recommendNew[newValue.date - 1].id)
-							}
-						} else if (newValue.time === 2) {
-							if (newValue.date === 0) {
-								// this.initFuture('')
-							} else {
-								// this.initFuture(this.recommendNew[newValue.date - 1].id)
-							}
-						} else if (newValue.time === 3) {
-							if (newValue.date === 0) {
-								// this.appointmentPage.p = 0
-								// this.appointmentList = []
-								// this.appointmentPage.compe_id = []
-								// this.reservationNext()
-							} else {
-								// this.appointmentPage.p = 0
-								// this.appointmentList = []
-								// this.appointmentPage.compe_id = [
-								// 	this.recommendNew[newValue.date - 1].id,
-								// ]
-								// this.reservationNext()
-							}
-						}
+					} else {
+						console.log('---33----33----33----33----33---')
 					}
 					if (this.oldCateIndex.compe_id !== newValue.compe_id) {
 						/* 当全局的compe_id发生更改的时候执行, 修改对应id然后 重新初始化页面数据 */
 						if (newValue.time === 0) {
 							if (newValue.compe_id.length === 0) {
 								if (this.initFlag) {
-									// this.changeId('')
-									// this.initOngoing()
+									this.changeId('')
+									this.initOngoing()
 								} else {
-									// this.changeId(['-1'])
-									// this.initOngoing()
+									this.changeId(['-1'])
+									this.initOngoing()
 								}
 							} else {
-								// this.changeId(newValue.compe_id)
-								// this.initOngoing()
+								this.changeId(newValue.compe_id)
+								this.initOngoing()
 							}
 						} else if (newValue.time === 1) {
 							if (JSON.stringify(newValue.compe_id) === '[]') {
-								// this.initFinished(['-1'])
+								this.initFinished(['-1'])
 							} else {
-								// this.initFinished(newValue.compe_id)
+								this.initFinished(newValue.compe_id)
 							}
 						} else if (newValue.time === 2) {
 							if (JSON.stringify(newValue.compe_id) === '[]') {
-								// this.initFuture(['-1'])
+								this.initFuture(['-1'])
 							} else {
-								// this.initFuture(newValue.compe_id)
+								this.initFuture(newValue.compe_id)
 							}
 						} else if (newValue.time === 3) {
-							// this.appointmentPage.p = 0
-							// this.appointmentList = []
-							// this.appointmentPage.compe_id = newValue.compe_id
-							// this.reservationNext()
+							this.appointmentPage.p = 0
+							this.appointmentList = []
+							this.appointmentPage.compe_id = newValue.compe_id
+							this.reservationNext()
 						}
 					}
-					console.log('---1----1----1----1----1---', newValue, this.oldCateIndex)
 					this.oldCateIndex.time = newValue.time
 					this.oldCateIndex.date = newValue.date
 					this.oldCateIndex.compe_id = newValue.compe_id
@@ -266,6 +319,271 @@
 			},
 			show() {
 				console.log('list', this.eventsList)
+			},
+			initFuture(id) {
+				if (typeof id === 'array') {
+					this.futurePage.compe_id = id
+				} else {
+					this.futurePage.compe_id = [id]
+				}
+				this.appointmentPage.p = 0
+				this.futureList = []
+				this.futurePage.p = 1
+				const d = new Date()
+				this.futurePage.time = this.formatGiven(d, 'yyyyMMdd')
+				this.getScores('futureList', this.futurePage, 'futurePage.isAll')
+			},
+			initFinished(id) {
+				if (typeof id === 'array') {
+					this.finishedPage.compe_id = id
+				} else {
+					this.finishedPage.compe_id = [id]
+				}
+				this.appointmentPage.p = 0
+				this.finishedList = []
+				this.finishedPage.p = 1
+				const d = new Date()
+				this.finishedPage.time = this.formatGiven(d, 'yyyyMMdd')
+				this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
+			},
+			initOngoing() {
+				const d = new Date()
+				this.ongoingObj.ongoing = []
+				this.ongoingObj.finished = []
+				this.ongoingObj.future = []
+				this.ongoingPage.ongoing.time = this.formatGiven(d, 'yyyyMMdd')
+				this.ongoingPage.finished.time = this.formatGiven(d, 'yyyyMMdd')
+				this.ongoingPage.future.time = this.formatGiven(d, 'yyyyMMdd')
+				// console.log(
+				// 	'this',
+				// 	this.ongoingPage.ongoing,
+				// 	'this',
+				// 	this.ongoingPage.finished,
+				// 	'this',
+				// 	this.ongoingPage.future
+				// )
+				this.getScores(
+					'ongoingObj.ongoing',
+					this.ongoingPage.ongoing,
+					'ongoingStatus.ongoing'
+				)
+				this.getScores(
+					'ongoingObj.finished',
+					this.ongoingPage.finished,
+					'ongoingStatus.finished'
+				)
+				this.getScores(
+					'ongoingObj.future',
+					this.ongoingPage.future,
+					'ongoingStatus.future'
+				)
+				this.initFlag = false
+			},
+			ongoingLoad(target) {
+				if (target === 'ongoing') {
+					this.ongoingPage.ongoing.p += 1
+					this.getScores(
+						'ongoingObj.ongoing',
+						this.ongoingPage.ongoing,
+						'ongoingStatus.ongoing'
+					)
+				}
+				if (target === 'finished') {
+					this.ongoingPage.finished.p += 1
+					this.getScores(
+						'ongoingObj.finished',
+						this.ongoingPage.finished,
+						'ongoingStatus.finished'
+					)
+				}
+				if (target === 'future') {
+					this.ongoingPage.future.p += 1
+					this.getScores(
+						'ongoingObj.future',
+						this.ongoingPage.future,
+						'ongoingStatus.future'
+					)
+				}
+			},
+			changeId(id) {
+				if (typeof id === 'array') {
+					this.ongoingPage.ongoing.compe_id = id
+					this.ongoingPage.finished.compe_id = id
+					this.ongoingPage.future.compe_id = id
+				} else {
+					this.ongoingPage.ongoing.compe_id = [id]
+					this.ongoingPage.finished.compe_id = [id]
+					this.ongoingPage.future.compe_id = [id]
+				}
+			},
+			changeDate(date) {
+				const d = new Date(
+					date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8)
+				)
+				const cd = new Date()
+				if (d.toDateString() !== cd.toDateString()) {
+					if (cd - d < 0) {
+						// 未来
+						this.cateIndex.time = 2
+					}
+				}
+				Object.assign(this.finishedPage, { p: 1, time: date, isAll: false })
+				this.finishedList = []
+				this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
+			},
+			changeDatef(date) {
+				const d = new Date(
+					date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8)
+				)
+				const cd = new Date()
+				if (d.toDateString() !== cd.toDateString()) {
+					if (cd - d > 0) {
+						// 过去
+						this.cateIndex.time = 1
+					}
+				}
+				Object.assign(this.futurePage, { p: 1, time: date, isAll: false })
+				this.futureList = []
+				this.getScores('futureList', this.futurePage, 'futurePage.isAll')
+			},
+			getScheduleList(p, num, uid) {
+				getScheduleList(p, num, uid)
+					.then((res) => {
+						this.msg = 'No games'
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			subscribe(item) {
+				const token = window.localStorage.getItem('token')
+				if (!token) {
+					// console.log('this', this.$refs)
+					return (this.$refs.loginDialog.loginVisible = true) /* 如果用户未登录访问数据，则直接返回 */
+				}
+				const uid = window.localStorage.getItem('uid')
+				addAppointment({ uid, game_id: item.id, token })
+					.then((res) => {
+						if (res.info.isappointment === '0') {
+							item.is_appointment = 0
+						} else if (res.info.isappointment === 1) {
+							item.is_appointment = 1
+						}
+					})
+					.catch((err) => {
+						console.log('err', err)
+					})
+			},
+			loadMore(target) {
+				if (target === 'finished') {
+					this.finishedPage.p += 1
+					this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
+				}
+				if (target === 'future') {
+					this.futurePage.p += 1
+					this.getScores('futureList', this.futurePage, 'futurePage.isAll')
+				}
+				if (target === 'reserved') {
+					this.appointmentPage.p += 1
+					this.reservationNext()
+				}
+			},
+			getScores(listName, page, isAllName) {
+				let uid = 100
+				if (!this.isEmpty(this.uid)) uid = this.uid
+				Object.assign(page, { uid })
+				console.log('page===========', page)
+				getScores(page)
+					.then((res) => {
+						/* 控制loadMore显示 */
+						console.log('res', res.info)
+						if (Object.keys(res.info).length < page.num) {
+							let arr = isAllName.split('.') //
+							this[arr[0]][arr[1]] = true
+						} /* 拼接数组 */
+						let lArr = listName.split('.')
+						if (lArr.length === 1) {
+							if (JSON.stringify(res.info) === '{}') {
+								this[listName] = this[listName].concat([])
+							} else {
+								res.info.forEach((info) => {
+									info.incidents = []
+									info.stats = []
+								})
+								this[listName] = this[listName].concat(res.info)
+							}
+						} else {
+							if (JSON.stringify(res.info) === '{}') {
+								return (this[lArr[0]][lArr[1]] = this[lArr[0]][lArr[1]].concat([]))
+							} else {
+								res.info.forEach((info) => {
+									info.incidents = []
+									info.stats = []
+								})
+								this[lArr[0]][lArr[1]] = this[lArr[0]][lArr[1]].concat(res.info)
+							}
+						}
+					})
+					.catch((err) => {
+						console.log('err', err)
+					})
+			},
+			reservationNext() {
+				const token = window.localStorage.getItem('token')
+				if (!token) return /* 如果用户未登录访问数据，则直接返回 */
+				const uid = window.localStorage.getItem('uid')
+				this.appointmentPage.p += 1
+				this.getAppointmentList(
+					uid,
+					token,
+					this.appointmentPage.p,
+					this.appointmentPage.num,
+					this.appointmentPage.compe_id
+				)
+			},
+			/* 删除订阅的赛事 */
+			scheduleAppoint(item) {
+				const token = window.localStorage.getItem('token')
+				if (!token) return /* 如果用户未登录访问数据，则直接返回 */
+				const uid = window.localStorage.getItem('uid')
+				// console.log('item', item)
+				scheduleAppoint(uid, item.id, token).then((res) => {
+					// console.log('sche', res)
+					if (res.code === 0) {
+						this.$message({
+							message:
+								parseInt(res.info.isappointment) === 1
+									? 'Notification set'
+									: 'Notification canceled',
+							type: 'success',
+						})
+						const index = this.appointmentList.findIndex((ele) => ele.id === item.id)
+						this.appointmentList.splice(index, 1)
+						item.is_appointment = res.info.isappointment
+						// this.init();
+					} else {
+						this.$message({
+							message: 'error',
+							type: 'warning',
+						})
+					}
+				})
+			},
+			/* 获取我的订阅 */
+			getAppointmentList(uid, token, p, num, compe_id) {
+				getAppointmentList({ uid, token, p, num, compe_id })
+					.then((res) => {
+						if (Object.keys(res.info).length === 0) {
+							this.appointmentPage.isAll = true
+						} else {
+							this.appointmentList = this.appointmentList.concat(res.info)
+							// console.log('this', this.appointmentList)
+						}
+					})
+					.catch((err) => {
+						console.log(err)
+						// this.$message.error("4");
+					})
 			},
 		},
 	}

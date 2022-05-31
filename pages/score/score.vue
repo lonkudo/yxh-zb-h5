@@ -41,6 +41,7 @@
 					<view class="b-f margin-top-sm list">
 						<score-item></score-item>
 						<score-item></score-item>
+						<button @tap="show">show</button>
 					</view>
 				</scroll-view>
 			</swiper-item>
@@ -75,6 +76,7 @@
 <script>
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import ScoreItem from './components/ScoreItem.vue'
+	import { FilterBus } from '@/utils/bus.js'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
 		components: { ScoreItem },
@@ -97,10 +99,15 @@
 					date: 0,
 					compe_id: [],
 				},
+				eventsList: [],
 			}
 		},
 		onLoad() {
 			this.myHeight = this.initScrollHeight(268)
+			FilterBus.$on('confirm', (data) => {
+				this.eventsList = data
+				this.cateIndex.compe_id = data
+			})
 		},
 		watch: {
 			cateIndex: {
@@ -234,6 +241,9 @@
 			tabsChange(index) {
 				this.swiperCurrent = index
 				this.cateIndex.time = index
+			},
+			show() {
+				console.log('list', this.eventsList)
 			},
 		},
 	}

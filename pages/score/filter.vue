@@ -1,38 +1,63 @@
 <template>
-	<u-index-list :scrollTop="scrollTop" class="b-f">
-		<checkbox-group @change="eventChecked">
-			<view v-for="(event, index) in indexList" :key="index">
-				<u-index-anchor :index="event.title" style="background-color: #fff" />
-				<view class="flex flex-wrap">
-					<label
-						class="uni-list-cell uni-list-cell-pd"
-						v-for="item in event.compe"
-						:key="item.id"
-					>
-						<view
-							:class="[
-								'w-300 f-hide compe-item text-center',
-								item.isSelected ? 'active' : 'in-active',
-							]"
-						>
-							<checkbox
-								:value="item.id"
-								:checked="item.isSelected"
-								style="display: none"
-								:id="item.id"
-							></checkbox>
-							<view class="f-hide">{{ item.name }}</view>
+	<view>
+		<scroll-view :style="{ height: myHeight + 'rpx' }" scroll-y>
+			<u-index-list :scrollTop="scrollTop" class="b-f">
+				<checkbox-group @change="eventChecked">
+					<view v-for="(event, index) in compeInfo" :key="index">
+						<view @tap="eventGroup(index)">
+							<u-index-anchor :index="event.title" style="background-color: #fff" />
 						</view>
-					</label>
-				</view>
-			</view>
-		</checkbox-group>
-	</u-index-list>
+						<view class="flex flex-wrap">
+							<label
+								class="uni-list-cell uni-list-cell-pd"
+								v-for="item in event.compe"
+								:key="item.id"
+							>
+								<view
+									:class="[
+										'w-300 f-hide compe-item text-center',
+										item.isSelected ? 'active' : 'in-active',
+									]"
+								>
+									<checkbox
+										:value="item.id"
+										:checked="item.isSelected"
+										style="display: none"
+										:id="item.id"
+									></checkbox>
+									<view class="f-hide">{{ item.name }}</view>
+								</view>
+							</label>
+						</view>
+					</view>
+				</checkbox-group>
+			</u-index-list>
+		</scroll-view>
+
+		<view
+			class="h-100 flex align-center justify-start padding-left-sm padding-right-sm b-f"
+		>
+			<text class="margin-left-lg margin-right-lg" @tap="handleCompe('all')"
+				>All</text
+			>
+			<text class="margin-left-lg" @tap="handleCompe('inverse')">Inverse</text>
+			<my-button
+				mana
+				:text="'Confirm'"
+				class="margin-left-auto"
+				@onTap="go('score')"
+			></my-button>
+		</view>
+	</view>
 </template>
 
 <script>
 	import { getCompe } from '@/api/score'
+	import MyButton from '../../components/MyButton/MyButton.vue'
+	import { FilterBus } from '@/utils/bus.js'
+
 	export default {
+		components: { MyButton },
 		data() {
 			return {
 				compePage: {
@@ -45,13 +70,23 @@
 				initFlag: true,
 				selectable: true,
 				scrollTop: 0,
-				indexList: [],
+				compeInfo: [],
+				myHeight: 0,
 			}
 		},
 		onLoad() {
 			this.getCompe()
+			this.myHeight = this.initScrollHeight(188)
 		},
 		methods: {
+			go(val) {
+				FilterBus.$emit('confirm', this.eventsList)
+				if (val === 'score') {
+					uni.switchTab({
+						url: '/pages/score/score',
+					})
+				}
+			},
 			onPageScroll(e) {
 				this.scrollTop = e.scrollTop
 			},
@@ -62,13 +97,13 @@
 				getCompe(this.compePage)
 					.then((res) => {
 						this.compeInfo = res.info
-						this.indexList = res.info
+						this.compeInfo = res.info
 						console.log('res', res.info)
-						this.compeInfo.selectAll = false
+						this.compeInfo.selectAll = true
 						this.eventsList = []
 						this.allEvents = []
 						this.compeInfo.forEach((ele) => {
-							ele.selectAll = false
+							ele.selectAll = true
 							ele.compe.forEach((element) => {
 								element.isSelected = true
 								this.eventsList.push(element.id)
@@ -96,8 +131,96 @@
 				})
 			},
 			eventChecked(e, detail) {
+				console.log('changed')
 				console.log('item', e)
 				console.log('item', e.detail.value)
+				this.eventsList = e.detail.value
+				this.compeInfo.forEach((ele) => {
+					ele.compe.forEach((element) => {
+						const index = this.eventsList.indexOf(element.id)
+						if (index === -1) {
+							element.isSelected = false
+						} else {
+							element.isSelected = true
+						}
+					})
+				})
+				console.log('this', this.compeInfo)
+				this.compeInfo = JSON.parse(JSON.stringify(this.compeInfo))
+			},
+			eventGroup(index) {
+				console.log('tap', index)
+				/* 每组一起选中反选 */
+				if (this.compeInfo[index].selectAll) {
+					this.compeInfo[index].compe.forEach((ele) => {
+						ele.isSelected = false
+						let index = this.eventsList.findIndex((element) => {
+							console.log('ele', ele.id)
+							return element === ele.id
+						})
+						if (index !== -1) {
+							this.eventsList.splice(index, 1)
+						}
+					})
+					this.compeInfo[index].selectAll = false
+				} else {
+					this.compeInfo[index].compe.forEach((ele) => {
+						ele.isSelected = true
+						let index = this.eventsList.findIndex((element) => {
+							return element === ele.id
+						})
+						if (index === -1) {
+							this.eventsList.push(ele.id)
+						}
+					})
+					this.compeInfo[index].selectAll = true
+				}
+				this.compeInfo = JSON.parse(JSON.stringify(this.compeInfo))
+				console.log('this', this.eventsList)
+			},
+			handleCompe(event) {
+				let flag = true
+				if (event === 'all') {
+					if (this.compeInfo.selectAll) {
+						console.log('---2----2----2----2----2---')
+						this.compeInfo.forEach((ele, outerIndex) => {
+							ele.compe.forEach((element, index) => {
+								element.isSelected = false
+							})
+						})
+						console.log('---3----3----3----3----3---')
+						this.eventsList = []
+						this.compeInfo.selectAll = false
+						console.log('this.', this.eventsList)
+						flag = false
+					} else {
+						this.compeInfo.forEach((ele) => {
+							ele.compe.forEach((element, index) => {
+								element.isSelected = true
+							})
+						})
+						this.eventsList = this.allEvents
+						this.compeInfo.selectAll = true
+						flag = true
+						console.log('this.', this.eventsList)
+					}
+				} else if (event === 'inverse') {
+					this.compeInfo.forEach((ele) => {
+						ele.compe.forEach((element, index) => {
+							element.isSelected = !element.isSelected
+						})
+					})
+					let newArr = []
+					this.allEvents.forEach((ele) => {
+						if (!this.eventsList.includes(ele)) {
+							newArr.push(ele)
+						}
+					})
+					this.eventsList = newArr
+				}
+				this.compeInfo = JSON.parse(JSON.stringify(this.compeInfo))
+				this.compeInfo.selectAll = flag
+				console.log('this.compe', this.compeInfo)
 			},
 		},
 	}

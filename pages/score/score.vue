@@ -51,8 +51,15 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<view>
+				<view :id="'content-wrap' + 'Finished'">
 					<time-search></time-search>
+					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
+						<view class="b-f margin-top-sm list">
+							<score-item></score-item>
+							<score-item></score-item>
+							<button @tap="show">show</button>
+						</view>
+					</scroll-view>
 				</view>
 			</swiper-item>
 			<swiper-item
@@ -61,8 +68,15 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<view>
+				<view :id="'content-wrap' + 'Schedule'">
 					<reverse-time-search></reverse-time-search>
+					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
+						<view class="b-f margin-top-sm list">
+							<score-item></score-item>
+							<score-item></score-item>
+							<button @tap="show">show</button>
+						</view>
+					</scroll-view>
 				</view>
 			</swiper-item>
 			<swiper-item
@@ -90,6 +104,7 @@
 		data() {
 			return {
 				myHeight: 0,
+				myHeight2: 0,
 				menu: [
 					{ name: 'Ongoing' },
 					{ name: 'Finished' },
@@ -111,6 +126,7 @@
 		},
 		onLoad() {
 			this.myHeight = this.initScrollHeight(268)
+			this.myHeight2 = this.initScrollHeight(348)
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data
 				this.cateIndex.compe_id = data
@@ -124,13 +140,8 @@
 			cateIndex: {
 				handler: function (newValue, oldValue) {
 					/* 当cateIndex发生改变的时候去重新获取数据。 */
-					// console.log(
-					// 	this.oldCateIndex.time,
-					// 	this.oldCateIndex.date,
-					// 	'compare',
-					// 	newValue.time,
-					// 	newValue.date
-					// )
+					// console.log( 'compare',this.oldCateIndex)
+					// console.log('compare', newValue)
 					if (this.oldCateIndex.time !== newValue.time) {
 						/* 第一行发生改变，第二行切换成all，并且获取对应数据。因为修改对象，它的索引不变所以新旧值相同，所以要另外起一个变量进行对比。 */
 						newValue.date = 0

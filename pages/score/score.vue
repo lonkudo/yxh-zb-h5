@@ -61,7 +61,9 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				Schedule
+				<view>
+					<reverse-time-search></reverse-time-search>
+				</view>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -80,9 +82,11 @@
 	import ScoreItem from './components/ScoreItem.vue'
 	import { FilterBus } from '@/utils/bus.js'
 	import TimeSearch from '@/components/TimeSearch/TimeSearch.vue'
+	import ReverseTimeSearch from '@/components/TimeSearch/ReverseTimeSearch.vue'
+	import { DateBus } from '@/utils/bus.js'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { ScoreItem, TimeSearch },
+		components: { ScoreItem, TimeSearch, ReverseTimeSearch },
 		data() {
 			return {
 				myHeight: 0,
@@ -110,6 +114,10 @@
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data
 				this.cateIndex.compe_id = data
+			})
+			DateBus.$on('dateChanged', (date) => {
+				this.cateIndex.date = date
+				console.log('date', date)
 			})
 		},
 		watch: {

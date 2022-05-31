@@ -20,7 +20,13 @@
 		<view @click="show = true">
 			<text class="iconfont icon-rili fc-g"></text>
 		</view>
-		<my-calendar v-model="show" :mode="mode" @change="change"></my-calendar>
+		<my-calendar
+			v-model="show"
+			:mode="mode"
+			@change="change"
+			:min-date="today"
+			:max-date="'2050-12-31'"
+		></my-calendar>
 	</view>
 </template>
 
@@ -30,7 +36,7 @@
 	import { DateBus } from '@/utils/bus.js'
 
 	export default {
-		name: 'TimeSearch',
+		name: 'ReverseTimeSearch',
 		components: { MyCalendar },
 		data() {
 			return {
@@ -69,17 +75,17 @@
 					let dateW = this.getWeek(i, val)
 					let item = {
 						date: moment(val)
-							.subtract(0 + i, 'days') // subtract 就是通过减去i 来获取新的moment()  .format就是格式化数据.
+							.add(0 + i, 'days') // subtract 就是通过减去i 来获取新的moment()  .format就是格式化数据.
 							.format('M-D'),
 						dateA: moment(val)
-							.subtract(0 + i, 'days')
+							.add(0 + i, 'days')
 							.format('YYYY-MM-DD'),
 						dateW: dateW,
 						// dateFull: moment(val)
 						// 	.subtract(0 + i, 'days')
 						// 	.format('YYYY-MM-DD (dddd)'),
 						dateWanted: moment(val)
-							.subtract(0 + i, 'days')
+							.add(0 + i, 'days')
 							.format('YYYYMMDD'),
 						index: i,
 						isActive: false,
@@ -95,12 +101,12 @@
 						item.isActive = false
 					}
 					console.log('item', item, this.today)
-					this.datelist.unshift(item)
+					this.datelist.push(item)
 				}
 			},
 			getWeek(i, val) {
 				let week = moment(val)
-					.subtract(0 + i, 'days')
+					.add(0 + i, 'days')
 					.format('e')
 				switch (week) {
 					case '1':

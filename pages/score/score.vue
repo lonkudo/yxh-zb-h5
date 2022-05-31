@@ -11,7 +11,7 @@
 			<navigator :url="'settings'" slot="default"
 				><text class="margin-left-lg iconfont icon-shezhi fs-40"></text
 			></navigator>
-			<navigator :url="'filter'" slot="right"
+			<navigator :url="'filter?type=' + (cateIndex.time + 1)" slot="right"
 				><text class="margin-right-lg iconfont icon-shaixuan fs-40"></text
 			></navigator>
 		</u-navbar>
@@ -38,7 +38,7 @@
 					:id="'content-wrap' + 'Ongoing'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
-					<view class="b-f margin-top-sm list">
+					<view class="margin-top-sm list" :style="{ height: myHeight + 'rpx' }">
 						<score-item
 							:control="[1, 1, 1, 0, 1]"
 							:info="item"
@@ -72,13 +72,21 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<view :id="'content-wrap' + 'Finished'">
+				<view
+					:id="'content-wrap' + 'Finished'"
+					:style="{ height: myHeight + 'rpx' }"
+				>
 					<time-search></time-search>
 					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
-						<view class="b-f margin-top-sm list">
-							<score-item></score-item>
-							<score-item></score-item>
-							<button @tap="show">show</button>
+						<view class="list">
+							<score-item
+								:control="[1, 1, 1, 0, 0]"
+								:info="item"
+								v-for="(item, index) in finishedList"
+								:key="'fi' + index"
+							>
+								<slot name="default">End</slot>
+							</score-item>
 						</view>
 					</scroll-view>
 				</view>
@@ -89,13 +97,21 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<view :id="'content-wrap' + 'Schedule'">
+				<view
+					:id="'content-wrap' + 'Schedule'"
+					:style="{ height: myHeight + 'rpx' }"
+				>
 					<reverse-time-search></reverse-time-search>
 					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
-						<view class="b-f margin-top-sm list">
-							<score-item></score-item>
-							<score-item></score-item>
-							<button @tap="show">show</button>
+						<view class="list">
+							<score-item
+								:control="[1, 1, 1, 1, 0]"
+								:info="item"
+								v-for="(item, index) in futureList"
+								:key="'fu' + index"
+							>
+								<slot name="default">Not Started</slot>
+							</score-item>
 						</view>
 					</scroll-view>
 				</view>
@@ -221,82 +237,92 @@
 			}
 		},
 		onLoad() {
+			/* 初始化高度  */
 			this.myHeight = this.initScrollHeight(268)
 			this.myHeight2 = this.initScrollHeight(348)
 			FilterBus.$on('confirm', (data) => {
-				this.eventsList = data
-				this.cateIndex.compe_id = data
+				this.eventsList = data.compe_id
+				console.log('confirm--------')
+				if (data.type === '1') {
+					this.changeId(data.compe_id)
+					this.initOngoing()
+				} else if (data.type === '2') {
+					this.initFinished(data.compe_id)
+				} else if (data.type === '3') {
+					this.initFuture(data.compe_id)
+				}
+				this.$store.commit('CHANGE_FILTER', data)
+				// this.cateIndex.compe_id = data
 			})
 			DateBus.$on('dateChanged', (date) => {
 				this.cateIndex.date = date
-				console.log('date', date)
 			})
+			this.init()
 		},
 		watch: {
 			cateIndex: {
 				handler: function (newValue, oldValue) {
 					/* 当cateIndex发生改变的时候去重新获取数据。 */
 					console.log(this.oldCateIndex.time, 'compare', newValue.time)
-					console.log('---11----11----11----11----11---')
-					if (this.oldCateIndex.time !== newValue.time) {
-						/* 第一行发生改变，第二行切换成all，并且获取对应数据。因为修改对象，它的索引不变所以新旧值相同，所以要另外起一个变量进行对比。 */
-						console.log('---22----22----22----22----22---')
-						if (newValue.time === 0) {
-							this.changeId('')
-							this.initOngoing()
-						} else if (newValue.time === 1) {
-							this.initFinished('')
-						} else if (newValue.time === 2) {
-							this.initFuture('')
-						} else if (newValue.time === 3) {
-							this.appointmentPage.p = 0
-							this.appointmentList = []
-							this.reservationNext()
-						}
-						if (newValue.time !== 3) {
-							this.compePage.type = newValue.time + 1
-							// this.getCompe()
-							this.selectable = true
-						} else {
-							this.selectable = false
-						}
-					} else {
-						console.log('---33----33----33----33----33---')
-					}
-					if (this.oldCateIndex.compe_id !== newValue.compe_id) {
-						/* 当全局的compe_id发生更改的时候执行, 修改对应id然后 重新初始化页面数据 */
-						if (newValue.time === 0) {
-							if (newValue.compe_id.length === 0) {
-								if (this.initFlag) {
-									this.changeId('')
-									this.initOngoing()
-								} else {
-									this.changeId(['-1'])
-									this.initOngoing()
-								}
-							} else {
-								this.changeId(newValue.compe_id)
-								this.initOngoing()
-							}
-						} else if (newValue.time === 1) {
-							if (JSON.stringify(newValue.compe_id) === '[]') {
-								this.initFinished(['-1'])
-							} else {
-								this.initFinished(newValue.compe_id)
-							}
-						} else if (newValue.time === 2) {
-							if (JSON.stringify(newValue.compe_id) === '[]') {
-								this.initFuture(['-1'])
-							} else {
-								this.initFuture(newValue.compe_id)
-							}
-						} else if (newValue.time === 3) {
-							this.appointmentPage.p = 0
-							this.appointmentList = []
-							this.appointmentPage.compe_id = newValue.compe_id
-							this.reservationNext()
-						}
-					}
+					// if (this.oldCateIndex.time !== newValue.time) {
+					// 	/* 第一行发生改变，第二行切换成all，并且获取对应数据。因为修改对象，它的索引不变所以新旧值相同，所以要另外起一个变量进行对比。 */
+					// 	console.log('---22----22----22----22----22---')
+					// 	if (newValue.time === 0) {
+					// 		this.changeId('')
+					// 		this.initOngoing()
+					// 	} else if (newValue.time === 1) {
+					// 		this.initFinished('')
+					// 	} else if (newValue.time === 2) {
+					// 		this.initFuture('')
+					// 	} else if (newValue.time === 3) {
+					// 		this.appointmentPage.p = 0
+					// 		this.appointmentList = []
+					// 		this.reservationNext()
+					// 	}
+					// 	if (newValue.time !== 3) {
+					// 		this.compePage.type = newValue.time + 1
+					// 		// this.getCompe()
+					// 		this.selectable = true
+					// 	} else {
+					// 		this.selectable = false
+					// 	}
+					// } else {
+					// 	console.log('---33----33----33----33----33---')
+					// }
+					// if (this.oldCateIndex.compe_id !== newValue.compe_id) {
+					// 	/* 当全局的compe_id发生更改的时候执行, 修改对应id然后 重新初始化页面数据 */
+					// 	if (newValue.time === 0) {
+					// 		if (newValue.compe_id.length === 0) {
+					// 			if (this.initFlag) {
+					// 				this.changeId('')
+					// 				this.initOngoing()
+					// 			} else {
+					// 				this.changeId(['-1'])
+					// 				this.initOngoing()
+					// 			}
+					// 		} else {
+					// 			this.changeId(newValue.compe_id)
+					// 			this.initOngoing()
+					// 		}
+					// 	} else if (newValue.time === 1) {
+					// 		if (JSON.stringify(newValue.compe_id) === '[]') {
+					// 			this.initFinished(['-1'])
+					// 		} else {
+					// 			this.initFinished(newValue.compe_id)
+					// 		}
+					// 	} else if (newValue.time === 2) {
+					// 		if (JSON.stringify(newValue.compe_id) === '[]') {
+					// 			this.initFuture(['-1'])
+					// 		} else {
+					// 			this.initFuture(newValue.compe_id)
+					// 		}
+					// 	} else if (newValue.time === 3) {
+					// 		// this.appointmentPage.p = 0
+					// 		// this.appointmentList = []
+					// 		// this.appointmentPage.compe_id = newValue.compe_id
+					// 		// this.reservationNext()
+					// 	}
+					// }
 					this.oldCateIndex.time = newValue.time
 					this.oldCateIndex.date = newValue.date
 					this.oldCateIndex.compe_id = newValue.compe_id
@@ -305,14 +331,14 @@
 				deep: true,
 				immediate: true,
 			},
-			// compeInfo: {
-			// 	handler: function (newVal) {
-			// 		return newVal
-			// 	},
-			// 	deep: true,
-			// },
 		},
 		methods: {
+			init() {
+				this.changeId('')
+				this.initOngoing()
+				this.initFinished('')
+				this.initFuture('')
+			},
 			tabsChange(index) {
 				this.swiperCurrent = index
 				this.cateIndex.time = index
@@ -335,6 +361,8 @@
 			},
 			initFinished(id) {
 				if (typeof id === 'array') {
+					this.finishedPage.compe_id = id
+				} else if (typeof id === 'object') {
 					this.finishedPage.compe_id = id
 				} else {
 					this.finishedPage.compe_id = [id]
@@ -592,9 +620,11 @@
 <style lang="scss">
 	.list {
 		border-top: 1rpx solid #f1f1f1;
-		border-bottom: 1rpx solid #f1f1f1;
 		> :nth-child(n) {
 			border-top: 1rpx solid #f1f1f1;
+		}
+		> :nth-last-child(1) {
+			border-bottom: 1rpx solid #f1f1f1;
 		}
 	}
 </style>

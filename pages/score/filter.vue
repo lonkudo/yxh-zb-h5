@@ -72,15 +72,41 @@
 				scrollTop: 0,
 				compeInfo: [],
 				myHeight: 0,
+				type: 1,
 			}
 		},
-		onLoad() {
-			this.getCompe()
+		async onLoad(options) {
+			this.type = options.type
+			this.compePage.type = options.type
 			this.myHeight = this.initScrollHeight(188)
+			await this.getCompe()
+			if (options.type === '1') {
+				if (!this.$store.state.filter.initOngoing) return
+				this.eventChecked({
+					detail: {
+						value: this.$store.state.filter.ongoing,
+					},
+				})
+			} else if (options.type === '2') {
+				if (!this.$store.state.filter.initFinished) return
+				this.eventChecked({
+					detail: {
+						value: this.$store.state.filter.finished,
+					},
+				})
+			} else if (options.type === '3') {
+				if (!this.$store.state.filter.initFuture) return
+				this.eventChecked({
+					detail: {
+						value: this.$store.state.filter.future,
+					},
+				})
+			}
 		},
 		methods: {
 			go(val) {
-				FilterBus.$emit('confirm', this.eventsList)
+				console.log('emit', this.eventsList)
+				FilterBus.$emit('confirm', { compe_id: this.eventsList, type: this.type })
 				if (val === 'score') {
 					uni.switchTab({
 						url: '/pages/score/score',
@@ -94,27 +120,29 @@
 				/* 获取赛事筛选的列表 */
 				this.compePage.time = this.formatGiven(new Date(), 'yyyyMMdd')
 				// console.log('compePage.time', this.compePage)
-				getCompe(this.compePage)
-					.then((res) => {
-						this.compeInfo = res.info
-						this.compeInfo = res.info
-						console.log('res', res.info)
-						this.compeInfo.selectAll = true
-						this.eventsList = []
-						this.allEvents = []
-						this.compeInfo.forEach((ele) => {
-							ele.selectAll = true
-							ele.compe.forEach((element) => {
-								element.isSelected = true
-								this.eventsList.push(element.id)
-								this.allEvents.push(element.id)
-								// safe
+				return new Promise((resolve, reject) => {
+					getCompe(this.compePage)
+						.then((res) => {
+							this.compeInfo = res.info
+							this.compeInfo = res.info
+							this.compeInfo.selectAll = true
+							this.eventsList = []
+							this.allEvents = []
+							this.compeInfo.forEach((ele) => {
+								ele.selectAll = true
+								ele.compe.forEach((element) => {
+									element.isSelected = true
+									this.eventsList.push(element.id)
+									this.allEvents.push(element.id)
+									// safe
+								})
 							})
+							resolve()
 						})
-					})
-					.catch((err) => {
-						console.log(err)
-					})
+						.catch((err) => {
+							console.log(err)
+						})
+				})
 			},
 			// 选中某个复选框时，由checkbox时触发
 			checkboxChange(e) {
@@ -130,14 +158,14 @@
 					val.checked = true
 				})
 			},
-			eventChecked(e, detail) {
-				console.log('changed')
-				console.log('item', e)
-				console.log('item', e.detail.value)
+			eventChecked(e) {
+				console.log('eventChecked', e.detail.value)
 				this.eventsList = e.detail.value
+				console.log('---333----333----333----333----333---', this.compeInfo)
 				this.compeInfo.forEach((ele) => {
 					ele.compe.forEach((element) => {
 						const index = this.eventsList.indexOf(element.id)
+						console.log('---4----4----4----4----4---', index)
 						if (index === -1) {
 							element.isSelected = false
 						} else {
@@ -145,7 +173,6 @@
 						}
 					})
 				})
-				console.log('this', this.compeInfo)
 				this.compeInfo = JSON.parse(JSON.stringify(this.compeInfo))
 			},
 			eventGroup(index) {

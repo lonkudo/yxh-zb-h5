@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "moment": "^2.29.3",
-    "mqtt": "^4.3.7"
+    "mqtt": "^4.3.7",
+    "qs": "^6.10.3"
   },
   "name": "yxh-zb-h5",
   "version": "1.0.0",

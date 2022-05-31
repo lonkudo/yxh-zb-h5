@@ -7,6 +7,7 @@ import settings from './modules/settings'
 import history from './modules/history'
 import data from './modules/data'
 import snippet from './modules/snippet'
+import filter from './modules/filter'
 
 Vue.use(Vuex)
 
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
 		history,
 		data,
 		snippet,
+		filter,
 	},
 	getters,
 })

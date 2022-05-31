@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "moment": "^2.29.3",
     "mqtt": "^4.3.7"
   },
   "name": "yxh-zb-h5",

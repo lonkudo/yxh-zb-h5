@@ -51,7 +51,9 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				finished
+				<view>
+					<time-search></time-search>
+				</view>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -77,9 +79,10 @@
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import ScoreItem from './components/ScoreItem.vue'
 	import { FilterBus } from '@/utils/bus.js'
+	import TimeSearch from '@/components/TimeSearch/TimeSearch.vue'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { ScoreItem },
+		components: { ScoreItem, TimeSearch },
 		data() {
 			return {
 				myHeight: 0,

@@ -1,10 +1,21 @@
 <template>
 	<view class="popMsg">
-		<transition-group name="slide">
-			<view v-for="(item, index) in tempList" :key="index" style="display: block">
-				<pop-msg-item :info="item" class="margin-bottom-xs"></pop-msg-item>
-			</view>
-		</transition-group>
+		<!-- <transition-group name="slide"> -->
+		<view v-for="(item, index) in tempList" :key="index" style="display: block">
+			<!-- <transition name="slide"> -->
+			<template v-if="item.show">
+				<pop-msg-item
+					:info="item"
+					:class="['margin-bottom-xs']"
+					v-if="item.show"
+				></pop-msg-item>
+			</template>
+			<template v-else>
+				<view class="h-100"></view>
+			</template>
+			<!-- </transition> -->
+		</view>
+		<!-- </transition-group> -->
 	</view>
 </template>
 
@@ -41,9 +52,13 @@
 		computed: {
 			tempList: function () {
 				let arr = []
-				this.myTemp.tempList.forEach((element) => {
+				this.myTemp.display.displayList.forEach((element) => {
 					arr.push(element.item)
+					console.log('element.show', element.item.show)
 				})
+				// this.myTemp.tempList.forEach((element) => {
+				// 	arr.push(element.item)
+				// })
 				return arr
 			},
 		},

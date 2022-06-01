@@ -1,10 +1,12 @@
 export class Temp {
 	constructor() {
 		this.tempList = []
+		this.display = new TempDisplay(5)
 	}
 	addItem(item) {
 		const tmpItem = new TempItem(item, this)
 		this.tempList.push(tmpItem)
+		this.display.addItem(tmpItem)
 		// console.log('this.tempList', this.tempList)
 	}
 	removeItem(tmpItem) {
@@ -13,13 +15,16 @@ export class Temp {
 		})
 		this.tempList[index] = null
 		this.tempList.splice(index, 1)
+		if (this.tempList.length === 0) {
+			this.display.clearList()
+		}
 		// console.log('this.tempList', this.tempList)
 	}
 	resetCountdown(tempItem) {
 		const index = this.tempList.findIndex((ele, index) => {
 			return ele.id === tempItem.id
 		})
-		this.tempList[index].countdown = 5
+		this.tempList[index].reset()
 	}
 	findItem(item) {
 		const index = this.tempList.findIndex((ele, index) => {
@@ -63,6 +68,7 @@ export class TempItem {
 			this.down()
 		}, 1000)
 		this.myTemp = myTemp
+		this.item.show = true
 	}
 	down() {
 		this.countdown -= 1
@@ -88,5 +94,26 @@ export class TempItem {
 	}
 	destory() {
 		this.myTemp.removeItem(this)
+		this.item.show = false
+		console.log('destory')
+	}
+}
+
+class TempDisplay {
+	constructor(max) {
+		this.displayList = []
+		this.max = max
+	}
+	addItem(item) {
+		if (this.count === this.max) {
+			this.clearList()
+		}
+		this.displayList.push(item)
+	}
+	clearList() {
+		this.displayList = []
+	}
+	get count() {
+		return this.displayList.length
 	}
 }

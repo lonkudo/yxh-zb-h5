@@ -77,9 +77,13 @@
 								v-for="(item, index) in ongoingObj.ongoing"
 								:key="'oon' + index"
 							>
-								<slot name="default">{{
-									item.time | match_time_fmt(item.status_id)
-								}}</slot>
+								<slot name="default"
+									><text
+										:class="item.status_id == 2 || item.status_id == 4 ? 'maohao' : ''"
+									>
+										{{ item.time | match_time_fmt(item.status_id) }}
+									</text></slot
+								>
 							</score-item>
 							<score-item
 								:control="[1, 1, 1, 1, 0, 1]"
@@ -467,7 +471,8 @@
 			},
 			refeshOngoing() {
 				// console.log('refeshOngoing=========');
-				this.$emit('ws', JSON.parse(this.freshPayload))
+				// this.$emit('ws', JSON.parse(this.freshPayload))
+				this.realTime(JSON.parse(payload))
 			},
 
 			realTime(msgArr) {
@@ -528,7 +533,10 @@
 					eleObj['type'] = 1
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
-					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.changeSound(
+						// JSON.parse(localStorage.getItem('settingForm')).soundType
+						uni.getStorageSync('settingForm').soundType
+					)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
@@ -550,7 +558,10 @@
 					eleObj['type'] = 4
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
-					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.changeSound(
+						// JSON.parse(localStorage.getItem('settingForm')).soundType
+						uni.getStorageSync('settingForm').soundType
+					)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
@@ -572,7 +583,7 @@
 					eleObj['type'] = 1
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
-					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.changeSound(uni.getStorageSync('settingForm').soundType)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
@@ -594,7 +605,7 @@
 					eleObj['type'] = 4
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
-					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.changeSound(uni.getStorageSync('settingForm').soundType)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
@@ -685,14 +696,15 @@
 				}
 			},
 			settings() {
-				if (localStorage.getItem('settingForm')) {
-					this.settingForm = JSON.parse(localStorage.getItem('settingForm'))
+				if (!this.isEmpty(uni.getStorageSync('settingForm'))) {
+					this.settingForm = uni.getStorageSync('settingForm').soudnType
 				} else {
 					this.closeSetting()
 				}
 			},
 			closeSetting() {
-				localStorage.setItem('settingForm', JSON.stringify(this.settingForm))
+				uni.setStorageSync('settingForm', this.settingForm)
+				// localStorage.setItem('settingForm', JSON.stringify(this.settingForm))
 			},
 			/* -----------------------mqtt部分 结束------------------------------- */
 			finishedDateChanged(date) {
@@ -1101,5 +1113,21 @@
 		> :nth-last-child(1) {
 			border-bottom: 1rpx solid #f1f1f1;
 		}
+	}
+	@keyframes twinkling {
+		0% {
+			// display: block;
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			// display: none;
+		}
+	}
+	.maohao::after {
+		color: red;
+		font-weight: 600;
+		content: " '";
+		animation: twinkling 1s ease-in-out infinite;
 	}
 </style>

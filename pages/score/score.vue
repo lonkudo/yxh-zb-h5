@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<!-- 头部导航区域 -->
 		<u-navbar
 			:is-back="false"
 			:title="'Score'"
@@ -15,6 +16,7 @@
 				><text class="margin-right-lg iconfont icon-shaixuan fs-40"></text
 			></navigator>
 		</u-navbar>
+		<!-- tab切换区域 -->
 		<u-tabs-swiper
 			ref="uTabs"
 			:list="menu"
@@ -26,46 +28,70 @@
 			font-size="24"
 			gutter="0"
 		></u-tabs-swiper>
+		<!-- tab切换的内容区域 -->
 		<swiper
 			:current="swiperCurrent"
 			@transition="transition"
 			@animationfinish="animationfinish"
 			:style="{ height: myHeight + 'rpx' }"
 		>
+			<!-- ongoing的区域 -->
 			<swiper-item class="swiper-item" :key="'Ongoing'" @touchmove.stop="">
 				<scroll-view
 					scroll-y
 					:id="'content-wrap' + 'Ongoing'"
 					:style="{ height: myHeight + 'rpx' }"
+					refresher-enabled="true"
+					:refresher-triggered="triggeredOngoing"
+					:refresher-threshold="100"
+					refresher-background="#f6f6f6"
+					@refresherpulling="onPulling"
+					@refresherrefresh="onRefreshOngoing"
+					@refresherrestore="onRestore"
+					@refresherabort="onAbort"
 				>
-					<view class="margin-top-sm list" :style="{ height: myHeight + 'rpx' }">
-						<score-item
-							:control="[1, 1, 1, 0, 1]"
-							:info="item"
-							v-for="(item, index) in ongoingObj.ongoing"
-							:key="'oon' + index"
-						>
-							<slot name="default">ongoing</slot>
-						</score-item>
-						<score-item
-							:control="[1, 1, 1, 1, 0]"
-							:info="item"
-							v-for="(item, index) in ongoingObj.future"
-							:key="'ofu' + index"
-						>
-							<slot name="default">Not Started</slot>
-						</score-item>
-						<score-item
-							:control="[1, 1, 1, 0, 1]"
-							:info="item"
-							v-for="(item, index) in ongoingObj.finished"
-							:key="'ofi' + index"
-						>
-							<slot name="default">End</slot>
-						</score-item>
-					</view>
+					<!-- 没数据显示缺省页 -->
+					<template
+						v-if="
+							ongoingObj.ongoing.length === 0 &&
+							ongoingObj.future.length === 0 &&
+							ongoingObj.finished.length === 0
+						"
+					>
+						<no-content :style="{ height: myHeight + 'rpx' }"> </no-content>
+					</template>
+					<template v-else>
+						<!-- ongoing区域由三部分组成 -->
+						<view class="margin-top-sm list" :style="{ height: myHeight + 'rpx' }">
+							<score-item
+								:control="[1, 1, 1, 0, 1, 1]"
+								:info="item"
+								v-for="(item, index) in ongoingObj.ongoing"
+								:key="'oon' + index"
+							>
+								<slot name="default">ongoing</slot>
+							</score-item>
+							<score-item
+								:control="[1, 1, 1, 1, 0, 1]"
+								:info="item"
+								v-for="(item, index) in ongoingObj.future"
+								:key="'ofu' + index"
+							>
+								<slot name="default">Not Started</slot>
+							</score-item>
+							<score-item
+								:control="[1, 1, 1, 0, 1, 1]"
+								:info="item"
+								v-for="(item, index) in ongoingObj.finished"
+								:key="'ofi' + index"
+							>
+								<slot name="default">End</slot>
+							</score-item>
+						</view>
+					</template>
 				</scroll-view>
 			</swiper-item>
+			<!-- 已完场赛事页面 -->
 			<swiper-item
 				class="swiper-item"
 				:key="'Finished'"
@@ -77,11 +103,22 @@
 					:style="{ height: myHeight + 'rpx' }"
 				>
 					<time-search @dateChanged="finishedDateChanged"></time-search>
-					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
+					<scroll-view
+						scroll-y
+						:style="{ height: myHeight2 + 'rpx' }"
+						refresher-enabled="true"
+						:refresher-triggered="triggeredFinished"
+						:refresher-threshold="100"
+						refresher-background="#f6f6f6"
+						@refresherpulling="onPulling"
+						@refresherrefresh="onRefreshFinished"
+						@refresherrestore="onRestore"
+						@refresherabort="onAbort"
+					>
 						<template v-if="finishedList.length > 0">
 							<view class="list">
 								<score-item
-									:control="[1, 1, 1, 0, 0]"
+									:control="[1, 1, 1, 0, 0, 1]"
 									:info="item"
 									v-for="(item, index) in finishedList"
 									:key="'fi' + index"
@@ -96,6 +133,7 @@
 					</scroll-view>
 				</view>
 			</swiper-item>
+			<!-- 未来赛事页面 -->
 			<swiper-item
 				class="swiper-item"
 				:key="'Schedule'"
@@ -109,14 +147,26 @@
 					<reverse-time-search
 						@dateChanged="futureDateChanged"
 					></reverse-time-search>
-					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
+					<scroll-view
+						scroll-y
+						:style="{ height: myHeight2 + 'rpx' }"
+						refresher-enabled="true"
+						:refresher-triggered="triggeredSchedule"
+						:refresher-threshold="100"
+						refresher-background="#f6f6f6"
+						@refresherpulling="onPulling"
+						@refresherrefresh="onRefreshFuture"
+						@refresherrestore="onRestore"
+						@refresherabort="onAbort"
+					>
 						<template v-if="futureList.length > 0">
 							<view class="list">
 								<score-item
-									:control="[1, 1, 1, 1, 0]"
+									:control="[1, 1, 1, 1, 0, 1]"
 									:info="item"
 									v-for="(item, index) in futureList"
 									:key="'fu' + index"
+									@subscribe="subscribe(item)"
 								>
 									<slot name="default">Not Started</slot>
 								</score-item>
@@ -128,29 +178,47 @@
 					</scroll-view>
 				</view>
 			</swiper-item>
+			<!-- 订阅赛事区域 -->
 			<swiper-item
 				class="swiper-item"
 				:key="'Subscribe'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<!-- <template v-if="appointmentList.length > 0"> </template>
-				<template v-else> -->
 				<scroll-view
 					scroll-y
 					:style="{ height: myHeight + 'rpx' }"
 					refresher-enabled="true"
-					:refresher-triggered="triggered"
+					:refresher-triggered="triggeredSubscribe"
 					:refresher-threshold="100"
 					refresher-background="#f6f6f6"
 					@refresherpulling="onPulling"
-					@refresherrefresh="onRefresh('Subscribe')"
+					@refresherrefresh="onRefreshSubscribe"
 					@refresherrestore="onRestore"
 					@refresherabort="onAbort"
 				>
-					<no-content :style="{ height: myHeight + 'rpx' }"></no-content>
+					<template v-if="appointmentList.length > 0">
+						<view v-for="(time, idx) in appointmentList" :key="idx">
+							<view class="flex padding-xs align-center justify-center"
+								><text>{{ time.time }}</text></view
+							>
+							<view class="list">
+								<score-item
+									:control="[1, 1, 1, 1, 0, 0]"
+									:info="item"
+									v-for="(item, index) in time.list"
+									:key="'sub' + idx + index"
+									@subscribe="subscribe(item)"
+								>
+									<slot name="default">Not Started</slot>
+								</score-item>
+							</view>
+						</view>
+					</template>
+					<template v-else>
+						<no-content :style="{ height: myHeight + 'rpx' }"></no-content>
+					</template>
 				</scroll-view>
-				<!-- </template> -->
 			</swiper-item>
 		</swiper>
 	</view>
@@ -264,7 +332,9 @@
 					type: 1,
 					time: '',
 				},
-				triggered: false, // 下拉刷新
+				triggeredFinished: false, // 下拉刷新
+				triggeredSchedule: false, // 下拉刷新
+				triggeredSubscribe: false, // 下拉刷新
 				finishedDate: null,
 				futureDate: null,
 			}
@@ -273,6 +343,7 @@
 			/* 初始化高度  */
 			this.myHeight = this.initScrollHeight(268)
 			this.myHeight2 = this.initScrollHeight(348)
+			/* 过滤页面传回数据,更新对应的区域,更新vuex */
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data.compe_id
 				console.log('confirm--------')
@@ -292,118 +363,48 @@
 			// })
 			this.init()
 			/* 下拉刷新 */
-			this._freshing = false
-			setTimeout(() => {
-				this.triggered = true
-			}, 1000)
-		},
-		watch: {
-			cateIndex: {
-				handler: function (newValue, oldValue) {
-					/* 当cateIndex发生改变的时候去重新获取数据。 */
-					console.log(this.oldCateIndex.time, 'compare', newValue.time)
-					// if (this.oldCateIndex.time !== newValue.time) {
-					// 	/* 第一行发生改变，第二行切换成all，并且获取对应数据。因为修改对象，它的索引不变所以新旧值相同，所以要另外起一个变量进行对比。 */
-					// 	console.log('---22----22----22----22----22---')
-					// 	if (newValue.time === 0) {
-					// 		this.changeId('')
-					// 		this.initOngoing()
-					// 	} else if (newValue.time === 1) {
-					// 		this.initFinished('')
-					// 	} else if (newValue.time === 2) {
-					// 		this.initFuture('')
-					// 	} else if (newValue.time === 3) {
-					// 		this.appointmentPage.p = 0
-					// 		this.appointmentList = []
-					// 		this.reservationNext()
-					// 	}
-					// 	if (newValue.time !== 3) {
-					// 		this.compePage.type = newValue.time + 1
-					// 		// this.getCompe()
-					// 		this.selectable = true
-					// 	} else {
-					// 		this.selectable = false
-					// 	}
-					// } else {
-					// 	console.log('---33----33----33----33----33---')
-					// }
-					// if (this.oldCateIndex.compe_id !== newValue.compe_id) {
-					// 	/* 当全局的compe_id发生更改的时候执行, 修改对应id然后 重新初始化页面数据 */
-					// 	if (newValue.time === 0) {
-					// 		if (newValue.compe_id.length === 0) {
-					// 			if (this.initFlag) {
-					// 				this.changeId('')
-					// 				this.initOngoing()
-					// 			} else {
-					// 				this.changeId(['-1'])
-					// 				this.initOngoing()
-					// 			}
-					// 		} else {
-					// 			this.changeId(newValue.compe_id)
-					// 			this.initOngoing()
-					// 		}
-					// 	} else if (newValue.time === 1) {
-					// 		if (JSON.stringify(newValue.compe_id) === '[]') {
-					// 			this.initFinished(['-1'])
-					// 		} else {
-					// 			this.initFinished(newValue.compe_id)
-					// 		}
-					// 	} else if (newValue.time === 2) {
-					// 		if (JSON.stringify(newValue.compe_id) === '[]') {
-					// 			this.initFuture(['-1'])
-					// 		} else {
-					// 			this.initFuture(newValue.compe_id)
-					// 		}
-					// 	} else if (newValue.time === 3) {
-					// 		// this.appointmentPage.p = 0
-					// 		// this.appointmentList = []
-					// 		// this.appointmentPage.compe_id = newValue.compe_id
-					// 		// this.reservationNext()
-					// 	}
-					// }
-					this.oldCateIndex.time = newValue.time
-					this.oldCateIndex.date = newValue.date
-					this.oldCateIndex.compe_id = newValue.compe_id
-					return newValue
-				},
-				deep: true,
-				immediate: true,
-			},
+			this._freshingFinished = false
+			this.triggeredFinished = true
+			this._freshingSchedule = false
+			this.triggeredSchedule = true
+			this._freshingSubscribe = false
+			this.triggeredSubscribe = true
+			this._freshingOngoing = false
+			this.triggeredOngoing = true
 		},
 		methods: {
-			test() {
-				console.log('refresh')
-			},
 			finishedDateChanged(date) {
-				/* 完成，日期变更 */
+				/* timesearch日期变更 */
 				this.finishedDate = date
 				this.initFinished({ id: this.$store.state.filter.finished, time: date })
 			},
 			futureDateChanged(date) {
-				/* 完成，日期变更 */
+				/* reserver time search日期变更 */
 				this.futureDate = date
 				this.initFuture({ id: this.$store.state.filter.future, time: date })
 			},
 			init() {
+				/* 刚进入score初始化数据 */
 				this.changeId('')
+				// ongoing的数据 只加载当天的，只会收到compe_id筛选赛事的影响，通过changeId来改
 				this.initOngoing()
 				this.initFinished({ id: '' })
 				this.initFuture({ id: '' })
 				this.initSubscribe()
 			},
 			tabsChange(index) {
+				/* swiper改变触发,更新cateIndex */
 				this.swiperCurrent = index
 				this.cateIndex.time = index
 			},
-			show() {
-				console.log('list', this.eventsList)
-			},
 			initSubscribe(callback) {
+				/* 初始化我的订阅，callback是用来当下拉结束的时候收起下拉 */
 				this.appointmentPage.p = 0
 				this.appointmentList = []
 				this.reservationNext(callback)
 			},
 			initFuture(args) {
+				/* 初始化未来赛事页面 */
 				let { id, time, callback } = args
 				if (typeof id === 'array') {
 					this.futurePage.compe_id = id
@@ -422,6 +423,7 @@
 				this.getScores('futureList', this.futurePage, 'futurePage.isAll', callback)
 			},
 			initFinished(args) {
+				/* 初始化 已完场 赛事页面 */
 				let { id, time, callback } = args
 				if (typeof id === 'array') {
 					this.finishedPage.compe_id = id
@@ -446,7 +448,7 @@
 					callback
 				)
 			},
-			initOngoing() {
+			initOngoing(callback) {
 				// 不需要进行时间筛选 , 在changeId这个方法里面进行compe_id的筛选
 				const d = new Date()
 				this.ongoingObj.ongoing = []
@@ -455,14 +457,6 @@
 				this.ongoingPage.ongoing.time = this.formatGiven(d, 'yyyyMMdd')
 				this.ongoingPage.finished.time = this.formatGiven(d, 'yyyyMMdd')
 				this.ongoingPage.future.time = this.formatGiven(d, 'yyyyMMdd')
-				// console.log(
-				// 	'this',
-				// 	this.ongoingPage.ongoing,
-				// 	'this',
-				// 	this.ongoingPage.finished,
-				// 	'this',
-				// 	this.ongoingPage.future
-				// )
 				this.getScores(
 					'ongoingObj.ongoing',
 					this.ongoingPage.ongoing,
@@ -471,7 +465,12 @@
 				this.getScores(
 					'ongoingObj.finished',
 					this.ongoingPage.finished,
-					'ongoingStatus.finished'
+					'ongoingStatus.finished',
+					callback
+					/* 因为多个请求，同时发送,如果三个callback会因异步导致出错，
+          所以只在一般情况下加载最久的这个请求下面修改,uni.Showloading也会因为这个问题没有正常显示，暂不做处理。
+          可以通过await改造，但是这样会导致请求挨个发送，变慢。
+          或者改造request,让uni.Showloading变成单例。 */
 				)
 				this.getScores(
 					'ongoingObj.future',
@@ -517,58 +516,17 @@
 					this.ongoingPage.future.compe_id = [id]
 				}
 			},
-			changeDate(date) {
-				const d = new Date(
-					date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8)
-				)
-				const cd = new Date()
-				if (d.toDateString() !== cd.toDateString()) {
-					if (cd - d < 0) {
-						// 未来
-						this.cateIndex.time = 2
-					}
-				}
-				Object.assign(this.finishedPage, { p: 1, time: date, isAll: false })
-				this.finishedList = []
-				this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
-			},
-			changeDatef(date) {
-				const d = new Date(
-					date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(6, 8)
-				)
-				const cd = new Date()
-				if (d.toDateString() !== cd.toDateString()) {
-					if (cd - d > 0) {
-						// 过去
-						this.cateIndex.time = 1
-					}
-				}
-				Object.assign(this.futurePage, { p: 1, time: date, isAll: false })
-				this.futureList = []
-				this.getScores('futureList', this.futurePage, 'futurePage.isAll')
-			},
-			getScheduleList(p, num, uid) {
-				getScheduleList(p, num, uid)
-					.then((res) => {
-						this.msg = 'No games'
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
 			subscribe(item) {
-				const token = window.localStorage.getItem('token')
-				if (!token) {
-					// console.log('this', this.$refs)
-					return (this.$refs.loginDialog.loginVisible = true) /* 如果用户未登录访问数据，则直接返回 */
-				}
-				const uid = window.localStorage.getItem('uid')
-				addAppointment({ uid, game_id: item.id, token })
+				/* 订阅赛事 */
+				this.guard()
+				addAppointment({ uid: this.uid, game_id: item.id, token: this.token })
 					.then((res) => {
 						if (res.info.isappointment === '0') {
 							item.is_appointment = 0
+							this.$u.toast('unsubscribed')
 						} else if (res.info.isappointment === 1) {
 							item.is_appointment = 1
+							this.$u.toast('subscribed')
 						}
 					})
 					.catch((err) => {
@@ -590,13 +548,13 @@
 				}
 			},
 			getScores(listName, page, isAllName, callback) {
+				/* 获取比分数据 */
 				let uid = 100
 				if (!this.isEmpty(this.uid)) uid = this.uid
 				Object.assign(page, { uid })
 				getScores(page)
 					.then((res) => {
 						/* 控制loadMore显示 */
-						console.log('res', res.info)
 						if (Object.keys(res.info).length < page.num) {
 							let arr = isAllName.split('.') //
 							this[arr[0]][arr[1]] = true
@@ -632,6 +590,7 @@
 					})
 			},
 			reservationNext(callback) {
+				/* 获取订阅赛事的数据 */
 				let uid = 100
 				let token = '100'
 				if (!this.isEmpty(this.uid)) {
@@ -648,36 +607,8 @@
 					callback
 				)
 			},
-			/* 删除订阅的赛事 */
-			scheduleAppoint(item) {
-				const token = window.localStorage.getItem('token')
-				if (!token) return /* 如果用户未登录访问数据，则直接返回 */
-				const uid = window.localStorage.getItem('uid')
-				// console.log('item', item)
-				scheduleAppoint(uid, item.id, token).then((res) => {
-					// console.log('sche', res)
-					if (res.code === 0) {
-						this.$message({
-							message:
-								parseInt(res.info.isappointment) === 1
-									? 'Notification set'
-									: 'Notification canceled',
-							type: 'success',
-						})
-						const index = this.appointmentList.findIndex((ele) => ele.id === item.id)
-						this.appointmentList.splice(index, 1)
-						item.is_appointment = res.info.isappointment
-						// this.init();
-					} else {
-						this.$message({
-							message: 'error',
-							type: 'warning',
-						})
-					}
-				})
-			},
-			/* 获取我的订阅 */
 			getAppointmentList(uid, token, p, num, compe_id, callback) {
+				/* 获取我的订阅 */
 				getAppointmentList({ uid, token, p, num, compe_id })
 					.then((res) => {
 						if (Object.keys(res.info).length === 0) {
@@ -696,46 +627,61 @@
 					})
 			},
 			onPulling(e) {
-				console.log('onpulling', e)
+				/* 下拉的时候触发 */
+				// console.log('onpulling', e)
 			},
-			onRefresh(val) {
-				if (this._freshing) return
-				this._freshing = true
-				if (val === 'Subscribe') {
-					this.initSubscribe(() => {
-						this.triggered = false
-						this._freshing = false
-					})
-				}
-				if (val === 'Schedule') {
-					//三个参数不一定齐全
-					this.initFuture({
-						id: this.$store.state.filter.future,
-						time: this.futureDate,
-						callback: () => {
-							this.triggered = false
-							this._freshing = false
-						},
-					})
-				}
-				if (val === 'Finished') {
-					this.initFinished({
-						id: this.$store.state.filter.finished,
-						time: this.finishedDate,
-						callback: () => {
-							this.triggered = false
-							this._freshing = false
-						},
-					})
-				}
+			onRefreshFinished() {
+				/* 下拉刷新已完场赛事 */
+				if (this._freshingFinished) return
+				this._freshingFinished = true
+				this.initFinished({
+					id: this.$store.state.filter.finished,
+					time: this.finishedDate,
+					callback: () => {
+						this.triggeredFinished = false
+						this._freshingFinished = false
+					},
+				})
+			},
+			onRefreshFuture() {
+				/* 下拉刷新未来赛事 */
+				if (this._freshingSchedule) return
+				this._freshingSchedule = true
+				this.initFuture({
+					id: this.$store.state.filter.future,
+					time: this.futureDate,
+					callback: () => {
+						this.triggeredSchedule = false
+						this._freshingSchedule = false
+					},
+				})
+			},
+			onRefreshSubscribe() {
+				/* 下拉刷新订阅赛事 */
+				if (this._freshingSubscribe) return
+				this._freshingSubscribe = true
+				this.initSubscribe(() => {
+					this.triggeredSubscribe = false
+					this._freshingSubscribe = false
+				})
+			},
+			onRefreshOngoing() {
+				/* 下拉刷新正在进行 赛事 */
+				if (this._freshingOngoing) return
+				this._freshingOngoing = true
+				this.initOngoing(() => {
+					this.triggeredOngoing = false
+					this._freshingOngoing = false
+				})
 			},
 			onRestore() {
-				this.triggered = 'restore' // 需要重置
-				console.log('onRestore')
+				/* 恢复下拉状态，写法固定 */
+				this.triggeredFinished = 'restore'
+				this.triggeredSchedule = 'restore'
+				this.triggeredSubscribe = 'restore'
+				this.triggeredOngoing = 'restore'
 			},
-			onAbort() {
-				console.log('onAbort')
-			},
+			onAbort() {},
 		},
 	}
 </script>

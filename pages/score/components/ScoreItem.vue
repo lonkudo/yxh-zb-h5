@@ -16,8 +16,7 @@
 					>
 					<text class="fc-b-9">{{ info.match_time | formatGiven('hh:ss') }}</text>
 				</view>
-				<!-- <view class="flex align-center fc-g">{{ getStatus(info.status_id) }}</view> -->
-				<view class="flex align-center fc-g w-150 justify-center"
+				<view class="flex align-center fc-g w-150 justify-center text-center"
 					><slot>Not Started</slot></view
 				>
 				<view class="flex align-center w-300 justify-end">
@@ -28,7 +27,7 @@
 						>
 					</view>
 					<view class="flex align-center margin-left-xs">
-						<image src="/static/styles/png/corner.png" class="h-20 w-20" mode="" />
+						<image src="/static/styles/png/corner.png" class="h-30 w-30" mode="" />
 						<text class="fc-b-9 margin-left-xs"
 							>{{ info.home_scores[4] }} - {{ info.away_scores[4] }}</text
 						>
@@ -39,7 +38,7 @@
 		<view class="fs-24 margin-top-xs margin-bottom-xs">
 			<view class="flex align-center">
 				<view class="flex align-center justify-end w-300">
-					<view class="margin-right-auto w-40" v-if="control[3]">
+					<view class="margin-right-auto w-40" v-if="control[3]" @tap="subscribe">
 						<text
 							:class="[
 								'iconfont icon-lingdang fs-40  ',
@@ -70,7 +69,6 @@
 						>
 					</view>
 				</view>
-				<!-- <view class="flex align-center fc-g">{{ getStatus(info.status_id) }}</view> -->
 				<view class="flex align-center w-150 justify-center"
 					><text class="fc-red fw-6 fs-30"
 						>{{ info.home_scores[0] }} - {{ info.away_scores[0] }}</text
@@ -109,7 +107,7 @@
 		</view>
 		<view
 			class="fs-14 margin-bottom-xs flex align-center fc-b-9"
-			v-if="info.odds.asia_text"
+			v-if="control[5] && info.odds.asia_text"
 		>
 			<view class="w-350 text-right">
 				<text>{{ info.odds.asia_text }}</text>
@@ -130,9 +128,10 @@
 		name: 'ScoreItem',
 		props: {
 			control: {
+				// 用来人为控制部分区域的显示
 				type: Array,
 				default() {
-					return [1, 1, 1, 1, 1] // 红牌 黄牌 排名 铃铛 视频
+					return [1, 1, 1, 1, 1, 1] // 红牌 黄牌 排名 铃铛 视频 盘口指数
 				},
 			},
 			info: {
@@ -149,6 +148,10 @@
 			// console.log('this', this)
 		},
 		methods: {
+			subscribe() {
+				/* 点击铃铛，触发订阅事件 */
+				this.$emit('subscribe')
+			},
 			getStatus: function (val) {
 				// console.log('this', this)
 				let num = this.toNum(val)

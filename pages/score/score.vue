@@ -12,9 +12,17 @@
 			<navigator :url="'settings'" slot="default"
 				><text class="margin-left-lg iconfont icon-shezhi fs-40"></text
 			></navigator>
-			<navigator :url="'filter?type=' + (cateIndex.time + 1)" slot="right"
-				><text class="margin-right-lg iconfont icon-shaixuan fs-40"></text
-			></navigator>
+			<template v-if="swiperCurrent !== 3">
+				<navigator :url="'filter?type=' + (swiperCurrent + 1)" slot="right"
+					><text class="margin-right-lg iconfont icon-shaixuan fs-40"></text
+				></navigator>
+			</template>
+			<template v-else>
+				<text
+					class="margin-right-lg iconfont icon-shaixuan fs-40 fc-b-c"
+					slot="right"
+				></text>
+			</template>
 		</u-navbar>
 		<!-- tab切换区域 -->
 		<u-tabs-swiper
@@ -230,7 +238,6 @@
 	import { FilterBus } from '@/utils/bus.js'
 	import TimeSearch from '@/components/TimeSearch/TimeSearch.vue'
 	import ReverseTimeSearch from '@/components/TimeSearch/ReverseTimeSearch.vue'
-	// import { DateBus } from '@/utils/bus.js'
 	import { getScores, addAppointment } from '@/api/score'
 	import { getAppointmentList } from '@/api/my'
 	import NoContent from '../../components/NoContent/NoContent.vue'
@@ -248,16 +255,6 @@
 					{ name: 'Schedule' },
 					{ name: 'Subscribe' },
 				],
-				cateIndex: {
-					time: 0,
-					date: 0,
-					compe_id: [],
-				},
-				oldCateIndex: {
-					time: -1,
-					date: 0,
-					compe_id: [],
-				},
 				eventsList: [],
 				ongoingStatus: {
 					ongoing: false,
@@ -356,11 +353,8 @@
 					this.initFuture({ id: data.compe_id })
 				}
 				this.$store.commit('CHANGE_FILTER', data)
-				// this.cateIndex.compe_id = data
 			})
-			// DateBus.$on('dateChanged', (date) => {
-			// 	this.cateIndex.date = date
-			// })
+
 			this.init()
 			/* 下拉刷新 */
 			this._freshingFinished = false
@@ -391,11 +385,6 @@
 				this.initFinished({ id: '' })
 				this.initFuture({ id: '' })
 				this.initSubscribe()
-			},
-			tabsChange(index) {
-				/* swiper改变触发,更新cateIndex */
-				this.swiperCurrent = index
-				this.cateIndex.time = index
 			},
 			initSubscribe(callback) {
 				/* 初始化我的订阅，callback是用来当下拉结束的时候收起下拉 */

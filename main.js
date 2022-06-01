@@ -37,6 +37,8 @@ Vue.component('image-right', ImageRight)
 import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 
+store.dispatch('settings/GetSiteInfo')
+
 import io from '@/uni_modules/socket.io-client'
 Vue.prototype.io = io
 

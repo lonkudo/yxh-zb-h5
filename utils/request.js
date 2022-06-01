@@ -36,7 +36,6 @@ export default class Request {
 				title: 'Loading...',
 			})
 		}
-		console.log('data', data.compe_id, typeof data.compe_id)
 
 		// 返回promise
 		return new Promise((resolve, reject) => {

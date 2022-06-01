@@ -77,7 +77,9 @@
 								v-for="(item, index) in ongoingObj.ongoing"
 								:key="'oon' + index"
 							>
-								<slot name="default">ongoing</slot>
+								<slot name="default">{{
+									item.time | match_time_fmt(item.status_id)
+								}}</slot>
 							</score-item>
 							<score-item
 								:control="[1, 1, 1, 1, 0, 1]"
@@ -263,6 +265,11 @@
 	import { getAppointmentList } from '@/api/my'
 	import NoContent from '../../components/NoContent/NoContent.vue'
 
+	/* -----------------------mqtt-------------------------- */
+	import { Mqtt } from '@/utils/mqtt'
+	import { match_time_fmt } from '@/utils/index'
+	/* -----------------------mqtt-------------------------- */
+
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
 		components: { ScoreItem, TimeSearch, ReverseTimeSearch, NoContent },
@@ -366,6 +373,29 @@
 					nomore: 'no more data',
 				},
 				loadingFlag: false,
+				/* -------------------------mqtt---------------------------- */
+				goalList: [],
+				soundTypeOptions: [
+					'Mute',
+					'Default',
+					'Whistle',
+					'Drum',
+					'Broadcast',
+					'Bugle',
+					'Victory',
+				],
+				Default: require('@/static/styles/audio/Default.mp3'),
+				Whistle: require('@/static/styles/audio/Whistle.mp3'),
+				Drum: require('@/static/styles/audio/Drum.mp3'),
+				Broadcast: require('@/static/styles/audio/Broadcast.mp3'),
+				Bugle: require('@/static/styles/audio/Bugle.mp3'),
+				Victory: require('@/static/styles/audio/Victory.mp3'),
+				settingForm: {
+					rank: '1',
+					redyellow: '1',
+					soundType: 'Default',
+				},
+				/* -------------------------mqtt---------------------------- */
 			}
 		},
 		onLoad() {
@@ -399,6 +429,272 @@
 			this.triggeredOngoing = true
 		},
 		methods: {
+			/* -----------------------mqtt部分------------------------------- */
+
+			// 连接MQTT服务器
+			connectMqtt(host, username, password, clean, clientId, topics, callback) {
+				this.mq = new Mqtt(host, topics, callback)
+				this.mq.connect({
+					username,
+					password,
+					clean, //离线时是否接收 QoS 1 和 2 的消息 false 为接收,true为不接收
+					clientId,
+					reconnectPeriod: 5000, //重连时间间隔
+				})
+			},
+			// 处理文字直播消息
+			connectMsg() {
+				let topics = []
+				this.ongoingObj.ongoing.forEach((element) => {
+					topics.push(element.id)
+				})
+				this.connectMqtt(
+					// process.env.VUE_APP_MQTT_SERVICE,
+					this.$store.state.settings.siteInfo.mqttwsserver,
+					'',
+					'',
+					true,
+					// id 保证唯一
+					'mqtitId-ongoing' + Math.random() * 1000,
+					topics,
+					this.dealMessage
+				)
+			},
+			dealMessage(topic, payload) {
+				this.freshPayload = payload
+				console.log('payload', JSON.parse(payload))
+				this.realTime(JSON.parse(payload))
+			},
+			refeshOngoing() {
+				// console.log('refeshOngoing=========');
+				this.$emit('ws', JSON.parse(this.freshPayload))
+			},
+
+			realTime(msgArr) {
+				msgArr.forEach((item) => {
+					this.ongoingObj.ongoing.forEach((ele) => {
+						//ele 是当前的 item是实时的
+						if (ele.id == item.id.toString()) {
+							// 进球、红牌动画
+							this.checkScoresCard(ele, item)
+							// console.log(ele);
+							ele.home_scores = item.score[2]
+							ele.away_scores = item.score[3]
+							// ele.match_time = item.score[4].toString()
+							ele.status_id = item.score[1]
+							ele.time = match_time_fmt(item.score[1], item.score[4])
+							// 实时赛况
+							if (item.tlive.length > 0) {
+								item.tlive[item.tlive.length - 1]['time_status'] = item.score[1]
+								item.tlive[item.tlive.length - 1]['match_time'] = item.score[4]
+							}
+							ele.incidents = item.tlive
+							// 技术统计
+							ele.stats = item.stats
+							// console.log("ele.stats=======",ele.stats,ele.stats.length);
+						}
+					})
+				})
+				// console.log('msgArrAfter', msgArr[0].id, msgArr);
+			},
+			checkScoresCard: function (ele, realItem) {
+				// if (ele.id == '3705598' && !this.testFlag) {
+				//   this.testFlag = true;
+				//   this.test(ele, realItem);
+				//   setTimeout(() => {
+				//     this.testFlag = false;
+				//   }, 10000);
+				// }
+				//ele 是当前的 realItem是实时的
+				let eleObj = JSON.parse(JSON.stringify(ele))
+				let item = JSON.parse(JSON.stringify(realItem))
+				// 比分不一致 、 红牌不一致
+				eleObj.time = match_time_fmt(item.score[1], item.score[4])
+				if (eleObj.home_scores[0] != item.score[2][0]) {
+					console.log(
+						eleObj.home_scores,
+						'eleobj=====homeScoreFather=====item' + eleObj.id,
+						item.score[2]
+					)
+					console.log(
+						eleObj.home_scores[0],
+						'eleobj=====homeScore=====item' + eleObj.id,
+						item.score[2][0]
+					)
+					eleObj.home_scores = item.score[2]
+					ele['home_active'] = true
+					ele['type'] = 1
+					eleObj['position'] = 1
+					eleObj['type'] = 1
+					this.setRank(eleObj)
+					this.pushGoalList(eleObj)
+					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.delItemByTimeOut(eleObj.id)
+					// this.setFresh(realItem);
+				}
+				if (eleObj.home_scores[2] != item.score[2][2]) {
+					console.log(
+						eleObj.home_scores,
+						'eleobj=====homeRedFather======item' + eleObj.id,
+						item.score[2]
+					)
+					console.log(
+						eleObj.home_scores[2],
+						'eleobj=====homeRed======item' + eleObj.id,
+						item.score[2][2]
+					)
+					eleObj.home_scores = item.score[2]
+					ele['home_active'] = true
+					ele['type'] = 4
+					eleObj['position'] = 1
+					eleObj['type'] = 4
+					this.setRank(eleObj)
+					this.pushGoalList(eleObj)
+					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.delItemByTimeOut(eleObj.id)
+					// this.setFresh(realItem);
+				}
+				if (eleObj.away_scores[0] != item.score[3][0]) {
+					console.log(
+						eleObj.away_scores,
+						'eleobj=====awayScoreFather======item' + eleObj.id,
+						item.score[3]
+					)
+					console.log(
+						eleObj.away_scores[0],
+						'eleobj=====awayScore======item' + eleObj.id,
+						item.score[3][0]
+					)
+					eleObj.away_scores = item.score[3]
+					ele['away_active'] = true
+					ele['type'] = 1
+					eleObj['position'] = 2
+					eleObj['type'] = 1
+					this.setRank(eleObj)
+					this.pushGoalList(eleObj)
+					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.delItemByTimeOut(eleObj.id)
+					// this.setFresh(realItem);
+				}
+				if (eleObj.away_scores[2] != item.score[3][2]) {
+					console.log(
+						eleObj.away_scores,
+						'eleobj=====awayRedFather=====item' + eleObj.id,
+						item.score[3]
+					)
+					console.log(
+						eleObj.away_scores[2],
+						'eleobj=====awayRed=====item' + eleObj.id,
+						item.score[3][2]
+					)
+					eleObj.away_scores = item.score[3]
+					ele['away_active'] = true
+					ele['type'] = 4
+					eleObj['position'] = 2
+					eleObj['type'] = 4
+					this.setRank(eleObj)
+					this.pushGoalList(eleObj)
+					this.changeSound(JSON.parse(localStorage.getItem('settingForm')).soundType)
+					this.delItemByTimeOut(eleObj.id)
+					// this.setFresh(realItem);
+				}
+				if (this.goalList.length > 0) {
+					console.log('checkScoresCard', this.goalList.length, this.goalList)
+				}
+				eleObj = null
+				// return obj;
+			},
+
+			delItemByTimeOut(id) {
+				console.log(new Date().getMinutes() + ':' + new Date().getSeconds())
+				setTimeout(() => {
+					console.log(
+						'delItemAfterFive',
+						new Date().getMinutes() + ':' + new Date().getSeconds()
+					)
+					this.delItemAfterFive(id)
+				}, 5000)
+				// }, 120000);
+				setTimeout(() => {
+					console.log(
+						'delItemAfterTen',
+						new Date().getMinutes() + ':' + new Date().getSeconds()
+					)
+					this.delItemAfterTen(id)
+				}, 10000)
+				// }, 120000);
+			},
+			setRank(eleObj) {
+				eleObj['rank'] =
+					this.goalList.length > 0
+						? this.goalList[this.goalList.length - 1].rank + 1
+						: 0
+			},
+			pushGoalList(eleObj) {
+				const result = this.goalList.find((ele) => {
+					if (eleObj.id === ele.id) {
+						ele.home_scores = eleObj.home_scores
+						ele.away_scores = eleObj.away_scores
+					}
+					return eleObj.id === ele.id
+				})
+				if (!result) {
+					this.goalList.push(eleObj)
+				}
+			},
+
+			delItemAfterFive(id) {
+				this.goalList = this.goalList.filter((item) => {
+					return item.id != id
+				})
+			},
+			delItemAfterTen(id) {
+				this.ongoingObj.ongoing.forEach((ele, index) => {
+					if (ele.id == id.toString()) {
+						// ele.home_active = false;
+						// ele.away_active = false;
+						this.$set(this.ongoingObj.ongoing[index], 'home_active', false)
+						this.$set(this.ongoingObj.ongoing[index], 'away_active', false)
+						this.$refs.ongoing.refeshOngoing()
+					}
+				})
+			},
+			changeSound(value) {
+				switch (value) {
+					case 'Mute':
+						AudioBus.$emit('playAudio', 2, '')
+						break
+					case 'Default':
+						AudioBus.$emit('playAudio', 1, this.Default)
+						break
+					case 'Whistle':
+						AudioBus.$emit('playAudio', 1, this.Whistle)
+						break
+					case 'Drum':
+						AudioBus.$emit('playAudio', 1, this.Drum)
+						break
+					case 'Broadcast':
+						AudioBus.$emit('playAudio', 1, this.Broadcast)
+						break
+					case 'Bugle':
+						AudioBus.$emit('playAudio', 1, this.Bugle)
+						break
+					case 'Victory':
+						AudioBus.$emit('playAudio', 1, this.Victory)
+						break
+				}
+			},
+			settings() {
+				if (localStorage.getItem('settingForm')) {
+					this.settingForm = JSON.parse(localStorage.getItem('settingForm'))
+				} else {
+					this.closeSetting()
+				}
+			},
+			closeSetting() {
+				localStorage.setItem('settingForm', JSON.stringify(this.settingForm))
+			},
+			/* -----------------------mqtt部分 结束------------------------------- */
 			finishedDateChanged(date) {
 				/* timesearch日期变更 */
 				this.finishedDate = date
@@ -458,14 +754,10 @@
 				}
 				this.finishedList = []
 				this.finishedPage.p = 1
-				console.log(
-					'---loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit---'
-				)
+
 				this.finishedPage.isAll = false
 				this.statusFinished = 'loadmore' // 上拉加载更多
-				console.log(
-					'---loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit---'
-				)
+
 				if (!time) {
 					const d = new Date()
 					this.finishedPage.time = this.formatGiven(d, 'yyyyMMdd')
@@ -491,7 +783,10 @@
 				this.getScores(
 					'ongoingObj.ongoing',
 					this.ongoingPage.ongoing,
-					'ongoingStatus.ongoing'
+					'ongoingStatus.ongoing',
+					() => {
+						this.connectMsg()
+					}
 				)
 				this.getScores(
 					'ongoingObj.finished',
@@ -565,13 +860,13 @@
 					})
 			},
 			loadMore(target) {
-	       /* 获取更多数据，这个方法搭配 u-loadmore使用,status 三种状态 loadmore loading nomore */
-	       /* 加载完成以后，如果isAll为true就让status 为nomore表示没有更多数据 */
-	       /* 每次init的时候也要同时初始化loadMore的状态。 */
+				/* 获取更多数据，这个方法搭配 u-loadmore使用,status 三种状态 loadmore loading nomore */
+				/* 加载完成以后，如果isAll为true就让status 为nomore表示没有更多数据 */
+				/* 每次init的时候也要同时初始化loadMore的状态。 */
 				if (this.loadingFlag) return
 				this.loadingFlag = true // 防止重复发送请求
 				if (target === 'finished') {
-					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore') k
+					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore')
 					this.statusFinished = 'loading'
 					this.finishedPage.p += 1
 					this.getScores(
@@ -753,6 +1048,46 @@
 				this.triggeredOngoing = 'restore'
 			},
 			onAbort() {},
+		},
+		filters: {
+			match_time_fmt(time, status) {
+				// console.log(status, timestamp);
+				/* 格式化开赛事件 */
+				// console.log('status', status, timestamp)
+				if (typeof status === 'string') status = parseInt(status)
+				switch (status) {
+					case 1:
+						return 'Not Start'
+					case 2:
+						return time
+					case 3:
+						return 'HT'
+					case 4:
+						return time
+					case 5:
+						return 'Overtime'
+					case 6:
+						return 'Overtime'
+					case 7:
+						return 'Penalty Shoot-Out'
+					case 8:
+						return 'Game Over'
+					case 9:
+						return 'Game Delayed'
+					case 10:
+						return 'Game Break'
+					case 11:
+						return 'Game Break'
+					case 12:
+						return 'Game Cancel'
+					case 13:
+						return 'Waiting'
+					case 5:
+						return ''
+					default:
+						break
+				}
+			},
 		},
 	}
 </script>

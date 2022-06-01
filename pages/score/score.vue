@@ -499,9 +499,9 @@
 					'ongoingStatus.finished',
 					callback
 					/* 因为多个请求，同时发送,如果三个callback会因异步导致出错，
-          所以只在一般情况下加载最久的这个请求下面修改,uni.Showloading也会因为这个问题没有正常显示，暂不做处理。
-          可以通过await改造，但是这样会导致请求挨个发送，变慢。
-          或者改造request,让uni.Showloading变成单例。 */
+	         所以只在一般情况下加载最久的这个请求下面修改,uni.Showloading也会因为这个问题没有正常显示，暂不做处理。
+	         可以通过await改造，但是这样会导致请求挨个发送，变慢。
+	         或者改造request,让uni.Showloading变成单例。 */
 				)
 				this.getScores(
 					'ongoingObj.future',
@@ -565,14 +565,13 @@
 					})
 			},
 			loadMore(target) {
-				console.log('loadmore')
+	       /* 获取更多数据，这个方法搭配 u-loadmore使用,status 三种状态 loadmore loading nomore */
+	       /* 加载完成以后，如果isAll为true就让status 为nomore表示没有更多数据 */
+	       /* 每次init的时候也要同时初始化loadMore的状态。 */
 				if (this.loadingFlag) return
-				console.log('---1----1----1----1----1---')
-				this.loadingFlag = true
+				this.loadingFlag = true // 防止重复发送请求
 				if (target === 'finished') {
-					console.log('---2----2----2----2----2---')
-					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore')
-					console.log('---3----3----3----3----3---')
+					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore') k
 					this.statusFinished = 'loading'
 					this.finishedPage.p += 1
 					this.getScores(
@@ -590,7 +589,6 @@
 					)
 				}
 				if (target === 'future') {
-					console.log('---tright----tright----tright----tright----tright---')
 					if (this.futurePage.isAll) return (this.statusFuture = 'nomore')
 					this.statusFuture = 'loading'
 					this.futurePage.p += 1
@@ -617,7 +615,6 @@
 					})
 				}
 			},
-
 			getScores(listName, page, isAllName, callback) {
 				/* 获取比分数据 */
 				let uid = 100
@@ -625,7 +622,7 @@
 				Object.assign(page, { uid })
 				getScores(page)
 					.then((res) => {
-						/* 控制loadMore显示 */
+						/* 控制isAll */
 						if (Object.keys(res.info).length < page.num) {
 							let arr = isAllName.split('.') //
 							this[arr[0]][arr[1]] = true

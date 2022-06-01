@@ -96,6 +96,7 @@ export class TempItem {
 		this.myTemp.removeItem(this)
 		this.item.show = false
 		console.log('destory')
+		this.show = false
 	}
 }
 

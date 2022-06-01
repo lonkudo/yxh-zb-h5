@@ -122,6 +122,7 @@
 						@refresherrefresh="onRefreshFinished"
 						@refresherrestore="onRestore"
 						@refresherabort="onAbort"
+						@scrolltolower="loadMore('finished')"
 					>
 						<template v-if="finishedList.length > 0">
 							<view class="list">
@@ -134,6 +135,12 @@
 									<slot name="default">End</slot>
 								</score-item>
 							</view>
+							<u-loadmore
+								class="h-100"
+								:status="statusFinished"
+								:icon-type="iconType"
+								:load-text="loadText"
+							/>
 						</template>
 						<template v-else>
 							<no-content :style="{ height: myHeight2 + 'rpx' }"></no-content>
@@ -166,6 +173,7 @@
 						@refresherrefresh="onRefreshFuture"
 						@refresherrestore="onRestore"
 						@refresherabort="onAbort"
+						@scrolltolower="loadMore('future')"
 					>
 						<template v-if="futureList.length > 0">
 							<view class="list">
@@ -179,6 +187,12 @@
 									<slot name="default">Not Started</slot>
 								</score-item>
 							</view>
+							<u-loadmore
+								class="h-100"
+								:status="statusFuture"
+								:icon-type="iconType"
+								:load-text="loadText"
+							/>
 						</template>
 						<template v-else>
 							<no-content :style="{ height: myHeight2 + 'rpx' }"></no-content>
@@ -204,6 +218,7 @@
 					@refresherrefresh="onRefreshSubscribe"
 					@refresherrestore="onRestore"
 					@refresherabort="onAbort"
+					@scrolltolower="loadMore('reserved')"
 				>
 					<template v-if="appointmentList.length > 0">
 						<view v-for="(time, idx) in appointmentList" :key="idx">
@@ -221,6 +236,12 @@
 									<slot name="default">Not Started</slot>
 								</score-item>
 							</view>
+							<u-loadmore
+								class="h-100"
+								:status="statusAppointment"
+								:icon-type="iconType"
+								:load-text="loadText"
+							/>
 						</view>
 					</template>
 					<template v-else>
@@ -334,6 +355,17 @@
 				triggeredSubscribe: false, // 下拉刷新
 				finishedDate: null,
 				futureDate: null,
+				/* 上滑加载更多 */
+				statusFinished: 'loadmore',
+				statusFuture: 'loadmore',
+				statusAppointment: 'loadmore',
+				iconType: 'flower',
+				loadText: {
+					loadmore: '',
+					loading: 'loading',
+					nomore: 'no more data',
+				},
+				loadingFlag: false,
 			}
 		},
 		onLoad() {
@@ -390,6 +422,8 @@
 				/* 初始化我的订阅，callback是用来当下拉结束的时候收起下拉 */
 				this.appointmentPage.p = 0
 				this.appointmentList = []
+				this.appointmentPage.isAll = false
+				this.statusAppointment = 'loadmore'
 				this.reservationNext(callback)
 			},
 			initFuture(args) {
@@ -400,9 +434,10 @@
 				} else {
 					this.futurePage.compe_id = [id]
 				}
-				this.appointmentPage.p = 0
 				this.futureList = []
 				this.futurePage.p = 1
+				this.futurePage.isAll = false
+				this.statusFuture = 'loadmore' // 上拉加载更多
 				if (!time) {
 					const d = new Date()
 					this.futurePage.time = this.formatGiven(d, 'yyyyMMdd')
@@ -421,9 +456,16 @@
 				} else {
 					this.finishedPage.compe_id = [id]
 				}
-				this.appointmentPage.p = 0
 				this.finishedList = []
 				this.finishedPage.p = 1
+				console.log(
+					'---loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit---'
+				)
+				this.finishedPage.isAll = false
+				this.statusFinished = 'loadmore' // 上拉加载更多
+				console.log(
+					'---loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit----loadmoreInit---'
+				)
 				if (!time) {
 					const d = new Date()
 					this.finishedPage.time = this.formatGiven(d, 'yyyyMMdd')
@@ -523,19 +565,59 @@
 					})
 			},
 			loadMore(target) {
+				console.log('loadmore')
+				if (this.loadingFlag) return
+				console.log('---1----1----1----1----1---')
+				this.loadingFlag = true
 				if (target === 'finished') {
+					console.log('---2----2----2----2----2---')
+					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore')
+					console.log('---3----3----3----3----3---')
+					this.statusFinished = 'loading'
 					this.finishedPage.p += 1
-					this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
+					this.getScores(
+						'finishedList',
+						this.finishedPage,
+						'finishedPage.isAll',
+						() => {
+							if (this.finishedPage.isAll) {
+								this.statusFinished = 'nomore'
+							} else {
+								this.statusFinished = 'loadmore'
+							}
+							this.loadingFlag = false
+						}
+					)
 				}
 				if (target === 'future') {
+					console.log('---tright----tright----tright----tright----tright---')
+					if (this.futurePage.isAll) return (this.statusFuture = 'nomore')
+					this.statusFuture = 'loading'
 					this.futurePage.p += 1
-					this.getScores('futureList', this.futurePage, 'futurePage.isAll')
+					this.getScores('futureList', this.futurePage, 'futurePage.isAll', () => {
+						if (this.futurePage.isAll) {
+							this.statusFuture = 'nomore'
+						} else {
+							this.statusFuture = 'loadmore'
+						}
+						this.loadingFlag = false
+					})
 				}
 				if (target === 'reserved') {
+					if (this.appointmentPage.isAll) return (this.statusAppointment = 'nomore')
+					this.statusAppointment = 'loading'
 					this.appointmentPage.p += 1
-					this.reservationNext()
+					this.reservationNext(() => {
+						if (this.appointmentPage.isAll) {
+							this.statusAppointment = 'nomore'
+						} else {
+							this.statusAppointment = 'loadmore'
+						}
+						this.loadingFlag = false
+					})
 				}
 			},
+
 			getScores(listName, page, isAllName, callback) {
 				/* 获取比分数据 */
 				let uid = 100
@@ -600,11 +682,14 @@
 				/* 获取我的订阅 */
 				getAppointmentList({ uid, token, p, num, compe_id })
 					.then((res) => {
-						if (Object.keys(res.info).length === 0) {
-							this.appointmentPage.isAll = true
+						if (res.code === 700) {
+							this.appointmentList = []
 						} else {
-							this.appointmentList = this.appointmentList.concat(res.info)
-							// console.log('this', this.appointmentList)
+							if (Object.keys(res.info).length === 0) {
+								this.appointmentPage.isAll = true
+							} else {
+								this.appointmentList = this.appointmentList.concat(res.info)
+							}
 						}
 					})
 					.catch((err) => {

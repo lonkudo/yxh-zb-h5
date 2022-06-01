@@ -76,18 +76,23 @@
 					:id="'content-wrap' + 'Finished'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
-					<time-search></time-search>
+					<time-search @dateChanged="finishedDateChanged"></time-search>
 					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
-						<view class="list">
-							<score-item
-								:control="[1, 1, 1, 0, 0]"
-								:info="item"
-								v-for="(item, index) in finishedList"
-								:key="'fi' + index"
-							>
-								<slot name="default">End</slot>
-							</score-item>
-						</view>
+						<template v-if="finishedList.length > 0">
+							<view class="list">
+								<score-item
+									:control="[1, 1, 1, 0, 0]"
+									:info="item"
+									v-for="(item, index) in finishedList"
+									:key="'fi' + index"
+								>
+									<slot name="default">End</slot>
+								</score-item>
+							</view>
+						</template>
+						<template v-else>
+							<no-content :style="{ height: myHeight2 + 'rpx' }"></no-content>
+						</template>
 					</scroll-view>
 				</view>
 			</swiper-item>
@@ -101,18 +106,25 @@
 					:id="'content-wrap' + 'Schedule'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
-					<reverse-time-search></reverse-time-search>
+					<reverse-time-search
+						@dateChanged="futureDateChanged"
+					></reverse-time-search>
 					<scroll-view scroll-y :style="{ height: myHeight2 + 'rpx' }">
-						<view class="list">
-							<score-item
-								:control="[1, 1, 1, 1, 0]"
-								:info="item"
-								v-for="(item, index) in futureList"
-								:key="'fu' + index"
-							>
-								<slot name="default">Not Started</slot>
-							</score-item>
-						</view>
+						<template v-if="futureList.length > 0">
+							<view class="list">
+								<score-item
+									:control="[1, 1, 1, 1, 0]"
+									:info="item"
+									v-for="(item, index) in futureList"
+									:key="'fu' + index"
+								>
+									<slot name="default">Not Started</slot>
+								</score-item>
+							</view>
+						</template>
+						<template v-else>
+							<no-content :style="{ height: myHeight2 + 'rpx' }"></no-content>
+						</template>
 					</scroll-view>
 				</view>
 			</swiper-item>
@@ -134,12 +146,13 @@
 	import { FilterBus } from '@/utils/bus.js'
 	import TimeSearch from '@/components/TimeSearch/TimeSearch.vue'
 	import ReverseTimeSearch from '@/components/TimeSearch/ReverseTimeSearch.vue'
-	import { DateBus } from '@/utils/bus.js'
+	// import { DateBus } from '@/utils/bus.js'
 	import { getScores, addAppointment } from '@/api/score'
+	import NoContent from '../../components/NoContent/NoContent.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { ScoreItem, TimeSearch, ReverseTimeSearch },
+		components: { ScoreItem, TimeSearch, ReverseTimeSearch, NoContent },
 		data() {
 			return {
 				myHeight: 0,
@@ -254,9 +267,9 @@
 				this.$store.commit('CHANGE_FILTER', data)
 				// this.cateIndex.compe_id = data
 			})
-			DateBus.$on('dateChanged', (date) => {
-				this.cateIndex.date = date
-			})
+			// DateBus.$on('dateChanged', (date) => {
+			// 	this.cateIndex.date = date
+			// })
 			this.init()
 		},
 		watch: {
@@ -333,6 +346,14 @@
 			},
 		},
 		methods: {
+			finishedDateChanged(date) {
+				/* 完成，日期变更 */
+				this.initFinished(this.$store.state.filter.finished, date)
+			},
+			futureDateChanged(date) {
+				/* 完成，日期变更 */
+				this.initFuture(this.$store.state.filter.future, date)
+			},
 			init() {
 				this.changeId('')
 				this.initOngoing()
@@ -346,7 +367,7 @@
 			show() {
 				console.log('list', this.eventsList)
 			},
-			initFuture(id) {
+			initFuture(id, time) {
 				if (typeof id === 'array') {
 					this.futurePage.compe_id = id
 				} else {
@@ -355,11 +376,15 @@
 				this.appointmentPage.p = 0
 				this.futureList = []
 				this.futurePage.p = 1
-				const d = new Date()
-				this.futurePage.time = this.formatGiven(d, 'yyyyMMdd')
+				if (!time) {
+					const d = new Date()
+					this.futurePage.time = this.formatGiven(d, 'yyyyMMdd')
+				} else {
+					this.futurePage.time = time
+				}
 				this.getScores('futureList', this.futurePage, 'futurePage.isAll')
 			},
-			initFinished(id) {
+			initFinished(id, time) {
 				if (typeof id === 'array') {
 					this.finishedPage.compe_id = id
 				} else if (typeof id === 'object') {
@@ -370,8 +395,12 @@
 				this.appointmentPage.p = 0
 				this.finishedList = []
 				this.finishedPage.p = 1
-				const d = new Date()
-				this.finishedPage.time = this.formatGiven(d, 'yyyyMMdd')
+				if (!time) {
+					const d = new Date()
+					this.finishedPage.time = this.formatGiven(d, 'yyyyMMdd')
+				} else {
+					this.finishedPage.time = time
+				}
 				this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
 			},
 			initOngoing() {
@@ -520,7 +549,6 @@
 				let uid = 100
 				if (!this.isEmpty(this.uid)) uid = this.uid
 				Object.assign(page, { uid })
-				console.log('page===========', page)
 				getScores(page)
 					.then((res) => {
 						/* 控制loadMore显示 */

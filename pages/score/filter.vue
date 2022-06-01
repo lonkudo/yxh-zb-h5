@@ -106,8 +106,10 @@
 		methods: {
 			go(val) {
 				console.log('emit', this.eventsList)
-				FilterBus.$emit('confirm', { compe_id: this.eventsList, type: this.type })
 				if (val === 'score') {
+					if (this.eventsList.length === 0)
+						return this.$u.toast('Choose one event at least')
+					FilterBus.$emit('confirm', { compe_id: this.eventsList, type: this.type })
 					uni.switchTab({
 						url: '/pages/score/score',
 					})

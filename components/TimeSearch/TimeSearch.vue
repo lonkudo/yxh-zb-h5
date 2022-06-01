@@ -54,13 +54,15 @@
 				})
 				this.datelist[index].isActive = true
 				this.curDate = this.datelist[index].dateA
-				DateBus.$emit('dateChanged', this.curDate.replaceAll('-', ''))
+				this.$emit('dateChanged', this.curDate.replaceAll('-', ''))
+				// DateBus.$emit('dateChanged', this.curDate.replaceAll('-', ''))
 			},
 			change(args) {
 				/* 日期列表更换 */
 				this.curDate = args.result
 				this.getList(this.curDate)
-				DateBus.$emit('dateChanged', this.curDate.replaceAll('-', ''))
+				this.$emit('dateChanged', this.curDate.replaceAll('-', ''))
+				// DateBus.$emit('dateChanged', this.curDate.replaceAll('-', ''))
 			},
 			getList(val) {
 				/* 获取日期列表 */

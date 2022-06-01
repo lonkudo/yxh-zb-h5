@@ -134,7 +134,23 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				Subscribe
+				<!-- <template v-if="appointmentList.length > 0"> </template>
+				<template v-else> -->
+				<scroll-view
+					scroll-y
+					:style="{ height: myHeight + 'rpx' }"
+					refresher-enabled="true"
+					:refresher-triggered="triggered"
+					:refresher-threshold="100"
+					refresher-background="#f6f6f6"
+					@refresherpulling="onPulling"
+					@refresherrefresh="onRefresh('Subscribe')"
+					@refresherrestore="onRestore"
+					@refresherabort="onAbort"
+				>
+					<no-content :style="{ height: myHeight + 'rpx' }"></no-content>
+				</scroll-view>
+				<!-- </template> -->
 			</swiper-item>
 		</swiper>
 	</view>
@@ -148,6 +164,7 @@
 	import ReverseTimeSearch from '@/components/TimeSearch/ReverseTimeSearch.vue'
 	// import { DateBus } from '@/utils/bus.js'
 	import { getScores, addAppointment } from '@/api/score'
+	import { getAppointmentList } from '@/api/my'
 	import NoContent from '../../components/NoContent/NoContent.vue'
 
 	export default {
@@ -247,6 +264,7 @@
 					type: 1,
 					time: '',
 				},
+				triggered: false, // 下拉刷新
 			}
 		},
 		onLoad() {
@@ -271,6 +289,11 @@
 			// 	this.cateIndex.date = date
 			// })
 			this.init()
+			/* 下拉刷新 */
+			this._freshing = false
+			setTimeout(() => {
+				this.triggered = true
+			}, 1000)
 		},
 		watch: {
 			cateIndex: {
@@ -346,6 +369,9 @@
 			},
 		},
 		methods: {
+			test() {
+				console.log('refresh')
+			},
 			finishedDateChanged(date) {
 				/* 完成，日期变更 */
 				this.initFinished(this.$store.state.filter.finished, date)
@@ -359,6 +385,7 @@
 				this.initOngoing()
 				this.initFinished('')
 				this.initFuture('')
+				this.initSubscribe()
 			},
 			tabsChange(index) {
 				this.swiperCurrent = index
@@ -366,6 +393,11 @@
 			},
 			show() {
 				console.log('list', this.eventsList)
+			},
+			initSubscribe(callback) {
+				this.appointmentPage.p = 0
+				this.appointmentList = []
+				this.reservationNext(callback)
 			},
 			initFuture(id, time) {
 				if (typeof id === 'array') {
@@ -584,17 +616,21 @@
 						console.log('err', err)
 					})
 			},
-			reservationNext() {
-				const token = window.localStorage.getItem('token')
-				if (!token) return /* 如果用户未登录访问数据，则直接返回 */
-				const uid = window.localStorage.getItem('uid')
+			reservationNext(callback) {
+				let uid = 100
+				let token = '100'
+				if (!this.isEmpty(this.uid)) {
+					uid = this.uid
+					token = this.token
+				}
 				this.appointmentPage.p += 1
 				this.getAppointmentList(
 					uid,
 					token,
 					this.appointmentPage.p,
 					this.appointmentPage.num,
-					this.appointmentPage.compe_id
+					this.appointmentPage.compe_id,
+					callback
 				)
 			},
 			/* 删除订阅的赛事 */
@@ -626,7 +662,7 @@
 				})
 			},
 			/* 获取我的订阅 */
-			getAppointmentList(uid, token, p, num, compe_id) {
+			getAppointmentList(uid, token, p, num, compe_id, callback) {
 				getAppointmentList({ uid, token, p, num, compe_id })
 					.then((res) => {
 						if (Object.keys(res.info).length === 0) {
@@ -640,6 +676,29 @@
 						console.log(err)
 						// this.$message.error("4");
 					})
+					.finally(() => {
+						callback && callback()
+					})
+			},
+			onPulling(e) {
+				console.log('onpulling', e)
+			},
+			onRefresh(val) {
+				if (this._freshing) return
+				this._freshing = true
+				if (val === 'Subscribe') {
+					this.initSubscribe(() => {
+						this.triggered = false
+						this._freshing = false
+					})
+				}
+			},
+			onRestore() {
+				this.triggered = 'restore' // 需要重置
+				console.log('onRestore')
+			},
+			onAbort() {
+				console.log('onAbort')
 			},
 		},
 	}

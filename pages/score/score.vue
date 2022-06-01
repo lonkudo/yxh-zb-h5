@@ -265,6 +265,8 @@
 					time: '',
 				},
 				triggered: false, // 下拉刷新
+				finishedDate: null,
+				futureDate: null,
 			}
 		},
 		onLoad() {
@@ -278,9 +280,9 @@
 					this.changeId(data.compe_id)
 					this.initOngoing()
 				} else if (data.type === '2') {
-					this.initFinished(data.compe_id)
+					this.initFinished({ id: data.compe_id })
 				} else if (data.type === '3') {
-					this.initFuture(data.compe_id)
+					this.initFuture({ id: data.compe_id })
 				}
 				this.$store.commit('CHANGE_FILTER', data)
 				// this.cateIndex.compe_id = data
@@ -374,17 +376,19 @@
 			},
 			finishedDateChanged(date) {
 				/* 完成，日期变更 */
-				this.initFinished(this.$store.state.filter.finished, date)
+				this.finishedDate = date
+				this.initFinished({ id: this.$store.state.filter.finished, time: date })
 			},
 			futureDateChanged(date) {
 				/* 完成，日期变更 */
-				this.initFuture(this.$store.state.filter.future, date)
+				this.futureDate = date
+				this.initFuture({ id: this.$store.state.filter.future, time: date })
 			},
 			init() {
 				this.changeId('')
 				this.initOngoing()
-				this.initFinished('')
-				this.initFuture('')
+				this.initFinished({ id: '' })
+				this.initFuture({ id: '' })
 				this.initSubscribe()
 			},
 			tabsChange(index) {
@@ -399,7 +403,8 @@
 				this.appointmentList = []
 				this.reservationNext(callback)
 			},
-			initFuture(id, time) {
+			initFuture(args) {
+				let { id, time, callback } = args
 				if (typeof id === 'array') {
 					this.futurePage.compe_id = id
 				} else {
@@ -414,9 +419,10 @@
 				} else {
 					this.futurePage.time = time
 				}
-				this.getScores('futureList', this.futurePage, 'futurePage.isAll')
+				this.getScores('futureList', this.futurePage, 'futurePage.isAll', callback)
 			},
-			initFinished(id, time) {
+			initFinished(args) {
+				let { id, time, callback } = args
 				if (typeof id === 'array') {
 					this.finishedPage.compe_id = id
 				} else if (typeof id === 'object') {
@@ -433,9 +439,15 @@
 				} else {
 					this.finishedPage.time = time
 				}
-				this.getScores('finishedList', this.finishedPage, 'finishedPage.isAll')
+				this.getScores(
+					'finishedList',
+					this.finishedPage,
+					'finishedPage.isAll',
+					callback
+				)
 			},
 			initOngoing() {
+				// 不需要进行时间筛选 , 在changeId这个方法里面进行compe_id的筛选
 				const d = new Date()
 				this.ongoingObj.ongoing = []
 				this.ongoingObj.finished = []
@@ -577,7 +589,7 @@
 					this.reservationNext()
 				}
 			},
-			getScores(listName, page, isAllName) {
+			getScores(listName, page, isAllName, callback) {
 				let uid = 100
 				if (!this.isEmpty(this.uid)) uid = this.uid
 				Object.assign(page, { uid })
@@ -614,6 +626,9 @@
 					})
 					.catch((err) => {
 						console.log('err', err)
+					})
+					.finally(() => {
+						callback && callback()
 					})
 			},
 			reservationNext(callback) {
@@ -690,6 +705,27 @@
 					this.initSubscribe(() => {
 						this.triggered = false
 						this._freshing = false
+					})
+				}
+				if (val === 'Schedule') {
+					//三个参数不一定齐全
+					this.initFuture({
+						id: this.$store.state.filter.future,
+						time: this.futureDate,
+						callback: () => {
+							this.triggered = false
+							this._freshing = false
+						},
+					})
+				}
+				if (val === 'Finished') {
+					this.initFinished({
+						id: this.$store.state.filter.finished,
+						time: this.finishedDate,
+						callback: () => {
+							this.triggered = false
+							this._freshing = false
+						},
 					})
 				}
 			},

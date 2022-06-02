@@ -256,6 +256,13 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
+		<view class="football-goal-list">
+			<text>2132rjewkljrewklrew1</text>
+			<!-- key 不变化的时候render就不会刷新 -->
+			<view class="football-goal-item" v-for="goal of goalList" :key="goal.id">
+				<scores-card :item="goal" @close="close($event)"></scores-card>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -272,11 +279,21 @@
 	/* -----------------------mqtt-------------------------- */
 	import { Mqtt } from '@/utils/mqtt'
 	import { match_time_fmt } from '@/utils/index'
+	import { GoalPoolBus } from '@/utils/bus'
+	import PopGoalMsg from '../../components/PopGoalMsg/PopGoalMsg.vue'
+	import ScoresCard from './components/ScoresCard.vue'
 	/* -----------------------mqtt-------------------------- */
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { ScoreItem, TimeSearch, ReverseTimeSearch, NoContent },
+		components: {
+			ScoreItem,
+			TimeSearch,
+			ReverseTimeSearch,
+			NoContent,
+			PopGoalMsg,
+			ScoresCard,
+		},
 		data() {
 			return {
 				myHeight: 0,
@@ -378,7 +395,80 @@
 				},
 				loadingFlag: false,
 				/* -------------------------mqtt---------------------------- */
-				goalList: [],
+				goalList: [
+					{
+						id: '3735680',
+						competition_id: '1687',
+						match_time: '1652864400',
+						home_scores: [0, 0, 0, 0, 0, 0, 0],
+						away_scores: [0, 0, 0, 0, 0, 0, 0],
+						type: 1,
+						position: 1,
+						rank: 0,
+						status_id: 2,
+						home_position: '',
+						away_position: '',
+						home_name: 'Gaokaerlishibang U19',
+						away_name: 'Denizlispor U19',
+						competition_name: 'TUR U19 A2',
+						time: 6,
+						is_appointment: 0,
+					},
+					{
+						id: '3735681',
+						competition_id: '1687',
+						match_time: '1652864400',
+						home_scores: [0, 0, 0, 0, 0, 0, 0],
+						away_scores: [0, 0, 0, 0, 0, 0, 0],
+						type: 4,
+						position: 1,
+						rank: 1,
+						status_id: 2,
+						home_position: '',
+						away_position: '',
+						home_name: 'Gaokaerlishibang U19',
+						away_name: 'Denizlispor U19',
+						competition_name: 'TUR U19 A2',
+						time: 6,
+						is_appointment: 0,
+					},
+					{
+						id: '3735682',
+						competition_id: '1687',
+						match_time: '1652864400',
+						home_scores: [0, 0, 0, 0, 0, 0, 0],
+						away_scores: [0, 0, 0, 0, 0, 0, 0],
+						type: 1,
+						rank: 2,
+						position: 2,
+						status_id: 2,
+						home_position: '',
+						away_position: '',
+						home_name: 'Gaokaerlishibang U19',
+						away_name: 'Denizlispor U19',
+						competition_name: 'TUR U19 A2',
+						time: 6,
+						is_appointment: 0,
+					},
+					{
+						id: '3735683',
+						competition_id: '1687',
+						match_time: '1652864400',
+						home_scores: [0, 0, 0, 0, 0, 0, 0],
+						away_scores: [0, 0, 0, 0, 0, 0, 0],
+						type: 4,
+						rank: 3,
+						position: 2,
+						status_id: 2,
+						home_position: '',
+						away_position: '',
+						home_name: 'Gaokaerlishibang U19',
+						away_name: 'Denizlispor U19',
+						competition_name: 'TUR U19 A2',
+						time: 6,
+						is_appointment: 0,
+					},
+				],
 				soundTypeOptions: [
 					'Mute',
 					'Default',
@@ -398,6 +488,8 @@
 					rank: '1',
 					redyellow: '1',
 					soundType: 'Default',
+					red: '1',
+					yellow: '1',
 				},
 				/* -------------------------mqtt---------------------------- */
 			}
@@ -409,7 +501,7 @@
 			/* 过滤页面传回数据,更新对应的区域,更新vuex */
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data.compe_id
-				console.log('confirm--------')
+				// console.log('confirm--------')
 				if (data.type === '1') {
 					this.changeId(data.compe_id)
 					this.initOngoing()
@@ -466,13 +558,16 @@
 			},
 			dealMessage(topic, payload) {
 				this.freshPayload = payload
-				console.log('payload', JSON.parse(payload))
-				this.realTime(JSON.parse(payload))
+				// console.log('payload', JSON.parse(payload))
+
+				// 暂时关闭来测试
+				// this.realTime(JSON.parse(payload))
 			},
 			refeshOngoing() {
 				// console.log('refeshOngoing=========');
 				// this.$emit('ws', JSON.parse(this.freshPayload))
-				this.realTime(JSON.parse(payload))
+				// 暂时关闭来测试
+				// this.realTime(JSON.parse(this.freshPayload))
 			},
 
 			realTime(msgArr) {
@@ -513,9 +608,11 @@
 				//ele 是当前的 realItem是实时的
 				let eleObj = JSON.parse(JSON.stringify(ele))
 				let item = JSON.parse(JSON.stringify(realItem))
+				console.log('eleObj', eleObj, item)
 				// 比分不一致 、 红牌不一致
-				eleObj.time = match_time_fmt(item.score[1], item.score[4])
+				eleObj.time = match_time_fmt(item.score[1], item.score[4]) // 格式化中间的时间
 				if (eleObj.home_scores[0] != item.score[2][0]) {
+					//  主队的比分更新
 					console.log(
 						eleObj.home_scores,
 						'eleobj=====homeScoreFather=====item' + eleObj.id,
@@ -527,20 +624,21 @@
 						item.score[2][0]
 					)
 					eleObj.home_scores = item.score[2]
-					ele['home_active'] = true
-					ele['type'] = 1
-					eleObj['position'] = 1
+					ele['home_active'] = true // ele是原本的 ongoing里面的元素
+					ele['type'] = 1 // 主队进球事件
+					eleObj['position'] = 1 // position 1 动画渲染的时候作为主队
 					eleObj['type'] = 1
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
 					this.changeSound(
 						// JSON.parse(localStorage.getItem('settingForm')).soundType
 						uni.getStorageSync('settingForm').soundType
-					)
+					) // 播放声音
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
 				if (eleObj.home_scores[2] != item.score[2][2]) {
+					// 主队红牌事件
 					console.log(
 						eleObj.home_scores,
 						'eleobj=====homeRedFather======item' + eleObj.id,
@@ -553,7 +651,7 @@
 					)
 					eleObj.home_scores = item.score[2]
 					ele['home_active'] = true
-					ele['type'] = 4
+					ele['type'] = 4 // 主队红牌事件
 					eleObj['position'] = 1
 					eleObj['type'] = 4
 					this.setRank(eleObj)
@@ -566,6 +664,7 @@
 					// this.setFresh(realItem);
 				}
 				if (eleObj.away_scores[0] != item.score[3][0]) {
+					// 客队进球事件
 					console.log(
 						eleObj.away_scores,
 						'eleobj=====awayScoreFather======item' + eleObj.id,
@@ -578,8 +677,8 @@
 					)
 					eleObj.away_scores = item.score[3]
 					ele['away_active'] = true
-					ele['type'] = 1
-					eleObj['position'] = 2
+					ele['type'] = 1 // 进球事件
+					eleObj['position'] = 2 // 客队
 					eleObj['type'] = 1
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
@@ -588,6 +687,7 @@
 					// this.setFresh(realItem);
 				}
 				if (eleObj.away_scores[2] != item.score[3][2]) {
+					// 客队红牌事件
 					console.log(
 						eleObj.away_scores,
 						'eleobj=====awayRedFather=====item' + eleObj.id,
@@ -606,13 +706,13 @@
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
 					this.changeSound(uni.getStorageSync('settingForm').soundType)
-					this.delItemByTimeOut(eleObj.id)
+					this.delItemByTimeOut(eleObj.id) // 删除goalList里面的东西还有 修改ongoing列表的东西
 					// this.setFresh(realItem);
 				}
 				if (this.goalList.length > 0) {
 					console.log('checkScoresCard', this.goalList.length, this.goalList)
 				}
-				eleObj = null
+				eleObj = null // 信息传递完成销毁对象减少内存占用
 				// return obj;
 			},
 
@@ -636,6 +736,7 @@
 				// }, 120000);
 			},
 			setRank(eleObj) {
+				// 设置这个eleObj在goalList里面的排名
 				eleObj['rank'] =
 					this.goalList.length > 0
 						? this.goalList[this.goalList.length - 1].rank + 1
@@ -644,13 +745,14 @@
 			pushGoalList(eleObj) {
 				const result = this.goalList.find((ele) => {
 					if (eleObj.id === ele.id) {
+						// 如果是同一场比赛的话更新进球数量
 						ele.home_scores = eleObj.home_scores
 						ele.away_scores = eleObj.away_scores
 					}
 					return eleObj.id === ele.id
 				})
 				if (!result) {
-					this.goalList.push(eleObj)
+					this.goalList.push(eleObj) // 不是同一场比赛增加记录
 				}
 			},
 
@@ -666,7 +768,8 @@
 						// ele.away_active = false;
 						this.$set(this.ongoingObj.ongoing[index], 'home_active', false)
 						this.$set(this.ongoingObj.ongoing[index], 'away_active', false)
-						this.$refs.ongoing.refeshOngoing()
+						// this.$refs.ongoing.refeshOngoing()
+						this.refeshOngoing()
 					}
 				})
 			},
@@ -1129,5 +1232,13 @@
 		font-weight: 600;
 		content: " '";
 		animation: twinkling 1s ease-in-out infinite;
+	}
+	.football-goal-list {
+		position: fixed;
+		background-color: rgba(0, 0, 0, 0.1);
+		top: 300rpx;
+		left: 0;
+		right: 0;
+		bottom: 200rpx;
 	}
 </style>

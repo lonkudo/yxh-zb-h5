@@ -469,7 +469,7 @@ export function match_time_fmt(status, timestamp) {
 export function formatGiven(time, fmt) {
 	// 按制定格式格式化时间
 	if (!time) return
-	console.log('time', time, typeof time)
+	// console.log('time', time, typeof time)
 	if (typeof time === 'string') {
 		time = new Date(parseInt(time + '000'))
 	}

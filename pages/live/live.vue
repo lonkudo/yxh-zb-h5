@@ -591,6 +591,7 @@
 			},
 			getGiftList() {
 				/* 获取礼物列表 */
+				console.log('---11----11----11----11----11---')
 				this.guard()
 				const uid = this.uid
 				const token = this.token

@@ -18,7 +18,7 @@
 			return (
 				<view
 					class="ball-wrapper ball-wrapper-away away-wrapper"
-					style={{ top: this.item.rank * 200 + 250 + 'rpx' }}
+					style={{ bottom: this.item.rank * 130 + 150 + 'rpx' }}
 				>
 					<view class="wrapper-item">
 						<text
@@ -76,7 +76,8 @@
 	.ball-wrapper {
 		position: fixed;
 		// left: -480rpx;
-		top: 150rpx;
+		// top: 150rpx;
+		// bottom: 0rpx;
 		width: 686rpx;
 		height: 120rpx;
 		background-color: #ccf1e3;
@@ -228,8 +229,8 @@
 	.home-wrapper {
 		right: 50%;
 		transform: translateX(50%);
-		animation: homewrapper 1s ease-in-out infinite;
-		animation-iteration-count: 1; /*动画只执行一次*/
+		// animation: homewrapper 1s ease-in-out infinite;
+		// animation-iteration-count: 1; /*动画只执行一次*/
 	}
 	@keyframes awaywrapper {
 		0% {
@@ -243,7 +244,7 @@
 	.away-wrapper {
 		left: 50%;
 		transform: translateX(-50%);
-		animation: awaywrapper 1s ease-in-out infinite;
-		animation-iteration-count: 1; /*动画只执行一次*/
+		// animation: awaywrapper 1s ease-in-out infinite;
+		// animation-iteration-count: 1; /*动画只执行一次*/
 	}
 </style>

@@ -396,78 +396,78 @@
 				loadingFlag: false,
 				/* -------------------------mqtt---------------------------- */
 				goalList: [
-					{
-						id: '3735680',
-						competition_id: '1687',
-						match_time: '1652864400',
-						home_scores: [0, 0, 0, 0, 0, 0, 0],
-						away_scores: [0, 0, 0, 0, 0, 0, 0],
-						type: 1,
-						position: 1,
-						rank: 0,
-						status_id: 2,
-						home_position: '',
-						away_position: '',
-						home_name: 'Gaokaerlishibang U19',
-						away_name: 'Denizlispor U19',
-						competition_name: 'TUR U19 A2',
-						time: 6,
-						is_appointment: 0,
-					},
-					{
-						id: '3735681',
-						competition_id: '1687',
-						match_time: '1652864400',
-						home_scores: [0, 0, 0, 0, 0, 0, 0],
-						away_scores: [0, 0, 0, 0, 0, 0, 0],
-						type: 4,
-						position: 1,
-						rank: 1,
-						status_id: 2,
-						home_position: '',
-						away_position: '',
-						home_name: 'Gaokaerlishibang U19',
-						away_name: 'Denizlispor U19',
-						competition_name: 'TUR U19 A2',
-						time: 6,
-						is_appointment: 0,
-					},
-					{
-						id: '3735682',
-						competition_id: '1687',
-						match_time: '1652864400',
-						home_scores: [0, 0, 0, 0, 0, 0, 0],
-						away_scores: [0, 0, 0, 0, 0, 0, 0],
-						type: 1,
-						rank: 2,
-						position: 2,
-						status_id: 2,
-						home_position: '',
-						away_position: '',
-						home_name: 'Gaokaerlishibang U19',
-						away_name: 'Denizlispor U19',
-						competition_name: 'TUR U19 A2',
-						time: 6,
-						is_appointment: 0,
-					},
-					{
-						id: '3735683',
-						competition_id: '1687',
-						match_time: '1652864400',
-						home_scores: [0, 0, 0, 0, 0, 0, 0],
-						away_scores: [0, 0, 0, 0, 0, 0, 0],
-						type: 4,
-						rank: 3,
-						position: 2,
-						status_id: 2,
-						home_position: '',
-						away_position: '',
-						home_name: 'Gaokaerlishibang U19',
-						away_name: 'Denizlispor U19',
-						competition_name: 'TUR U19 A2',
-						time: 6,
-						is_appointment: 0,
-					},
+					// {
+					// 	id: '3735680',
+					// 	competition_id: '1687',
+					// 	match_time: '1652864400',
+					// 	home_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	away_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	type: 1,
+					// 	position: 1,
+					// 	rank: 0,
+					// 	status_id: 2,
+					// 	home_position: '',
+					// 	away_position: '',
+					// 	home_name: 'Gaokaerlishibang U19',
+					// 	away_name: 'Denizlispor U19',
+					// 	competition_name: 'TUR U19 A2',
+					// 	time: 6,
+					// 	is_appointment: 0,
+					// },
+					// {
+					// 	id: '3735681',
+					// 	competition_id: '1687',
+					// 	match_time: '1652864400',
+					// 	home_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	away_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	type: 4,
+					// 	position: 1,
+					// 	rank: 1,
+					// 	status_id: 2,
+					// 	home_position: '',
+					// 	away_position: '',
+					// 	home_name: 'Gaokaerlishibang U19',
+					// 	away_name: 'Denizlispor U19',
+					// 	competition_name: 'TUR U19 A2',
+					// 	time: 6,
+					// 	is_appointment: 0,
+					// },
+					// {
+					// 	id: '3735682',
+					// 	competition_id: '1687',
+					// 	match_time: '1652864400',
+					// 	home_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	away_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	type: 1,
+					// 	rank: 2,
+					// 	position: 2,
+					// 	status_id: 2,
+					// 	home_position: '',
+					// 	away_position: '',
+					// 	home_name: 'Gaokaerlishibang U19',
+					// 	away_name: 'Denizlispor U19',
+					// 	competition_name: 'TUR U19 A2',
+					// 	time: 6,
+					// 	is_appointment: 0,
+					// },
+					// {
+					// 	id: '3735683',
+					// 	competition_id: '1687',
+					// 	match_time: '1652864400',
+					// 	home_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	away_scores: [0, 0, 0, 0, 0, 0, 0],
+					// 	type: 4,
+					// 	rank: 3,
+					// 	position: 2,
+					// 	status_id: 2,
+					// 	home_position: '',
+					// 	away_position: '',
+					// 	home_name: 'Gaokaerlishibang U19',
+					// 	away_name: 'Denizlispor U19',
+					// 	competition_name: 'TUR U19 A2',
+					// 	time: 6,
+					// 	is_appointment: 0,
+					// },
 				],
 				soundTypeOptions: [
 					'Mute',
@@ -558,16 +558,16 @@
 			},
 			dealMessage(topic, payload) {
 				this.freshPayload = payload
-				// console.log('payload', JSON.parse(payload))
+				console.log('payload', JSON.parse(payload))
 
 				// 暂时关闭来测试
-				// this.realTime(JSON.parse(payload))
+				this.realTime(JSON.parse(payload))
 			},
 			refeshOngoing() {
 				// console.log('refeshOngoing=========');
 				// this.$emit('ws', JSON.parse(this.freshPayload))
 				// 暂时关闭来测试
-				// this.realTime(JSON.parse(this.freshPayload))
+				this.realTime(JSON.parse(this.freshPayload))
 			},
 
 			realTime(msgArr) {
@@ -1233,12 +1233,12 @@
 		content: " '";
 		animation: twinkling 1s ease-in-out infinite;
 	}
-	.football-goal-list {
-		position: fixed;
-		background-color: rgba(0, 0, 0, 0.1);
-		top: 300rpx;
-		left: 0;
-		right: 0;
-		bottom: 200rpx;
-	}
+	// .football-goal-list {
+	// 	position: fixed;
+	// 	background-color: rgba(0, 0, 0, 0.1);
+	// 	top: 300rpx;
+	// 	left: 0;
+	// 	right: 0;
+	// 	bottom: 200rpx;
+	// }
 </style>

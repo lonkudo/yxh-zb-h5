@@ -1,5 +1,5 @@
 <template>
-	<view class="flex align-center" id="msgItem">
+	<view class="flex align-center h-100" id="msgItem">
 		<view class="flex align-center b-0 br-50 padding-xs">
 			<image :src="info.userInfo.avatar" mode="" class="ava-80" />
 			<view class="flex flex-direction justify-between h-70">

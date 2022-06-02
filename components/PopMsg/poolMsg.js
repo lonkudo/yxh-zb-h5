@@ -15,6 +15,9 @@ export class Temp {
 		})
 		this.tempList[index] = null
 		this.tempList.splice(index, 1)
+
+		this.display.removeItem(tmpItem)
+
 		if (this.tempList.length === 0) {
 			this.display.clearList()
 		}
@@ -68,7 +71,7 @@ export class TempItem {
 			this.down()
 		}, 1000)
 		this.myTemp = myTemp
-		this.item.show = true
+		this.show = true
 	}
 	down() {
 		this.countdown -= 1
@@ -94,8 +97,6 @@ export class TempItem {
 	}
 	destory() {
 		this.myTemp.removeItem(this)
-		this.item.show = false
-		console.log('destory')
 		this.show = false
 	}
 }
@@ -103,18 +104,36 @@ export class TempItem {
 class TempDisplay {
 	constructor(max) {
 		this.displayList = []
+		for (var i = 0; i < max; i++) {
+			this.displayList.push(false)
+		}
+		console.log('displayList', this.displayList)
 		this.max = max
+		this.index = 0
 	}
 	addItem(item) {
 		if (this.count === this.max) {
 			this.clearList()
 		}
-		this.displayList.push(item)
+		this.displayList.splice(this.index, 1, item)
+		this.index++
+		console.log('displayList', this.displayList)
+	}
+	removeItem(tmpItem) {
+		/* 显示列表里面对应的元素置换为false */
+		const index = this.displayList.findIndex((ele) => {
+			return ele === tmpItem
+		})
+		this.displayList.splice(index, 1, false)
+		console.log('displayList', this.displayList)
 	}
 	clearList() {
 		this.displayList = []
-	}
-	get count() {
-		return this.displayList.length
+		this.index = 0
+		for (var i = 0; i < this.max; i++) {
+			this.displayList.push(false)
+		}
+
+		console.log('displayList', this.displayList)
 	}
 }

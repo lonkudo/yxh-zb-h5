@@ -1,10 +1,23 @@
 <template>
 	<view class="popMsg">
-		<transition-group name="slide">
-			<view v-for="(item, index) in tempList" :key="index" style="display: block">
-				<pop-msg-item :info="item" class="margin-bottom-xs"></pop-msg-item>
-			</view>
-		</transition-group>
+		<!-- <transition-group name="slide"> -->
+		<view
+			v-for="(element, index) in tempList"
+			:key="index"
+			style="display: block"
+		>
+			<transition name="slide">
+				<pop-msg-item
+					v-if="element"
+					:info="element.item"
+					class="margin-bottom-xs"
+				></pop-msg-item>
+			</transition>
+			<transition name="height">
+				<view v-if="!element" class="margin-bottom-xs holder"></view>
+			</transition>
+		</view>
+		<!-- </transition-group> -->
 	</view>
 </template>
 
@@ -41,12 +54,12 @@
 		computed: {
 			tempList: function () {
 				let arr = []
-				// this.myTemp.display.displayList.forEach((element) => {
+				this.myTemp.display.displayList.forEach((element) => {
+					arr.push(element)
+				})
+				// this.myTemp.tempList.forEach((element) => {
 				// 	arr.push(element.item)
 				// })
-				this.myTemp.tempList.forEach((element) => {
-					arr.push(element.item)
-				})
 				return arr
 			},
 		},
@@ -71,6 +84,17 @@
 		// 激活状态的效果
 		animation: slideout 0.5s;
 	}
+
+	@keyframes slideout {
+		from {
+			margin-left: 0%;
+			width: 100%;
+		}
+		to {
+			margin-left: -100%;
+			width: 300%;
+		}
+	}
 	@keyframes slidein {
 		from {
 			margin-left: -100%;
@@ -82,14 +106,33 @@
 			width: 100%;
 		}
 	}
-	@keyframes slideout {
+
+	.holder {
+		height: 100rpx;
+	}
+
+	.height-enter-active {
+		animation: heightin 0.5s;
+	}
+	.height-leave-active {
+		// 激活状态的效果
+		animation: heightout 0.5s;
+	}
+
+	@keyframes heightin {
 		from {
-			margin-left: 0%;
-			width: 100%;
+			height: 0rpx;
 		}
 		to {
-			margin-left: -100%;
-			width: 300%;
+			height: 0rpx;
+		}
+	}
+	@keyframes heightout {
+		from {
+			height: 0rpx;
+		}
+		to {
+			height: 0rpx;
 		}
 	}
 </style>

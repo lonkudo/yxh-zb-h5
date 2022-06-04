@@ -4,15 +4,26 @@
 			><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
 			><text class="fc-b-f">{{ liveDetail.title }}</text>
 		</view>
+		<view
+			class="switch flex align-center"
+			v-show="showBack"
+			@tap="showAnchor = true"
+			><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
+		</view>
 		<view class="video-container">
-			<video
-				id="myVideo"
-				:src="liveDetail.pull"
-				object-fit="contain"
-				@play="showBack = false"
-				@pause="showBack = true"
-				@ended="showBack = true"
-			></video>
+			<template v-if="liveDetail.uid === '3'">
+				<web-view :src="liveDetail.animation"></web-view>
+			</template>
+			<template v-else>
+				<video
+					id="myVideo"
+					:src="liveDetail.pull"
+					object-fit="contain"
+					@play="showBack = false"
+					@pause="showBack = true"
+					@ended="showBack = true"
+				></video>
+			</template>
 		</view>
 		<u-tabs-swiper
 			ref="uTabs"
@@ -275,6 +286,36 @@
 			@click="changeGiftNum"
 		></u-action-sheet>
 		<pop-msg></pop-msg>
+		<u-popup v-model="showAnchor" mode="bottom">
+			<view>
+				<view class="b-f6 padding-sm flex justify-center"
+					><text class="fc-g">Choose A Live Source</text></view
+				>
+				<view class="flex flex-wrap h-500 justify-start padding-xs">
+					<view
+						@tap="switchRoom(item)"
+						v-for="(item, index) in roomList"
+						:key="index"
+						:class="[
+							'flex flex-direction align-center justify-center margin-xs  w-160 h-160',
+							index === roomActiveIndex ? 'bg-lightgreen' : '',
+						]"
+					>
+						<view class="p-r">
+							<image :src="item.user.avatar" mode="" class="ava-100" />
+							<image
+								src="/static/styles/gif/living2.gif"
+								class="w-30 h-30 p-a top-70 left-70"
+								mode=""
+							/>
+						</view>
+						<text class="f-hide w-150 text-center fs-16 margin-top-xs">{{
+							item.user.user_nicename
+						}}</text>
+					</view>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -285,6 +326,7 @@
 		getGiftList,
 		sendGift,
 		getCoin,
+		changeRoom,
 	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
@@ -337,6 +379,9 @@
 				pointObj: {}, // 积分近况
 				futureObj: {}, // 未来比赛
 				squadFlag: false, // 如果有阵容信息，则展示阵容信息
+				showAnchor: false,
+				roomList: [], // 房间列表
+				roomActiveIndex: 0,
 			}
 		},
 		async onLoad(options) {
@@ -348,6 +393,7 @@
 			this.getLiveDetail()
 			await this.enterLiveRoom()
 			this.createChatServerClient()
+			this.getRoomsList()
 			/*  */
 		},
 		async onShow() {},
@@ -361,6 +407,39 @@
 			},
 		},
 		methods: {
+			switchRoom(item) {
+				uni.navigateTo({
+					url:
+						'live?liveuid=' +
+						item.uid +
+						'&game_id=' +
+						item.game_id +
+						'&stream=' +
+						item.stream,
+				})
+			},
+			getRoomsList() {
+				/* 更换房间 */
+				let uid = this.isEmpty(this.uid) ? 100 : this.uid
+				changeRoom({ liveid: this.liveuid, game_id: this.game_id, uid })
+					.then((res) => {
+						this.roomList = res.info
+						let index = res.info.findIndex((ele) => {
+							// console.log("index cc", index, this.liveItem.liveuid, ele.uid);
+							if (typeof ele.uid === Number) {
+							}
+							return this.liveuid.toString() === ele.uid.toString()
+						})
+						console.log('index', index)
+						// console.log('index', index)
+						this.roomActiveIndex = index
+						// console.log('changeRooms', res)
+					})
+					.catch((err) => {
+						console.log('chanrRoomsErr', err)
+					})
+			},
+
 			getCoin() {
 				/* 获取账户金币余额金币 */
 				getCoin(this.uid, this.token).then((res) => {
@@ -625,6 +704,12 @@
 		position: fixed;
 		top: 0;
 		left: 0;
+		z-index: 10;
+	}
+	.switch {
+		position: fixed;
+		top: 0;
+		right: 0;
 		z-index: 10;
 	}
 	#myVideo {

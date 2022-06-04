@@ -91,6 +91,7 @@
 								:info="item"
 								v-for="(item, index) in ongoingObj.future"
 								:key="'ofu' + index"
+								@subscribe="subscribe(item)"
 							>
 								<slot name="default">Not Started</slot>
 							</score-item>

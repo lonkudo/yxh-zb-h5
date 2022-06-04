@@ -131,7 +131,7 @@
 				// 用来人为控制部分区域的显示
 				type: Array,
 				default() {
-					return [1, 1, 1, 1, 1, 1] // 红牌 黄牌 排名 铃铛 视频 盘口指数
+					return [true, true, true, true, true, true] // 红牌 黄牌 排名 铃铛 视频 盘口指数
 				},
 			},
 			info: {
@@ -145,7 +145,7 @@
 			return {}
 		},
 		created() {
-			// console.log('this', this)
+			console.log('control', this.control)
 		},
 		methods: {
 			subscribe() {

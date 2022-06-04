@@ -30,7 +30,7 @@
 							{/*<h4>{item.competition_name}----------{item.id}</h4> */}
 							{/* <h4>{this.item.competition_name}</h4> */}
 							<view class="flex flex-direction  justify-between h-80">
-								<view class="flex ">
+								<view class="flex fs-20 f-hide">
 									<text
 										class={
 											this.item.position == 1
@@ -46,7 +46,7 @@
 										{this.item.home_scores[0]}
 									</text>
 								</view>
-								<view class="flex ">
+								<view class="flex fs-20 f-hide">
 									<text
 										class={
 											this.item.position == 2
@@ -185,7 +185,7 @@
 				color: #333;
 				background-color: #999;
 				top: 39rpx;
-				left: 100rpx;
+				left: 90rpx;
 			}
 			.time {
 				margin-right: 24rpx;

@@ -26,7 +26,6 @@
 		</u-navbar>
 		<!-- tab切换区域 -->
 
-		<button @tap="test">test</button>
 		<u-tabs-swiper
 			ref="uTabs"
 			:list="menu"
@@ -74,7 +73,7 @@
 						<!-- ongoing区域由三部分组成 -->
 						<view class="margin-top-sm list" :style="{ height: myHeight + 'rpx' }">
 							<score-item
-								:control="[1, 1, 1, 0, 1, 1]"
+								:control="[...displaySetting, false, true, true]"
 								:info="item"
 								v-for="(item, index) in ongoingObj.ongoing"
 								:key="'oon' + index"
@@ -88,7 +87,7 @@
 								>
 							</score-item>
 							<score-item
-								:control="[1, 1, 1, 1, 0, 1]"
+								:control="[...displaySetting, true, false, true]"
 								:info="item"
 								v-for="(item, index) in ongoingObj.future"
 								:key="'ofu' + index"
@@ -96,7 +95,7 @@
 								<slot name="default">Not Started</slot>
 							</score-item>
 							<score-item
-								:control="[1, 1, 1, 0, 1, 1]"
+								:control="[...displaySetting, false, true, true]"
 								:info="item"
 								v-for="(item, index) in ongoingObj.finished"
 								:key="'ofi' + index"
@@ -135,7 +134,7 @@
 						<template v-if="finishedList.length > 0">
 							<view class="list">
 								<score-item
-									:control="[1, 1, 1, 0, 0, 1]"
+									:control="[...displaySetting, false, false, true]"
 									:info="item"
 									v-for="(item, index) in finishedList"
 									:key="'fi' + index"
@@ -284,7 +283,7 @@
 	import { GoalPoolBus } from '@/utils/bus'
 	import PopGoalMsg from '../../components/PopGoalMsg/PopGoalMsg.vue'
 	import ScoresCard from './components/ScoresCard.vue'
-	import { AudioBus } from '@/utils/bus'
+	import { AudioBus, SettingBus } from '@/utils/bus'
 	/* -----------------------mqtt-------------------------- */
 
 	export default {
@@ -503,6 +502,7 @@
 					redCardPopup: true,
 					soundType: 'Default',
 				},
+				displaySetting: [true, true, true],
 				/* -------------------------mqtt---------------------------- */
 			}
 		},
@@ -556,6 +556,17 @@
 			if (!uni.getStorageSync('settingForm')) {
 				uni.setStorageSync('settingForm', this.settingFormDefault)
 			}
+			SettingBus.$on('display', () => {
+				if (!uni.getStorageSync('settingForm')) {
+					this.displaySetting = [true, true, true]
+				} else {
+					this.displaySetting = [
+						uni.getStorageSync('settingForm').red,
+						uni.getStorageSync('settingForm').yellow,
+						uni.getStorageSync('settingForm').rank,
+					]
+				}
+			})
 		},
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
@@ -668,6 +679,16 @@
 						if (uni.getStorageSync('settingForm').goalSound) {
 							this.changeSound(uni.getStorageSync('settingForm').homeSoundType) // 播放声音
 						}
+						if (uni.getStorageSync('settingForm').goalSound) {
+							this.changeSound(uni.getStorageSync('settingForm').homeSoundType) // 播放声音
+						}
+						if (uni.getStorageSync('settingForm').goalVibration) {
+							uni.vibrateLong({
+								success: function () {
+									console.log('vibrate')
+								},
+							})
+						}
 						this.delItemByTimeOut(eleObj.id)
 					}
 				}
@@ -696,6 +717,14 @@
 							// JSON.parse(localStorage.getItem('settingForm')).soundType
 							uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
 						)
+
+						if (uni.getStorageSync('settingForm').redCardVibration) {
+							uni.vibrateLong({
+								success: function () {
+									console.log('vibrate')
+								},
+							})
+						}
 						this.delItemByTimeOut(eleObj.id)
 					}
 					// this.setFresh(realItem);
@@ -725,6 +754,14 @@
 						if (uni.getStorageSync('settingForm').goalSound) {
 							this.changeSound(uni.getStorageSync('settingForm').awaySoundType)
 						}
+
+						if (uni.getStorageSync('settingForm').goalVibration) {
+							uni.vibrateLong({
+								success: function () {
+									console.log('vibrate')
+								},
+							})
+						}
 						this.delItemByTimeOut(eleObj.id)
 					}
 				}
@@ -752,6 +789,13 @@
 						this.changeSound(
 							uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
 						)
+						if (uni.getStorageSync('settingForm').redCardVibration) {
+							uni.vibrateLong({
+								success: function () {
+									console.log('vibrate')
+								},
+							})
+						}
 						this.delItemByTimeOut(eleObj.id) // 删除goalList里面的东西还有 修改ongoing列表的东西
 						// this.setFresh(realItem);
 					}
@@ -819,9 +863,6 @@
 						this.refeshOngoing()
 					}
 				})
-			},
-			test() {
-				AudioBus.$emit('playAudio', 1, this.Whistle)
 			},
 			changeSound(value) {
 				console.log(

@@ -154,6 +154,7 @@
 
 <script>
 	import MyPopup from '@/components/MyPopup/MyPopup.vue'
+	import { SettingBus } from '@/utils/bus'
 	export default {
 		components: { MyPopup },
 		data() {
@@ -203,6 +204,8 @@
 			settingForm: {
 				handler: function (newVal) {
 					uni.setStorageSync('settingForm', newVal)
+					console.log('newVal', newVal)
+					SettingBus.$emit('display')
 				},
 				deep: true,
 			},

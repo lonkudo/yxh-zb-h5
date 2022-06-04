@@ -551,6 +551,11 @@
 					console.log(res.errCode)
 				})
 			})
+			/* 如果没有本地settingForm就初始化 */
+
+			if (!uni.getStorageSync('settingForm')) {
+				uni.setStorageSync('settingForm', this.settingFormDefault)
+			}
 		},
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
@@ -656,15 +661,15 @@
 					ele['type'] = 1 // 主队进球事件
 					eleObj['position'] = 1 // position 1 动画渲染的时候作为主队
 					eleObj['type'] = 1
-					this.setRank(eleObj)
-					this.pushGoalList(eleObj)
-					this.changeSound(
-						// JSON.parse(localStorage.getItem('settingForm')).soundType
 
-						uni.getStorageSync('settingForm').homeSoundType || 'Default'
-					) // 播放声音
-					this.delItemByTimeOut(eleObj.id)
-					// this.setFresh(realItem);
+					if (uni.getStorageSync('settingForm').goalPopup) {
+						this.setRank(eleObj)
+						this.pushGoalList(eleObj)
+						if (uni.getStorageSync('settingForm').goalSound) {
+							this.changeSound(uni.getStorageSync('settingForm').homeSoundType) // 播放声音
+						}
+						this.delItemByTimeOut(eleObj.id)
+					}
 				}
 				if (eleObj.home_scores[2] != item.score[2][2]) {
 					// 主队红牌事件
@@ -683,13 +688,16 @@
 					ele['type'] = 4 // 主队红牌事件
 					eleObj['position'] = 1
 					eleObj['type'] = 4
-					this.setRank(eleObj)
-					this.pushGoalList(eleObj)
-					this.changeSound(
-						// JSON.parse(localStorage.getItem('settingForm')).soundType
-						uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
-					)
-					this.delItemByTimeOut(eleObj.id)
+
+					if (uni.getStorageSync('settingForm').redCardPopup) {
+						this.setRank(eleObj)
+						this.pushGoalList(eleObj)
+						this.changeSound(
+							// JSON.parse(localStorage.getItem('settingForm')).soundType
+							uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
+						)
+						this.delItemByTimeOut(eleObj.id)
+					}
 					// this.setFresh(realItem);
 				}
 				if (eleObj.away_scores[0] != item.score[3][0]) {
@@ -709,13 +717,16 @@
 					ele['type'] = 1 // 进球事件
 					eleObj['position'] = 2 // 客队
 					eleObj['type'] = 1
-					this.setRank(eleObj)
-					this.pushGoalList(eleObj)
-					this.changeSound(
-						uni.getStorageSync('settingForm').awaySoundType || 'Default'
-					)
-					this.delItemByTimeOut(eleObj.id)
-					// this.setFresh(realItem);
+
+					if (uni.getStorageSync('settingForm').goalPopup) {
+						this.setRank(eleObj)
+						this.pushGoalList(eleObj)
+
+						if (uni.getStorageSync('settingForm').goalSound) {
+							this.changeSound(uni.getStorageSync('settingForm').awaySoundType)
+						}
+						this.delItemByTimeOut(eleObj.id)
+					}
 				}
 				if (eleObj.away_scores[2] != item.score[3][2]) {
 					// 客队红牌事件
@@ -734,15 +745,16 @@
 					ele['type'] = 4
 					eleObj['position'] = 2
 					eleObj['type'] = 4
-					this.setRank(eleObj)
-
-					this.pushGoalList(eleObj)
-
-					this.changeSound(
-						uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
-					)
-					this.delItemByTimeOut(eleObj.id) // 删除goalList里面的东西还有 修改ongoing列表的东西
-					// this.setFresh(realItem);
+					if (uni.getStorageSync('settingForm').redCardPopup) {
+						/* 如果 */
+						this.setRank(eleObj)
+						this.pushGoalList(eleObj)
+						this.changeSound(
+							uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
+						)
+						this.delItemByTimeOut(eleObj.id) // 删除goalList里面的东西还有 修改ongoing列表的东西
+						// this.setFresh(realItem);
+					}
 				}
 				if (this.goalList.length > 0) {
 					console.log('checkScoresCard', this.goalList.length, this.goalList)

@@ -25,6 +25,8 @@
 			</template>
 		</u-navbar>
 		<!-- tab切换区域 -->
+
+		<button @tap="test">test</button>
 		<u-tabs-swiper
 			ref="uTabs"
 			:list="menu"
@@ -282,6 +284,7 @@
 	import { GoalPoolBus } from '@/utils/bus'
 	import PopGoalMsg from '../../components/PopGoalMsg/PopGoalMsg.vue'
 	import ScoresCard from './components/ScoresCard.vue'
+	import { AudioBus } from '@/utils/bus'
 	/* -----------------------mqtt-------------------------- */
 
 	export default {
@@ -484,12 +487,21 @@
 				Broadcast: require('@/static/styles/audio/Broadcast.mp3'),
 				Bugle: require('@/static/styles/audio/Bugle.mp3'),
 				Victory: require('@/static/styles/audio/Victory.mp3'),
-				settingForm: {
-					rank: '1',
-					redyellow: '1',
+				settingFormDefault: {
+					rank: true,
+					red: true,
+					yellow: true,
+					// 进球设置
+					goalSound: true,
+					homeSoundType: 'Default',
+					awaySoundType: 'Default',
+					goalVibration: true,
+					goalPopup: true,
+					// 红牌设置
+					redCardSound: true,
+					redCardVibration: true,
+					redCardPopup: true,
 					soundType: 'Default',
-					red: '1',
-					yellow: '1',
 				},
 				/* -------------------------mqtt---------------------------- */
 			}
@@ -523,6 +535,22 @@
 			this.triggeredSubscribe = true
 			this._freshingOngoing = false
 			this.triggeredOngoing = true
+
+			/* 音频播放 */
+			AudioBus.$on('playAudio', (data, sound) => {
+				console.log('data', data, sound)
+				if (data === 2) return
+				const innerAudioContext = uni.createInnerAudioContext()
+				innerAudioContext.autoplay = true
+				innerAudioContext.src = sound
+				innerAudioContext.onPlay(() => {
+					console.log('开始播放')
+				})
+				innerAudioContext.onError((res) => {
+					console.log(res.errMsg)
+					console.log(res.errCode)
+				})
+			})
 		},
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
@@ -632,7 +660,8 @@
 					this.pushGoalList(eleObj)
 					this.changeSound(
 						// JSON.parse(localStorage.getItem('settingForm')).soundType
-						uni.getStorageSync('settingForm').soundType
+
+						uni.getStorageSync('settingForm').homeSoundType || 'Default'
 					) // 播放声音
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
@@ -658,7 +687,7 @@
 					this.pushGoalList(eleObj)
 					this.changeSound(
 						// JSON.parse(localStorage.getItem('settingForm')).soundType
-						uni.getStorageSync('settingForm').soundType
+						uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
 					)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
@@ -682,7 +711,9 @@
 					eleObj['type'] = 1
 					this.setRank(eleObj)
 					this.pushGoalList(eleObj)
-					this.changeSound(uni.getStorageSync('settingForm').soundType)
+					this.changeSound(
+						uni.getStorageSync('settingForm').awaySoundType || 'Default'
+					)
 					this.delItemByTimeOut(eleObj.id)
 					// this.setFresh(realItem);
 				}
@@ -704,8 +735,12 @@
 					eleObj['position'] = 2
 					eleObj['type'] = 4
 					this.setRank(eleObj)
+
 					this.pushGoalList(eleObj)
-					this.changeSound(uni.getStorageSync('settingForm').soundType)
+
+					this.changeSound(
+						uni.getStorageSync('settingForm').redCardSound ? 'Default' : 'Mute'
+					)
 					this.delItemByTimeOut(eleObj.id) // 删除goalList里面的东西还有 修改ongoing列表的东西
 					// this.setFresh(realItem);
 				}
@@ -773,7 +808,13 @@
 					}
 				})
 			},
+			test() {
+				AudioBus.$emit('playAudio', 1, this.Whistle)
+			},
 			changeSound(value) {
+				console.log(
+					'---chaneSound----chaneSound----chaneSound----chaneSound----chaneSound---'
+				)
 				switch (value) {
 					case 'Mute':
 						AudioBus.$emit('playAudio', 2, '')

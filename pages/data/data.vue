@@ -158,33 +158,33 @@
 </script>
 
 <style lang="scss" scoped>
-	// @import "@/assets/styles/variables.scss";
+// @import "@/assets/styles/variables.scss";
 
-	.data-main {
-		width: 96%;
-		background: #ffffff;
-		margin: 0 auto;
-	}
-	.content {
-		margin-top: 20rpx;
-		border-radius: 8rpx;
-	}
-	.hot {
-	}
-	.title {
-		font-size: 30rpx;
-	}
-	.mold-con {
-		border-top: 1px solid #e5e5e5;
-		margin-top: 8rpx;
-		padding: 0 8rpx;
-	}
-	.swiper-con {
-	}
-	.league-item {
-		margin: 28rpx 4rpx;
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
+.data-main {
+  width: 96%;
+  background: #ffffff;
+  margin: 0 auto;
+}
+.content {
+  margin-top: 20rpx;
+  border-radius: 8rpx;
+}
+.hot {
+}
+.title {
+  font-size: 30rpx;
+}
+.mold-con {
+  border-top: 1px solid #e5e5e5;
+  margin-top: 8rpx;
+  padding: 0 8rpx;
+}
+.swiper-con {
+}
+.league-item {
+  margin: 28rpx 4rpx;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 </style>

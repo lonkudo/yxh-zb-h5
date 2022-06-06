@@ -156,6 +156,14 @@
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
+				:key="'Action'"
+				@touchmove.stop=""
+				:style="{ height: myHeight + 'rpx' }"
+			>
+				<team-formation :myHeight="myHeight" :game_id="game_id"></team-formation>
+			</swiper-item>
+			<swiper-item
+				class="swiper-item"
 				:key="'Squad'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
@@ -358,6 +366,7 @@
 				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
+					{ name: 'Action' },
 					{ name: 'Squad' },
 					{ name: 'Analyse' },
 					{ name: 'Contribution' },

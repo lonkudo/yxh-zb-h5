@@ -1,5 +1,5 @@
 <template>
-  <view class="demo-layout league-item">
+  <view class="demo-layout league-item" @click="selectLeague()">
     <view class="img-box">
       <image mode="aspectFit" :src="infoItem.logo" alt="" />
     </view>
@@ -10,6 +10,21 @@
 export default {
   name: "InfoItem",
   props: ["infoItem"],
+  methods: {
+    selectLeague() {
+      if (this.infoItem.id == 999999) {
+        uni.navigateTo({
+          url:
+            "/pages/data/fifa/fifa?league=" +
+            encodeURIComponent(JSON.stringify(this.infoItem)),
+        });
+      } else {
+        uni.navigateTo({
+          url: "/pages/data/league/league",
+        });
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

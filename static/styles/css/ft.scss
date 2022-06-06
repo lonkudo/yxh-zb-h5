@@ -62,6 +62,9 @@
 .fs-46 {
 	font-size: 46rpx !important;
 }
+.fs-50 {
+	font-size: 50rpx !important;
+}
 .fs-60 {
 	font-size: 60rpx !important;
 }
@@ -145,6 +148,18 @@
 	-webkit-line-clamp: 2;
 	line-height: 28rpx;
 }
+.f-hide-3 {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	line-height: 33rpx;
+}
 .f-center {
 	text-align: center !important;
+}
+
+.fs-shadow {
+	text-shadow: 10rpx 10rpx 20rpx black !important;
 }

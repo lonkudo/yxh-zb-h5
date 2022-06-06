@@ -13,11 +13,16 @@ Vue.use(uView)
 
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)
+Vue.prototype.formatGiven = formatGiven
 
 import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty
 import toNum from '@/utils/toNum.js'
 Vue.prototype.toNum = toNum
+import initScrollHeight from '@/utils/initScrollHeight.js'
+Vue.prototype.initScrollHeight = initScrollHeight
+import guard from '@/utils/guard.js'
+Vue.prototype.guard = guard
 
 import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
 
@@ -31,6 +36,11 @@ import ImageRight from '@/layout/ImageRight/ImageRight.vue'
 Vue.component('image-right', ImageRight)
 import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
+
+store.dispatch('settings/GetSiteInfo')
+
+import io from '@/uni_modules/socket.io-client'
+Vue.prototype.io = io
 
 Vue.config.productionTip = false
 App.mpType = 'app'

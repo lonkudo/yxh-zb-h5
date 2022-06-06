@@ -8,7 +8,7 @@ export default function (val) {
 			return val.keys().length === 0
 		} catch (error) {
 			/* 计算computed里面的object的时候，会因为没有keys触发这个条件 */
-			return JSON.stringify(val) === '{}'
+			return JSON.stringify(val) === '{}' || JSON.stringify(val) === '[]'
 		}
 	}
 	if (typeof val === 'string') {

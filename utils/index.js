@@ -2,8 +2,10 @@
  * 表格时间格式化
  */
 export function formatDate(cellValue) {
-	console.log(cellValue)
 	if (cellValue == null || cellValue == '') return ''
+	if (typeof cellValue === 'string' && cellValue.length === 10) {
+		cellValue = parseInt(cellValue) * 1000
+	}
 	var date = new Date(cellValue)
 	var year = date.getFullYear()
 	var month =
@@ -412,8 +414,61 @@ export function getDateFmt() {
 	return fmt
 }
 
+export function match_time_fmt(status, timestamp) {
+	/* 格式化开赛事件 */
+	// console.log('status', status, timestamp)
+	let d = new Date()
+	switch (status) {
+		case 1:
+			return 'Not Start'
+			break
+		case 2:
+			return Math.ceil((Number(d) / 1000 - timestamp) / 60)
+			break
+		case 3:
+			return 'HT'
+			break
+		case 4:
+			return Math.ceil((Number(d) / 1000 - timestamp) / 60) + 45
+			break
+		case 5:
+			return 'Overtime'
+			break
+		case 6:
+			return 'Overtime'
+			break
+		case 7:
+			return 'Penalty Shoot-Out'
+			break
+		case 8:
+			return 'Game Over'
+			break
+		case 9:
+			return 'Game Delayed'
+			break
+		case 10:
+			return 'Game Break'
+			break
+		case 11:
+			return 'Game Break'
+			break
+		case 12:
+			return 'Game Cancel'
+			break
+		case 13:
+			return 'Waiting'
+			break
+		case 5:
+			return ''
+			break
+		default:
+			break
+	}
+}
+
 export function formatGiven(time, fmt) {
 	// 按制定格式格式化时间
+	if (!time) return
 	// console.log('time', time, typeof time)
 	if (typeof time === 'string') {
 		time = new Date(parseInt(time + '000'))

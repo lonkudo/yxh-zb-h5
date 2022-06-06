@@ -18,6 +18,24 @@
 			}
 		},
 		{
+			"path": "pages/discover/detail/videoDetail",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/discover/detail/newsDetail",
+			"style": {
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "News Detail",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/search/search",
 			"style": {
 				"navigationBarTitleText": "",
@@ -42,7 +60,8 @@
 			"path": "pages/score/score",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -151,6 +170,83 @@
 			}
 		},
 		{
+			"path": "pages/my/messages/messages",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Messages",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/messages/comments",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Comments",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/messages/likes",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Likes",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/messages/likes",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Likes",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/messages/systemMsgs",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "System Messages",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/about/about",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "About Us",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/report/report",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Reports",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
 			"path": "pages/login/login",
 			"style": {
 				"navigationBarTextStyle": "black",
@@ -187,6 +283,56 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/live/live",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/live/snippet/snippet",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/live/snippet/add",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "components/PopMsg/PopMsgItem",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/score/settings",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Settings",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/score/filter",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Filter",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
 			}
 		}
 	],
@@ -233,12 +379,6 @@
 			},
 			{
 				"pagePath": "pages/my/my",
-				"iconPath": "static/styles/tab/tab-my@2x.png",
-				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
-				"text": "My"
-			},
-			{
-				"pagePath": "pages/search/search",
 				"iconPath": "static/styles/tab/tab-my@2x.png",
 				"selectedIconPath": "static/styles/tab/tab-my-active@2x.png",
 				"text": "My"

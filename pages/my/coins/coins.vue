@@ -285,7 +285,6 @@
 	.bg-custom {
 		background-image: url('@/static/styles/png/bg-my.png');
 		background-size: 100% auto;
-		background-color: pink;
 	}
 	.my-coin {
 		transform: scale(0.6);

@@ -1,6 +1,11 @@
 <template>
 	<view>
-		<image-info :img="videoInfo.thumb" :border="'top'" :showIcon="true">
+		<image-info
+			:img="videoInfo.thumb"
+			:border="'top'"
+			:showIcon="true"
+			@onTap="go(videoInfo)"
+		>
 			<text slot="top">{{ videoInfo.title }}</text>
 			<text slot="bottom">{{
 				videoInfo.addtime | formatGiven('yyyy-MM-dd hh:ss')
@@ -25,6 +30,13 @@
 		props: ['videoInfo'],
 		data() {
 			return {}
+		},
+		methods: {
+			go(info) {
+				uni.navigateTo({
+					url: 'detail/videoDetail?id=' + info.id,
+				})
+			},
 		},
 	}
 </script>

@@ -1,5 +1,16 @@
 {
   "dependencies": {
-    "mqtt": "^4.3.7"
-  }
+    "moment": "^2.29.3",
+    "mqtt": "^4.3.7",
+    "qs": "^6.10.3"
+  },
+  "name": "yxh-zb-h5",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

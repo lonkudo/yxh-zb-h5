@@ -15,6 +15,9 @@
 
 	export default {
 		name: 'AttentionItem',
+		components: {
+			MyButton,
+		},
 		props: ['attentionInfo'],
 		data() {
 			return {}

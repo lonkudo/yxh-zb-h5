@@ -1,19 +1,25 @@
 <template>
 	<view
-		class="u-progress"
+		class="my-progress"
 		:style="{
 			borderRadius: round ? '100rpx' : 0,
 			height: height + 'rpx',
 			backgroundColor: inactiveColor,
 		}"
 	>
+		<view class="p-a left-20 fs-20 fc-b-f">
+			<slot name="left">left</slot>
+		</view>
+		<view class="p-a right-20 fs-20 fc-b-f">
+			<slot name="right" class="p-a">right</slot>
+		</view>
 		<view
 			:class="[
-				type ? `u-type-${type}-bg` : '',
-				striped ? 'u-striped' : '',
-				striped && stripedActive ? 'u-striped-active' : '',
+				type ? `my-type-${type}-bg` : '',
+				striped ? 'my-striped' : '',
+				striped && stripedActive ? 'my-striped-active' : '',
 			]"
-			class="u-active"
+			class="my-active"
 			:style="[progressStyle]"
 		>
 			<slot v-if="$slots.default || $slots.$default" />
@@ -38,10 +44,10 @@
 	 * @property {String Number} height 进度条的高度，单位rpx（默认28）
 	 * @property {Boolean} striped 是否显示进度条激活部分的条纹（默认false）
 	 * @property {Boolean} striped-active 条纹是否具有动态效果（默认false）
-	 * @example <u-line-progress :percent="70" :show-percent="true"></u-line-progress>
+	 * @example <my-line-progress :percent="70" :show-percent="true"></my-line-progress>
 	 */
 	export default {
-		name: 'u-line-progress',
+		name: 'my-line-progress',
 		props: {
 			// 两端是否显示半圆形
 			round: {
@@ -104,20 +110,21 @@
 </script>
 
 <style lang="scss" scoped>
-	@import '../..//libs/css/style.components.scss';
+	@import '@/uni_modules/uview-ui/libs/css/style.components.scss';
 
-	.u-progress {
+	.my-progress {
 		overflow: hidden;
 		height: 15px;
 		/* #ifndef APP-NVUE */
 		display: inline-flex;
+		position: relative;
 		/* #endif */
 		align-items: center;
 		width: 100%;
 		border-radius: 100rpx;
 	}
 
-	.u-active {
+	.my-active {
 		width: 0;
 		height: 100%;
 		align-items: center;
@@ -129,7 +136,7 @@
 		transition: all 0.4s ease;
 	}
 
-	.u-striped {
+	.my-striped {
 		background-image: linear-gradient(
 			45deg,
 			rgba(255, 255, 255, 0.15) 25%,
@@ -143,7 +150,7 @@
 		background-size: 39px 39px;
 	}
 
-	.u-striped-active {
+	.my-striped-active {
 		animation: progress-stripes 2s linear infinite;
 	}
 

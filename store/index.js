@@ -8,6 +8,7 @@ import history from './modules/history'
 import data from './modules/data'
 import snippet from './modules/snippet'
 import filter from './modules/filter'
+import live from './modules/live'
 
 Vue.use(Vuex)
 
@@ -20,6 +21,7 @@ const store = new Vuex.Store({
 		data,
 		snippet,
 		filter,
+		live,
 	},
 	getters,
 })

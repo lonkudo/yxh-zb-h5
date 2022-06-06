@@ -54,14 +54,18 @@
 					:style="{ height: myHeight + 'rpx' }"
 				>
 					<scroll-view
-						scroll-y=""
-						class="flex flex-direction padding-sm b-f6"
+						scroll-y
+						class="flex flex-direction b-f6"
 						:style="{ height: chatHeight + 'rpx' }"
 					>
+						<battle-like
+							:battleLikeInfo="battleLikeInfo"
+							:teamInfo="teamInfo"
+						></battle-like>
 						<view
 							v-for="(item, index) in chatList"
 							:key="index"
-							class="margin-bottom-xs"
+							class="margin-bottom-xs padding-sm"
 							style="line-height: 30rpx; vertical-align: top"
 						>
 							<!-- 系统消息 -->
@@ -355,6 +359,7 @@
 	import Analyse from './components/Analyse'
 	import Contribution from './components/Contribution.vue'
 	import Action from './components/Action.vue'
+	import BattleLike from './components/BattleLike/BattleLike.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -366,6 +371,7 @@
 			Analyse,
 			Contribution,
 			Action,
+			BattleLike,
 		},
 		data() {
 			return {
@@ -411,6 +417,7 @@
 				roomList: [], // 房间列表
 				roomActiveIndex: 0,
 				teamInfo: {},
+				battleLikeInfo: {},
 			}
 		},
 		async onLoad(options) {
@@ -659,9 +666,9 @@
 					// console.log('mes', mes)
 				})
 				this.ws.on('broadcastingListen', (mes) => {
-					console.log('Mes', typeof mes[0])
+					// console.log('Mes', mes)
 					let pMes = JSON.parse(mes[0])
-					console.log('pMes', pMes)
+					// console.log('pMes', pMes)
 					if (pMes.msg[0]._method_ === 'SendGift') {
 						GiftPoolBus.$emit('push', {
 							id: pMes.msg[0].uid,
@@ -676,6 +683,10 @@
 								giftName: pMes.msg[0].ct.giftname,
 							},
 						})
+					}
+					if (pMes.msg[0]._method_ === 'Liked') {
+						this.battleLikeInfo = pMes.msg[0].ct
+						// console.log('ok')
 					}
 					// console.log('---2----23---2----2----2---')
 					this.chatList.push(pMes)

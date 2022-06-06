@@ -1,22 +1,37 @@
 <template>
 	<view class="">
-		<view class="u-content" :class="[elId]" :style="{ 
-			height: isLongContent && !showMore ? showHeight + 'rpx' : 'auto',
-			textIndent: textIndent
-		}">
+		<view
+			class="u-content"
+			:class="[elId]"
+			:style="{
+				height: isLongContent && !showMore ? showHeight + 'rpx' : 'auto',
+				textIndent: textIndent,
+			}"
+		>
 			<slot></slot>
 		</view>
-		<view @tap="toggleReadMore" v-if="isLongContent" class="u-content__showmore-wrap"
-		    :class="{ 'u-content__show-more': showMore }"
-		    :style="[innerShadowStyle]">
-			<text class="u-content__showmore-wrap__readmore-btn" :style="{
-				fontSize: fontSize + 'rpx',
-				color: color
-			}">
+		<view
+			@tap="toggleReadMore"
+			v-if="isLongContent"
+			class="u-content__showmore-wrap"
+			:class="{ 'u-content__show-more': showMore }"
+			:style="[innerShadowStyle]"
+		>
+			<text
+				class="u-content__showmore-wrap__readmore-btn"
+				:style="{
+					fontSize: fontSize + 'rpx',
+					color: color,
+				}"
+			>
 				{{ showMore ? openText : closeText }}
 			</text>
 			<view class="u-content__showmore-wrap__readmore-btn__icon u-flex">
-				<u-icon :color="color" :size="fontSize" :name="showMore ? 'arrow-up' : 'arrow-down'"></u-icon>
+				<u-icon
+					:color="color"
+					:size="fontSize"
+					:name="showMore ? 'arrow-up' : 'arrow-down'"
+				></u-icon>
 			</view>
 		</view>
 	</view>
@@ -37,111 +52,112 @@
 	 * @example <u-read-more><rich-text :nodes="content"></rich-text></u-read-more>
 	 */
 	export default {
-		name: "u-read-more",
+		name: 'u-read-more',
 		props: {
 			// 默认的显示占位高度，单位为rpx
 			showHeight: {
 				type: [Number, String],
-				default: 400
+				default: 400,
 			},
 			// 展开后是否显示"收起"按钮
 			toggle: {
 				type: Boolean,
-				default: false
+				default: false,
 			},
 			// 关闭时的提示文字
 			closeText: {
 				type: String,
-				default: '展开阅读全文'
+				default: '展开阅读全文',
 			},
 			// 展开时的提示文字
 			openText: {
 				type: String,
-				default: '收起'
+				default: '收起',
 			},
 			// 提示的文字颜色
 			color: {
 				type: String,
-				default: '#2979ff'
+				default: '#2979ff',
 			},
 			// 提示文字的大小
 			fontSize: {
 				type: [String, Number],
-				default: 28
+				default: 28,
 			},
 			// 是否显示阴影
 			shadowStyle: {
 				type: Object,
-				default () {
+				default() {
 					return {
-						backgroundImage: "linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 80%)",
-						paddingTop: "300rpx",
-						marginTop: "-300rpx"
+						backgroundImage:
+							'linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 80%)',
+						paddingTop: '300rpx',
+						marginTop: '-300rpx',
 					}
-				}
+				},
 			},
 			// 段落首行缩进的字符个数
 			textIndent: {
 				type: String,
-				default: '2em'
+				default: '2em',
 			},
 			// open和close事件时，将此参数返回在回调参数中
 			index: {
 				type: [Number, String],
-				default: ''
-			}
+				default: '',
+			},
 		},
 		watch: {
 			paramsChange(val) {
-				this.init();
-			}
+				this.init()
+			},
 		},
 		computed: {
 			paramsChange() {
-				return `${this.toggle}-${this.showHeight}`;
+				return `${this.toggle}-${this.showHeight}`
 			},
 			// 展开后无需阴影，收起时才需要阴影样式
 			innerShadowStyle() {
-				if (this.showMore) return {};
+				if (this.showMore) return {}
 				else return this.shadowStyle
-			}
+			},
 		},
 		data() {
 			return {
 				isLongContent: false, // 是否需要隐藏一部分内容
 				showMore: false, // 当前隐藏与显示的状态，true-显示，false-收起
 				elId: this.$u.guid(), // 生成唯一class
-			};
+			}
 		},
 		mounted() {
 			this.$nextTick(() => {
-				this.init();
+				this.init()
 			})
 		},
 		methods: {
 			init() {
-				this.$uGetRect('.' + this.elId).then(res => {
+				this.$uGetRect('.' + this.elId).then((res) => {
 					// 判断高度，如果真实内容高度大于占位高度，则显示收起与展开的控制按钮
 					if (res.height > uni.upx2px(this.showHeight)) {
-						this.isLongContent = true;
-						this.showMore = false;
+						this.isLongContent = true
+						this.showMore = false
 					}
 				})
 			},
 			// 展开或者收起
 			toggleReadMore() {
-				this.showMore = !this.showMore;
+				this.showMore = !this.showMore
 				// 如果toggle为false，隐藏"收起"部分的内容
-				if (this.toggle == false) this.isLongContent = false;
+				if (this.toggle == false) this.isLongContent = false
 				// 发出打开或者收齐的事件
-				this.$emit(this.showMore ? 'open' : 'close', this.index);
-			}
-		}
-	};
+				this.$emit(this.showMore ? 'open' : 'close', this.index)
+			},
+		},
+	}
 </script>
 
 <style lang="scss" scoped>
-	@import "../../libs/css/style.components.scss";
+	@import '../../libs/css/style.components.scss';
 
 	.u-content {
 		font-size: 30rpx;

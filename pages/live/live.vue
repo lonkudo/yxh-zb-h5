@@ -160,7 +160,11 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
-				<team-formation :myHeight="myHeight" :game_id="game_id"></team-formation>
+				<action
+					:game_id="game_id"
+					:teamInfo="teamInfo"
+					:myHeight="myHeight"
+				></action>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -350,10 +354,19 @@
 	import TeamFormation from './components/TeamFormation.vue'
 	import Analyse from './components/Analyse'
 	import Contribution from './components/Contribution.vue'
+	import Action from './components/Action.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
-		components: { Level, Coin, PopMsg, TeamFormation, Analyse, Contribution },
+		components: {
+			Level,
+			Coin,
+			PopMsg,
+			TeamFormation,
+			Analyse,
+			Contribution,
+			Action,
+		},
 		data() {
 			return {
 				liveuid: '',
@@ -367,6 +380,7 @@
 				menu: [
 					{ name: 'Chat' },
 					{ name: 'Action' },
+
 					{ name: 'Squad' },
 					{ name: 'Analyse' },
 					{ name: 'Contribution' },
@@ -396,6 +410,7 @@
 				showAnchor: false,
 				roomList: [], // 房间列表
 				roomActiveIndex: 0,
+				teamInfo: {},
 			}
 		},
 		async onLoad(options) {
@@ -596,6 +611,16 @@
 				getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id)
 					.then((res) => {
 						this.liveDetail = res.info
+						this.teamInfo = {
+							home: {
+								name: res.info.home_name,
+								logo: res.info.home_logo,
+							},
+							away: {
+								name: res.info.away_name,
+								logo: res.info.away_logo,
+							},
+						}
 					})
 					.catch((err) => {
 						console.log(err)

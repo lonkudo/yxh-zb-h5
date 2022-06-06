@@ -2,7 +2,9 @@
 	<view>
 		<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
 			><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-			><text class="fc-b-f">{{ liveDetail.title }}</text>
+			><text class="fc-b-f" v-if="liveDetail.uid !== '3'">{{
+				liveDetail.title
+			}}</text>
 		</view>
 		<view
 			class="switch flex align-center"
@@ -10,9 +12,12 @@
 			@tap="showAnchor = true"
 			><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
 		</view>
-		<view class="video-container">
+		<view class="video-container" :style="{ height: videoHeight + 'rpx' }">
 			<template v-if="liveDetail.uid === '3'">
-				<web-view :src="liveDetail.animation"></web-view>
+				<web-view
+					:src="liveDetail.animation"
+					:style="{ height: '568rpx' }"
+				></web-view>
 			</template>
 			<template v-else>
 				<video
@@ -349,7 +354,7 @@
 				liveDetail: {},
 				roomInfo: {},
 				chatList: [],
-				myHeight: 0,
+				// myHeight: 0,
 				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
@@ -388,8 +393,8 @@
 			this.liveuid = options.liveuid
 			this.stream = options.stream
 			this.game_id = options.game_id
-			this.myHeight = this.initScrollHeight(544)
-			this.chatHeight = this.initScrollHeight(624)
+			// this.myHeight = this.initScrollHeight(544)
+			// this.chatHeight = this.initScrollHeight(624)
 			this.getLiveDetail()
 			await this.enterLiveRoom()
 			this.createChatServerClient()
@@ -402,6 +407,27 @@
 		},
 		onHide() {},
 		computed: {
+			videoHeight: function () {
+				if (this.liveuid === '3') {
+					return 568
+				} else {
+					return 464
+				}
+			},
+			chatHeight: function () {
+				if (this.liveuid === '3') {
+					return this.initScrollHeight(728)
+				} else {
+					return this.initScrollHeight(624)
+				}
+			},
+			myHeight: function () {
+				if (this.liveuid === '3') {
+					return this.initScrollHeight(648)
+				} else {
+					return this.initScrollHeight(544)
+				}
+			},
 			snippetList: function () {
 				return this.$store.state.snippet.snippetList
 			},
@@ -698,7 +724,6 @@
 <style lang="scss">
 	.video-container {
 		width: 750rpx;
-		height: 464rpx;
 	}
 	.goback {
 		position: fixed;

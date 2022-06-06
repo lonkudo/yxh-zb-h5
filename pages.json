@@ -70,7 +70,7 @@
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Data",
 				"navigationBarBackgroundColor": "#FFF",
-				"backgroundColor": "#FFF",
+				"backgroundColor": "#FFFFFF",
 				"navigationStyle": "default"
 			}
 		},
@@ -79,6 +79,7 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
 				"navigationStyle": "custom"
 			}
 		},

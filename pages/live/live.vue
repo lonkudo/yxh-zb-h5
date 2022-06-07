@@ -130,12 +130,11 @@
 								<text class="margin-left-sm fs-24"> leave </text>
 							</template>
 
-							<template v-else>
+							<!-- <template v-else>
 								<text>
-									{{ JSON.stringify(item) + 'ejwq' }}
-									ejwqk
+									{{ JSON.stringify(item)  }}
 								</text>
-							</template>
+							</template> -->
 						</view>
 					</scroll-view>
 					<view

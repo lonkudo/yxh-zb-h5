@@ -129,6 +129,15 @@
 				></view>
 			</view>
 		</view>
+		<!-- <transition-group name="flyUp">
+			<image
+				class="p-f ava-40"
+				v-for="(item, index) in homeLike"
+				:key="index"
+				v-if="item"
+				src="/static/styles/png/soccerball.png"
+			></image>
+		</transition-group> -->
 	</view>
 </template>
 
@@ -162,12 +171,87 @@
 	}
 
 	function step() {
-		console.log('step', this, window)
-		let top = parseFloat(this.style.top.replace('px'))
-		this.style.top = top - 1 + 'px'
-		if (top > 0) {
-			window.requestAnimationFrame(step())
+		// console.log('this', this)
+		let top = parseFloat(this.ele.style.top.replace('px'))
+		let left = parseFloat(this.ele.style.left.replace('px'))
+		// let width = parseFloat(this.ele.style.width.replace('px'))
+		// let height = parseFloat(this.ele.style.height.replace('px'))
+
+		// 匀速直线
+		// this.ele.style.top = top - this.rpx2px(5) + 'px'
+		// if (this.flagX) {
+		// 	this.ele.style.left = left - this.rpx2px(3) + 'px'
+		// 	if (left < this.minX) {
+		// 		this.flagX = !this.flagX
+		// 	}
+		// } else {
+		// 	this.ele.style.left = left + this.rpx2px(3) + 'px'
+		// 	if (left > this.maxX) {
+		// 		this.flagX = !this.flagX
+		// 	}
+		// }
+
+		// 刚弹出的时候放大然后缩小足球
+		// if (width < this.rpx2px(60)) {
+		// 	this.ele.style.width = width + this.rpx2px(3) + 'px'
+		// 	this.ele.style.height = height + this.rpx2px(3) + 'px'
+		// }
+
+		// 贝赛尔曲线 描绘出移动轨迹，然后赋值给ele
+		if (this.direction) {
+			// console.log('---true----true----true----true----true---')
+			this.ele.style.left =
+				threebsr(
+					this.t,
+					this.bezier3.a1.x,
+					this.bezier3.a2.x,
+					this.bezier3.a3.x,
+					this.bezier3.a4.x
+				) + 'px'
+			this.ele.style.top =
+				threebsr(
+					this.t,
+					this.bezier3.a1.y,
+					this.bezier3.a2.y,
+					this.bezier3.a3.y,
+					this.bezier3.a4.y
+				) + 'px'
+		} else {
+			// console.log('---false----false----false----false----false---')
+			this.ele.style.left =
+				threebsr(
+					this.t,
+					this.bezier3Reverse.a1.x,
+					this.bezier3Reverse.a2.x,
+					this.bezier3Reverse.a3.x,
+					this.bezier3Reverse.a4.x
+				) + 'px'
+			this.ele.style.top =
+				threebsr(
+					this.t,
+					this.bezier3Reverse.a1.y,
+					this.bezier3Reverse.a2.y,
+					this.bezier3Reverse.a3.y,
+					this.bezier3Reverse.a4.y
+				) + 'px'
 		}
+
+		this.opacity -= 0.0098
+		this.t += 0.01
+		this.ele.style.opacity = this.opacity
+		// console.log('ok', typeof this.ele.style.opacity)
+		if (this.t < 1) {
+			window.requestAnimationFrame(step.bind(this))
+		}
+	}
+
+	function threebsr(t, a1, a2, a3, a4) {
+		return (
+			a1 * (1 - t) * (1 - t) * (1 - t) +
+			3 * a2 * t * (1 - t) * (1 - t) +
+			3 * a3 * t * t * (1 - t) +
+			a4 * t * t * t
+		)
 	}
 
 	export default {
@@ -179,6 +263,7 @@
 			return {
 				homeLike: new Array(20).fill(false),
 				homeLikeIndex: 0,
+				count: 0,
 			}
 		},
 		name: 'BattleLike',
@@ -192,26 +277,130 @@
 			changeFlag: function () {
 				this.$store.commit('SET_BATTLE_LIKE_FLAG')
 			},
-			soccerBallFlyUp() {
+			soccerBallFlyUp(team) {
+				if (!this.openFlag) return
 				let parent = window.document.body
-				console.log('parent', parent)
+				// console.log('parent', parent)
 				let img = document.createElement('img')
 				img.src = '/static/styles/png/soccerball.png'
 				img.style.width = this.rpx2px(40) + 'px'
 				img.style.height = this.rpx2px(40) + 'px'
 				img.style.position = 'fixed'
-				img.style.top = this.rpx2px(590) + 'px'
-				img.style.left = this.rpx2px(80) + 'px'
+				// img.style.top = this.rpx2px(590) + 'px'
+				// img.style.left = this.rpx2px(80) + 'px'
 				img.style.zIndex = '20000'
 				parent.appendChild(img)
 				setTimeout(() => {
 					parent.removeChild(img)
+					img = null
 				}, 2000)
-				this.flyUp(img)
+				this.flyUp(img, team)
 			},
-			flyUp(element) {
-				let fn = step.bind(element)
-				fn()
+			flyUp(element, team) {
+				let thisObj
+				if (team === 'home') {
+					thisObj = {
+						ele: element,
+						// maxX: this.rpx2px(60),
+						// minX: this.rpx2px(20),
+						rpx2px: this.rpx2px,
+						// flagX: true,
+						opacity: 1,
+						bezier3: {
+							a1: {
+								// 起始点
+								x: this.rpx2px(60),
+								y: this.rpx2px(600),
+							},
+							a2: {
+								x: this.rpx2px(0),
+								y: this.rpx2px(500),
+							},
+							a3: {
+								x: this.rpx2px(120),
+								y: this.rpx2px(400),
+							},
+							a4: {
+								x: this.rpx2px(60),
+								y: this.rpx2px(360),
+							},
+						},
+						bezier3Reverse: {
+							a1: {
+								// 起始点
+								x: this.rpx2px(60),
+								y: this.rpx2px(600),
+							},
+							a2: {
+								x: this.rpx2px(120),
+								y: this.rpx2px(500),
+							},
+							a3: {
+								x: this.rpx2px(0),
+								y: this.rpx2px(400),
+							},
+							a4: {
+								x: this.rpx2px(60),
+								y: this.rpx2px(360),
+							},
+						},
+						direction: Math.random() > 0.5,
+						t: 0, // 曲线进度，1是完成
+					}
+				} else {
+					thisObj = {
+						ele: element,
+						// maxX: this.rpx2px(60),
+						// minX: this.rpx2px(20),
+						rpx2px: this.rpx2px,
+						// flagX: true,
+						opacity: 1,
+						bezier3: {
+							a1: {
+								// 起始点
+								x: this.rpx2px(640),
+								y: this.rpx2px(600),
+							},
+							a2: {
+								x: this.rpx2px(580),
+								y: this.rpx2px(500),
+							},
+							a3: {
+								x: this.rpx2px(700),
+								y: this.rpx2px(400),
+							},
+							a4: {
+								x: this.rpx2px(640),
+								y: this.rpx2px(360),
+							},
+						},
+						bezier3Reverse: {
+							a1: {
+								// 起始点
+								x: this.rpx2px(640),
+								y: this.rpx2px(600),
+							},
+							a2: {
+								x: this.rpx2px(700),
+								y: this.rpx2px(500),
+							},
+							a3: {
+								x: this.rpx2px(580),
+								y: this.rpx2px(400),
+							},
+							a4: {
+								x: this.rpx2px(640),
+								y: this.rpx2px(360),
+							},
+						},
+						direction: Math.random() > 0.5,
+						t: 0, // 曲线进度，1是完成
+					}
+				}
+
+				step.call(thisObj)
+				// step = step.bind(element)
+				// step()
 			},
 		},
 		watch: {
@@ -225,7 +414,20 @@
 					// }, 500)
 					// this.homeLikeIndex += 1
 					// console.log('aaaaa', this.homeLike)
-					this.soccerBallFlyUp()
+					this.soccerBallFlyUp('home')
+				},
+			},
+			'battleLikeInfo.away_team': {
+				handler: function (newVal) {
+					// if (this.homeLikeIndex === this.homeLike.length) this.homeLikeIndex = 0
+					// let index = this.homeLikeIndex
+					// this.homeLike.splice(index, 1, true)
+					// setTimeout(() => {
+					// 	this.homeLike.splice(index, 1, false)
+					// }, 500)
+					// this.homeLikeIndex += 1
+					// console.log('aaaaa', this.homeLike)
+					this.soccerBallFlyUp('away')
 				},
 			},
 		},
@@ -286,51 +488,51 @@
 	// 	}
 	// 	10% {
 	// 		left: -1rpx;
-	// 		top: -10rpx;
+	// 		top: 10rpx;
 	// 		transform: scale(1.3);
 	// 	}
 	// 	20% {
-	// 		top: -2rpx;
-	// 		left: -20rpx;
+	// 		top: 20rpx;
+	// 		left: 20rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	30% {
-	// 		top: -3rpx;
+	// 		top: 30rpx;
 	// 		left: -10rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	40% {
-	// 		top: -4rpx;
+	// 		top: 40rpx;
 	// 		left: 0rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	50% {
-	// 		top: -5rpx;
+	// 		top: 50rpx;
 	// 		left: -10rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	60% {
-	// 		top: -6rpx;
+	// 		top: 60rpx;
 	// 		left: -20rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	70% {
-	// 		top: -7rpx;
+	// 		top: 70rpx;
 	// 		left: -10rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	80% {
-	// 		top: -8rpx;
+	// 		top: 80rpx;
 	// 		left: 0;
 	// 		transform: scale(1);
 	// 	}
 	// 	90% {
-	// 		top: -9rpx;
+	// 		top: 90rpx;
 	// 		left: 10rpx;
 	// 		transform: scale(1);
 	// 	}
 	// 	100% {
-	// 		top: -10rpx;
+	// 		top: 100rpx;
 	// 		transform: scale(1);
 	// 		left: 0;
 	// 	}

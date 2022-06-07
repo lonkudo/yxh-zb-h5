@@ -1,5 +1,5 @@
 <template>
-  <view class="t-tr">
+  <view class="t-tr" @click="change">
     <view
       v-if="isCheck"
       class="t-check-box"
@@ -49,6 +49,9 @@ export default {
     this.isCheck = this.table.isCheck;
   },
   methods: {
+    change() {
+      this.$emit("change");
+    },
     checkboxChange(e) {
       this.checkboxData.checked = !this.checkboxData.checked;
       this.table.childrens[this.checkboxData.value] = this;

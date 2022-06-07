@@ -122,7 +122,6 @@ export default {
     },
     getDataCategory(id) {
       getDataCategory(id).then((res) => {
-        console.log("getDataCategory", 11111111111111);
         this.leagueList = res.info;
         this.$nextTick(() => {
           this.setSwiperHeight();
@@ -135,14 +134,14 @@ export default {
       this.getDataCategory(this.moldList[index].id);
     },
     open(e) {
-      console.log("open");
+      // console.log("open");
       this.$nextTick(() => {
         this.setSwiperHeight();
       });
       // console.log('open', e)
     },
     close(e) {
-      console.log("close", e);
+      // console.log("close", e);
       setTimeout(() => {
         this.$nextTick(() => {
           this.setSwiperHeight();
@@ -150,7 +149,7 @@ export default {
       }, 300);
     },
     changeCollapse(e) {
-      console.log("change", this.$refs.collapse);
+      // console.log("change", this.$refs.collapse);
       setTimeout(() => {
         this.$nextTick(() => {
           this.setSwiperHeight();

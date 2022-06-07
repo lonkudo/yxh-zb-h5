@@ -62,7 +62,7 @@ export default {
   },
   onLoad(option) {
     this.league = JSON.parse(decodeURIComponent(option.league));
-    console.log(this.league);
+    // console.log(this.league);
   },
   mounted() {
     this.myHeight = this.initScrollHeight(350);

@@ -1,26 +1,26 @@
 <template>
   <t-table @change="change">
     <t-tr>
-      <t-th>Ranking</t-th>
-      <t-th>Team</t-th>
-      <t-th>Integral</t-th>
-      <t-th>Value(EUR)</t-th>
+      <t-th width="80">Ranking</t-th>
+      <t-th flexWidth="1" align="left">Team</t-th>
+      <t-th width="80">Integral</t-th>
+      <t-th width="100">Value(EUR)</t-th>
     </t-tr>
     <scroll-view
-      scroll-y=""
-      class="flex flex-direction b-f6"
+      scroll-y
+      @scrolltolower="onreachBottom"
       :style="{ height: myHeight + 'rpx' }"
     >
-      <t-tr v-for="item in tableList" :key="item.id">
-        <t-td>{{ item.ranking }}</t-td>
-        <t-td>
-          <span class="team-info-cell">
+      <t-tr v-for="(item, i) in tableList" :key="item.id + i">
+        <t-td width="80">{{ item.ranking }}</t-td>
+        <t-td flexWidth="1" align="left">
+          <view class="table-cell-image">
             <image mode="aspectFit" :src="item.logo" />
-            <span>{{ item.name }}</span>
-          </span>
+          </view>
+          <text class="team-name">{{ item.name }}</text>
         </t-td>
-        <t-td>{{ item.points }}</t-td>
-        <t-td>{{ item.market_value }}</t-td>
+        <t-td width="80">{{ item.points }}</t-td>
+        <t-td width="100">{{ (item.market_value / 1000000).toFixed(1) }}M</t-td>
       </t-tr>
     </scroll-view>
   </t-table>
@@ -40,18 +40,36 @@ export default {
   data() {
     return {
       tableList: [],
+      page: 1,
     };
   },
   mounted() {
     this.getFifaRankClub();
   },
   methods: {
-    getFifaRankClub({ p = 1, num = 20 } = {}) {
+    getFifaRankClub({ p = this.page, num = 20 } = {}) {
       getFifaRankClub({ p, num }).then((res) => {
-        this.tableList = res.info;
+        this.tableList = [...this.tableList, ...res.info];
       });
+    },
+    onreachBottom() {
+      this.getFifaRankClub({ p: ++this.page });
     },
   },
 };
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.table-cell-image {
+  image {
+    width: 40rpx;
+    height: 40rpx;
+  }
+}
+.team-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 14rpx;
+}
+</style>

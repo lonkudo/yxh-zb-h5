@@ -1,7 +1,6 @@
 <template>
   <view>
     <team-head :info="league"> </team-head>
-    <view>11111111111{{ myHeight }}</view>
     <view>
       <u-tabs-swiper
         ref="uTabs"

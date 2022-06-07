@@ -53,19 +53,21 @@
 					:id="'content-wrap' + 'Chat'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
+					<battle-like
+						:battleLikeInfo="battleLikeInfo"
+						:teamInfo="teamInfo"
+						@dianzan="dianzan"
+					></battle-like>
 					<scroll-view
 						scroll-y
 						class="flex flex-direction b-f6"
-						:style="{ height: chatHeight + 'rpx' }"
+						:style="{ height: chatHeight - battleLikeHeight + 'rpx' }"
 					>
-						<battle-like
-							:battleLikeInfo="battleLikeInfo"
-							:teamInfo="teamInfo"
-						></battle-like>
+						<!-- :style="{ height: chatHeight + 'rpx' }" -->
 						<view
 							v-for="(item, index) in chatList"
 							:key="index"
-							class="margin-bottom-xs padding-sm"
+							class="margin-bottom-xs padding-left-sm padding-right-sm"
 							style="line-height: 30rpx; vertical-align: top"
 						>
 							<!-- 系统消息 -->
@@ -450,6 +452,26 @@
 				} else {
 					return this.initScrollHeight(624)
 				}
+				// if (this.liveuid === '3' && this.$store.state.live.battleLikeFlag) {
+				// 	console.log('---1----1----1----1----1---')
+				// 	return this.initScrollHeight(1128)
+				// } else if (this.liveuid === '3' && !this.$store.state.live.battleLikeFlag) {
+				// 	console.log('---2----2----2----2----2---')
+				// 	return this.initScrollHeight(728)
+				// } else if (!this.liveuid === '3' && this.$store.state.live.battleLikeFlag) {
+				// 	console.log('---3----3----3----3----3---')
+				// 	return this.initScrollHeight(924)
+				// } else {
+				// 	console.log('---4----4----4----4----4---')
+				// 	return this.initScrollHeight(624)
+				// }
+			},
+			battleLikeHeight: function () {
+				if (this.$store.state.live.battleLikeFlag) {
+					return 230
+				} else {
+					return 80
+				}
 			},
 			myHeight: function () {
 				if (this.liveuid === '3') {
@@ -463,6 +485,23 @@
 			},
 		},
 		methods: {
+			dianzan(team) {
+				this.guard()
+				console.log('team', team)
+				let broadcastObj = {
+					msg: [],
+					token: this.token,
+				}
+				let obj = {}
+				obj._method_ = 'Liked'
+				obj.ct = JSON.stringify({
+					match_id: this.game_id,
+					team: team,
+				})
+				obj.uid = this.uid
+				broadcastObj.msg.push(obj)
+				this.ws.emit('broadcast', broadcastObj)
+			},
 			switchRoom(item) {
 				uni.navigateTo({
 					url:

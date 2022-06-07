@@ -14,8 +14,11 @@
 								padding: 0 10rpx;
 							"
 						>
-							<view id="homeLikeCon" class="p-a">
-								<text class="fs-36 iconfont icon-dianzan1 fc-b-f"></text>
+							<view>
+								<text
+									class="fs-36 iconfont icon-dianzan1 fc-b-f"
+									@tap="dianzan('home')"
+								></text>
 								<!-- <transition-group name="flyUp">
 									<image
 										class="p-b ava-40"
@@ -66,6 +69,7 @@
 							</view>
 							<view id="awayLike">
 								<text
+									@tap="dianzan('away')"
 									class="fs-36 iconfont icon-dianzan1 fc-b-f"
 									style="transform: scaleX(-1)"
 								></text>
@@ -114,7 +118,7 @@
 					}}</text>
 				</view>
 			</template>
-			<view class="flex justify-center">
+			<view class="flex justify-center b-f6">
 				<view class="xiangxia-con w-80 text-center h-30" @tap="changeFlag">
 					<view class="trapezoid">
 						<!-- 梯形 -->
@@ -269,11 +273,14 @@
 		name: 'BattleLike',
 		computed: {
 			openFlag: function () {
-				console.log('??', this.$store.state.settings)
+				// console.log('??', this.$store.state.settings)
 				return this.$store.state.live.battleLikeFlag
 			},
 		},
 		methods: {
+			dianzan(val) {
+				this.$emit('dianzan', val)
+			},
 			changeFlag: function () {
 				this.$store.commit('SET_BATTLE_LIKE_FLAG')
 			},

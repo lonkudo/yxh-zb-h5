@@ -48,7 +48,7 @@
 			:style="{ height: myHeight + 'rpx' }"
 		>
 			<swiper-item class="swiper-item" :key="'Chat'" @touchmove.stop="">
-				<text>{{ timeGap }}</text>
+				<!-- <text>{{ timeGap }}</text> -->
 				<view
 					class="b-f flex flex-direction"
 					:id="'content-wrap' + 'Chat'"

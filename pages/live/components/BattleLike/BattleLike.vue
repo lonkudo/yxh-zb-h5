@@ -80,7 +80,7 @@
 						<view class="flex-sub">
 							<my-line-progress
 								active-color="#ed0505"
-								:percent="parseFloat(battleLikeInfo.home_percent)"
+								:percent="percent"
 								:inactiveColor="'#1942B8'"
 								:showPercent="false"
 							>
@@ -275,6 +275,15 @@
 			openFlag: function () {
 				// console.log('??', this.$store.state.settings)
 				return this.$store.state.live.battleLikeFlag
+			},
+			percent: function () {
+				let a = parseFloat(this.battleLikeInfo.home_percent)
+				let b = parseFloat(this.battleLikeInfo.away_percent)
+				if (a == 0 && b == 0) {
+					return 50
+				} else {
+					return a
+				}
 			},
 		},
 		methods: {

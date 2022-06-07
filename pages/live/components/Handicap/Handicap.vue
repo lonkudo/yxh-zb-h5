@@ -64,8 +64,8 @@
 			}
 		},
 		created() {
-			this.getOdds()
-			this.connetOdds()
+			// this.getOdds()
+			// this.connetOdds()
 		},
 		methods: {
 			changeTag(index, item) {

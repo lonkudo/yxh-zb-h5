@@ -2,6 +2,7 @@
 	<view
 		class="flex flex-direction b-f padding-xs padding-top-sm"
 		v-if="!this.isEmpty(info)"
+		@tap="goLiving"
 	>
 		<view class="fs-14">
 			<view class="flex align-center justify-center">
@@ -38,7 +39,11 @@
 		<view class="fs-24 margin-top-xs margin-bottom-xs">
 			<view class="flex align-center">
 				<view class="flex align-center justify-end w-300">
-					<view class="margin-right-auto w-40" v-if="control[3]" @tap="subscribe">
+					<view
+						class="margin-right-auto w-40"
+						v-if="control[3]"
+						@tap.stop="subscribe"
+					>
 						<text
 							:class="[
 								'iconfont icon-lingdang fs-40  ',
@@ -151,6 +156,20 @@
 			subscribe() {
 				/* 点击铃铛，触发订阅事件 */
 				this.$emit('subscribe')
+			},
+			goLiving() {
+				/* 点击视频前往直播间，触发订阅事件 */
+				uni.navigateTo({
+					url:
+						'/pages/live/live?liveuid=' +
+						'2' +
+						'&game_id=' +
+						this.info.id +
+						'&stream=' +
+						'2_' +
+						this.info.id,
+				})
+				console.log('info', this.info)
 			},
 			getStatus: function (val) {
 				// console.log('this', this)

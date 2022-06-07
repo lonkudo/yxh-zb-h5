@@ -48,6 +48,7 @@
 			:style="{ height: myHeight + 'rpx' }"
 		>
 			<swiper-item class="swiper-item" :key="'Chat'" @touchmove.stop="">
+				<text>{{ timeGap }}</text>
 				<view
 					class="b-f flex flex-direction"
 					:id="'content-wrap' + 'Chat'"
@@ -424,6 +425,7 @@
 				roomActiveIndex: 0,
 				teamInfo: {},
 				battleLikeInfo: {},
+				livingStatus: false,
 			}
 		},
 		async onLoad(options) {
@@ -444,6 +446,38 @@
 		},
 		onHide() {},
 		computed: {
+			timeGap: function () {
+				if (this.isEmpty(this.liveDetail)) return ''
+				let startTimestamp = this.toNum(this.liveDetail.starttime) * 1000
+				let curTimestamp = Number(new Date())
+				let gap = curTimestamp - startTimestamp
+				console.log(
+					'gap',
+					curTimestamp,
+					startTimestamp,
+					gap,
+					'status:',
+					this.livingStatus
+				)
+				console.log('gap', new Date(curTimestamp), new Date(startTimestamp))
+				if (this.livingStatus) {
+					return 'living'
+				} else if (gap > 10800000) {
+					return 'Ended'
+				} else if (gap > -600000 && gap < 0) {
+					return (
+						Math.floor(-gap / 60000)
+							.toString()
+							.padStart(2, '0') +
+						':' +
+						Math.floor(-gap / (60000 * 60))
+							.toString()
+							.padStart(2, '0')
+					)
+				} else if (gap < -600000) {
+					return 'Not Started'
+				}
+			},
 			videoHeight: function () {
 				if (this.liveuid === '3') {
 					return 568
@@ -457,19 +491,6 @@
 				} else {
 					return this.initScrollHeight(624)
 				}
-				// if (this.liveuid === '3' && this.$store.state.live.battleLikeFlag) {
-				// 	console.log('---1----1----1----1----1---')
-				// 	return this.initScrollHeight(1128)
-				// } else if (this.liveuid === '3' && !this.$store.state.live.battleLikeFlag) {
-				// 	console.log('---2----2----2----2----2---')
-				// 	return this.initScrollHeight(728)
-				// } else if (!this.liveuid === '3' && this.$store.state.live.battleLikeFlag) {
-				// 	console.log('---3----3----3----3----3---')
-				// 	return this.initScrollHeight(924)
-				// } else {
-				// 	console.log('---4----4----4----4----4---')
-				// 	return this.initScrollHeight(624)
-				// }
 			},
 			battleLikeHeight: function () {
 				if (this.$store.state.live.battleLikeFlag) {
@@ -542,6 +563,7 @@
 
 			getCoin() {
 				/* 获取账户金币余额金币 */
+				console.log('---getCOin----getCOin----getCOin----getCOin----getCOin---')
 				getCoin(this.uid, this.token).then((res) => {
 					if (res.code == 0) {
 						this.coin = parseInt(res.info.coin)
@@ -661,6 +683,13 @@
 				getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id)
 					.then((res) => {
 						this.liveDetail = res.info
+						let num = this.toNum(res.info.status_id)
+						if (num > 1 && num < 8) {
+							this.livingStatus = true
+						} else {
+							this.livingStatus = false
+						}
+
 						this.teamInfo = {
 							home: {
 								name: res.info.home_name,

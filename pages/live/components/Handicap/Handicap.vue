@@ -4,14 +4,14 @@
 		:id="'content-wrap' + 'Handicap'"
 		:style="{ height: myHeight + 'rrpx' }"
 	>
-		<view class="container b-f">
+		<view class="container padding-top-sm b-f">
 			<view class="line">
-				<text
+				<view
 					:class="activeIndex === index ? 'active' : ''"
 					@click="changeTag(index, item)"
 					v-for="(item, index) of tagList"
 					:key="item.value"
-					>{{ item.value }}</text
+					><text>{{ item.value }}</text></view
 				>
 			</view>
 			<view class="progress-con">
@@ -201,28 +201,42 @@
 
 <style lang="scss">
 	.line {
-		margin-bottom: 20rpx;
+		margin: 20rpx 0;
 		text-align: center;
-		text {
+		.tab-group {
+			background-color: pink;
+		}
+		view {
 			font-size: 20rpx;
 			height: 50rpx;
 			line-height: 50rpx;
 			width: 150rpx;
 			display: inline-block;
 			font-weight: 600;
-			border: 1rpx solid #e5e5e5;
-			background-color: #f6f6f6;
+			background-color: #eee;
+			box-sizing: border-box;
 		}
-		text:nth-child(1) {
-			border-top-left-radius: 10rpx;
-			border-bottom-left-radius: 10rpx;
+		text {
+			display: inline-block;
+			width: 140rpx;
+			margin: 5rpx;
+			height: 40rpx;
+			line-height: 40rpx;
 		}
-		text:nth-child(4) {
-			border-top-right-radius: 10rpx;
-			border-bottom-right-radius: 10rpx;
+		view:nth-child(1) {
+			border-top-left-radius: 15rpx;
+			border-bottom-left-radius: 15rpx;
+		}
+		view:nth-child(4) {
+			border-top-right-radius: 15rpx;
+			border-bottom-right-radius: 15rpx;
 		}
 	}
 	.active {
-		background: #fff !important;
+		text {
+			background-color: white;
+			border-radius: 8rpx;
+			box-shadow: 0 0 4rpx 2rpx rgba(0, 0, 0, 0.1);
+		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <t-table @change="change">
+  <t-table>
     <t-tr>
       <t-th width="80">Ranking</t-th>
       <t-th flexWidth="1" align="left">Team</t-th>
@@ -59,17 +59,5 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.table-cell-image {
-  image {
-    width: 40rpx;
-    height: 40rpx;
-  }
-}
-.team-name {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-left: 14rpx;
-}
+
 </style>

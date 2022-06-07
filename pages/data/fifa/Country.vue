@@ -1,60 +1,53 @@
 <template>
   <t-table>
     <t-tr>
-      <t-th>序号</t-th>
-      <t-th>姓名</t-th>
-      <t-th>年龄</t-th>
-      <t-th>爱好</t-th>
+      <t-th width="80">Ranking</t-th>
+      <t-th flexWidth="1" align="left">Team</t-th>
+      <t-th width="100">Integral</t-th>
     </t-tr>
-    <t-tr v-for="item in tableList" :key="item.id">
-      <t-td>{{ item.id + 1 }}</t-td>
-      <t-td>{{ item.name }}</t-td>
-      <t-td>{{ item.age }}</t-td>
-      <t-td>{{ item.hobby }}</t-td>
-    </t-tr>
+    <scroll-view
+      scroll-y
+      @scrolltolower="onreachBottom"
+      :style="{ height: myHeight + 'rpx' }"
+    >
+      <t-tr v-for="(item, i) in tableList" :key="item.id + i">
+        <t-td width="80">{{ item.ranking }}</t-td>
+        <t-td flexWidth="1" align="left">
+          <view class="table-cell-image">
+            <image mode="aspectFit" :src="item.logo" />
+          </view>
+          <text class="team-name">{{ item.name }}</text>
+        </t-td>
+        <t-td width="100">{{ item.points }}</t-td>
+      </t-tr>
+    </scroll-view>
   </t-table>
 </template>
 <script>
-import { tTable, tTh, tTr, tTd } from "@/components/t-table";
+import { getFifaRankCountry } from "@/api/data";
 export default {
   name: "Country",
-  components: {
-    tTable,
-    tTh,
-    tTr,
-    tTd,
-  },
+  props: ["myHeight"],
+  components: {},
   data() {
     return {
-      tableList: [
-        {
-          id: 0,
-          name: "张三",
-          age: "19",
-          hobby: "游泳",
-        },
-        {
-          id: 1,
-          name: "李四",
-          age: "21",
-          hobby: "绘画",
-        },
-        {
-          id: 2,
-          name: "王二",
-          age: "29",
-          hobby: "滑板",
-        },
-        {
-          id: 3,
-          name: "码字",
-          age: "20",
-          hobby: "蹦极",
-        },
-      ],
+      tableList: [],
+      page: 1,
     };
   },
-  method: {},
+  mounted() {
+    this.getFifaRankCountry();
+  },
+  methods: {
+    getFifaRankCountry({ p = this.page, num = 20 } = {}) {
+      getFifaRankCountry({ p, num }).then((res) => {
+        this.tableList = [...this.tableList, ...res.info];
+      });
+    },
+    onreachBottom() {
+      this.getFifaRankCountry({ p: ++this.page });
+    },
+  },
 };
 </script>
 <style scoped lang="scss"></style>

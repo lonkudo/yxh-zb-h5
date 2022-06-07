@@ -11,6 +11,14 @@ import Request from '@/utils/request.js'
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
+import { tTable, tTh, tTr, tTd } from "@/components/t-table";
+Vue.component('t-table', tTable)
+Vue.component('t-th', tTh)
+Vue.component('t-tr', tTr)
+Vue.component('t-td', tTd)
+
+import '@/static/styles/css/common.scss'; // global css
+
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)
 Vue.prototype.formatGiven = formatGiven

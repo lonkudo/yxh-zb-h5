@@ -34,7 +34,7 @@
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <country></country>
+          <country :myHeight="myHeight"></country>
         </swiper-item>
       </swiper>
     </view>

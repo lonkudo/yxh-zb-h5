@@ -6,6 +6,7 @@ const { lan } = defaultSettings
 const state = {
 	lan: lan,
 	siteInfo: null,
+	battleLikeFlag: false,
 }
 
 const mutations = {
@@ -16,6 +17,9 @@ const mutations = {
 	},
 	SET_SITEINFO: (state, siteInfo) => {
 		state.siteInfo = siteInfo
+	},
+	SET_BATTLE_LIKE_FLAG: (state) => {
+		state.battleLikeFlag = !state.battleLikeFlag
 	},
 }
 

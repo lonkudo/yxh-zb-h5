@@ -250,3 +250,16 @@ export function getAdvert() {
 		method: 'POST',
 	})
 }
+
+/**
+ * 比赛统计数据
+ * @param {*} game_id
+ * @returns
+ */
+export function getMatchData(game_id) {
+	return request({
+		url: '?service=Live.GetMatchData',
+		method: 'POST',
+		data: { game_id },
+	})
+}

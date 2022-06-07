@@ -24,6 +24,9 @@ Vue.prototype.initScrollHeight = initScrollHeight
 import guard from '@/utils/guard.js'
 Vue.prototype.guard = guard
 
+import rpx2px from '@/utils/rpx2px.js'
+Vue.prototype.rpx2px = rpx2px
+
 import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
 
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar.vue'

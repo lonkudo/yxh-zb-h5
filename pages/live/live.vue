@@ -39,7 +39,7 @@
 			swiperWidth="750"
 			active-color="#02b875"
 			font-size="24"
-			gutter="0"
+			gutter="40"
 		></u-tabs-swiper>
 		<swiper
 			:current="swiperCurrent"
@@ -173,7 +173,7 @@
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
-				:key="'Squad'"
+				:key="'Line-up'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
@@ -186,6 +186,9 @@
 				:style="{ height: myHeight + 'rpx' }"
 			>
 				<analyse :myHeight="myHeight" :game_id="game_id"></analyse>
+			</swiper-item>
+			<swiper-item>
+				<handicap :myHeight="myHeight" :game_id="game_id"></handicap>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -361,6 +364,7 @@
 	import Contribution from './components/Contribution.vue'
 	import Action from './components/Action.vue'
 	import BattleLike from './components/BattleLike/BattleLike.vue'
+	import Handicap from './components/Handicap/Handicap.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -373,6 +377,7 @@
 			Contribution,
 			Action,
 			BattleLike,
+			Handicap,
 		},
 		data() {
 			return {
@@ -387,9 +392,9 @@
 				menu: [
 					{ name: 'Chat' },
 					{ name: 'Action' },
-
-					{ name: 'Squad' },
+					{ name: 'Line-up' },
 					{ name: 'Analyse' },
+					{ name: 'Handicap' },
 					{ name: 'Contribution' },
 				],
 				showBack: true,

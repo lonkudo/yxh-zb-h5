@@ -70,8 +70,25 @@
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Data",
 				"navigationBarBackgroundColor": "#FFF",
-				"backgroundColor": "#FFF",
+				"backgroundColor": "#FFFFFF",
 				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/data/fifa/fifa",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/data/league/league",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 		},
 		{

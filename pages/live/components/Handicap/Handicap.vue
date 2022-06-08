@@ -20,6 +20,7 @@
 			<handicap-table
 				:tableData="tableData"
 				:columnLabel="columnLabel"
+				@goOddsHistory="goOddsHistory"
 			></handicap-table>
 		</view>
 	</scroll-view>
@@ -70,6 +71,21 @@
 			// this.connetOdds()
 		},
 		methods: {
+			goOddsHistory(company_id, company_name) {
+				let odds_type = this.tagList[this.activeIndex].label
+				let match_id = this.game_id
+				uni.navigateTo({
+					url:
+						'oddsHistory?match_id=' +
+						match_id +
+						'&odds_type=' +
+						odds_type +
+						'&company_id=' +
+						company_id +
+						'&company_name=' +
+						company_name,
+				})
+			},
 			changeTag(index, item) {
 				this.activeIndex = index
 				if (this.activeIndex === 0 || this.activeIndex === 2) {

@@ -2,7 +2,7 @@
 	<view v-if="!this.isEmpty(teamInfo) && !this.isEmpty(battleLikeInfo)">
 		<view class="flex flex-direction">
 			<template v-if="openFlag">
-				<view class="flex flex-direction full-vote h-200 bg-gold padding-lg">
+				<view class="flex flex-direction full-vote h-200 padding-lg">
 					<view class="flex align-center justify-center">
 						<view
 							class="flex align-center"

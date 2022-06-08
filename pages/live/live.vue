@@ -2,9 +2,11 @@
 	<view>
 		<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
 			><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-			><text class="fc-b-f" v-if="liveDetail.uid !== '3'">{{
-				liveDetail.title
-			}}</text>
+			><text
+				class="fc-b-f"
+				v-if="liveDetail.uid !== '3' && liveDetail.uid !== '2'"
+				>{{ liveDetail.title }}</text
+			>
 		</view>
 		<view
 			class="switch flex align-center"
@@ -12,12 +14,59 @@
 			@tap="showAnchor = true"
 			><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
 		</view>
+		<!-- 视频区域 -->
 		<view class="video-container" :style="{ height: videoHeight + 'rpx' }">
 			<template v-if="liveDetail.uid === '3'">
 				<web-view
 					:src="liveDetail.animation"
 					:style="{ height: '568rpx' }"
 				></web-view>
+			</template>
+			<template v-else-if="liveDetail.uid === '2'">
+				<template v-if="livingStatus">
+					<video
+						id="myVideo"
+						:src="liveDetail.pull"
+						object-fit="contain"
+						@play="showBack = false"
+						@pause="showBack = true"
+						@ended="showBack = true"
+					></video>
+				</template>
+				<template v-else>
+					<view class="w100 h100 preview flex flex-direction align-center fc-b-f">
+						<text class="margin-top-sm">{{ liveDetail.competition_name }}</text>
+						<text class="margin-top-sm margin-bottom-sm">{{
+							liveDetail.starttime | formatGiven('yyyy-MM-dd hh:ss')
+						}}</text>
+						<view class="flex margin-top-lg justify-around">
+							<view class="flex flex-direction w-250 align-center">
+								<image :src="liveDetail.home_logo" mode="" class="w-120 h-120" />
+								<text
+									class="margin-top-sm w-250 text-center"
+									style="word-break: break-word"
+									>{{ liveDetail.home_name }}</text
+								>
+							</view>
+							<view class="flex flex-direction align-center margin-top-lg">
+								<text class="w-150 text-center fs-20">{{ timeGap }}</text>
+								<view class="fs-36 fw-6 margin-top-sm">
+									<text>{{ liveDetail.home_scores }}</text>
+									<text class="margin-left-sm margin-right-sm">-</text>
+									<text>{{ liveDetail.away_scores }}</text>
+								</view>
+							</view>
+							<view class="flex flex-direction w-250 align-center">
+								<image :src="liveDetail.away_logo" mode="" class="w-120 h-120" />
+								<text
+									class="margin-top-sm w-250 text-center"
+									style="word-break: break-word"
+									>{{ liveDetail.away_name }}</text
+								>
+							</view>
+						</view>
+					</view>
+				</template>
 			</template>
 			<template v-else>
 				<video
@@ -463,7 +512,7 @@
 				if (this.livingStatus) {
 					return 'living'
 				} else if (gap > 10800000) {
-					return 'Ended'
+					return 'End'
 				} else if (gap > -600000 && gap < 0) {
 					return (
 						Math.floor(-gap / 60000)
@@ -868,5 +917,10 @@
 		background-image: url('/static/styles/png/gift.png');
 		background-repeat: no-repeat;
 		background-position: 10rpx 10rpx;
+	}
+	.preview {
+		background-image: url('/static/styles/png/preview-bg.png');
+		background-repeat: no-repeat;
+		background-size: 750rpx auto;
 	}
 </style>

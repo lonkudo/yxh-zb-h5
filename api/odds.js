@@ -9,3 +9,10 @@ export function getOdds(match_id) {
 		data: { match_id },
 	})
 }
+export function getOddsHistory(data) {
+	return request({
+		url: '?service=Odds.GetOddsHistory',
+		method: 'POST',
+		data: data,
+	})
+}

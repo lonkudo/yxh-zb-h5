@@ -1,5 +1,5 @@
 <template>
-	<view class="color-bar bg-gold flex" :style="{ width: width + 'rpx' }">
+	<view class="color-bar flex" :style="{ width: width + 'rpx' }">
 		<view
 			:style="{ flex: win }"
 			class="h100 bg-red flex align-center justify-start fs-20 padding-left-xs"

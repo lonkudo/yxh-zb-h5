@@ -26,6 +26,9 @@
 					return 'fc-g'
 				}
 			},
+			goOddsHistory(row) {
+				this.$emit('goOddsHistory', row.company_id, row.company_name)
+			},
 		},
 		render(h) {
 			if (this.tableData) {
@@ -52,7 +55,12 @@
 						</u-tr-my>
 						{this.tableData.map((row) => {
 							return (
-								<u-tr-my>
+								<u-tr-my
+									onTap={() => {
+										console.log('row', row)
+										this.goOddsHistory(row)
+									}}
+								>
 									<u-td-my>
 										<view class="flex flex-direction h-50 justify-center align-center">
 											<text>{row.company_name}</text>
@@ -116,7 +124,6 @@
 								)
 							})}
 						</u-tr-my>
-
 						<u-tr-my>
 							<u-td-my>
 								<text>No data</text>

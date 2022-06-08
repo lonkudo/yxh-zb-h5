@@ -352,7 +352,16 @@
 				"navigationStyle": "default"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/live/oddsHistory",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

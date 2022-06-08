@@ -1,5 +1,5 @@
 <template>
-	<view class="u-tr-my">
+	<view class="u-tr-my" @tap="trClicked">
 		<slot></slot>
 	</view>
 </template>
@@ -13,6 +13,11 @@
 	 */
 	export default {
 		name: 'u-tr-my',
+		methods: {
+			trClicked: function () {
+				this.$emit('tap')
+			},
+		},
 	}
 </script>
 

@@ -3919,3 +3919,6 @@ scroll-view.cu-steps .cu-item {
 .text-very-black {
 	color: #000000;
 }
+.border-b {
+  border-bottom: 1px solid #f0f0f0;
+}

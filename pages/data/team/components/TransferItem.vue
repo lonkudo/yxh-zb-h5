@@ -8,6 +8,7 @@
       class="flex justify-between padding-tb"
       v-for="item of list"
       :key="item.id"
+      @click="goPlayer(item)"
     >
       <view class="flex-sub flex">
         <view class="img-box">
@@ -46,6 +47,15 @@ export default {
     },
     transferName: {
       type: String,
+    },
+  },
+  methods: {
+    goPlayer(item) {
+      uni.navigateTo({
+        url:
+          "/pages/data/player/player?item=" +
+          encodeURIComponent(JSON.stringify(item)),
+      });
     },
   },
 };

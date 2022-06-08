@@ -82,9 +82,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.border-b {
-  border-bottom: 1px solid #999999;
-}
+
 .border-ra-lg {
   border-radius: 40upx;
 }

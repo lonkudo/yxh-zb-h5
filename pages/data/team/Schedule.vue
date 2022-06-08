@@ -163,9 +163,6 @@ export default {
     height: 40rpx;
   }
 }
-.border-b {
-  border-bottom: 1px solid #f0f0f0;
-}
 .border-ra-lg {
   border-radius: 40upx;
 }

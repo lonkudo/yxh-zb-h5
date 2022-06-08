@@ -101,6 +101,15 @@
 			}
 		},
 		{
+			"path": "pages/data/player/player",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/my/coins/coins",
 			"style": {
 				"enablePullDownRefresh": false,

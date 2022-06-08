@@ -49,11 +49,12 @@ export default {
           this.getTeamDetailPlayerList();
         }
       },
+      immediate: true,
     },
   },
-  mounted() {
-    this.getTeamDetailPlayerList();
-  },
+  // mounted() {
+  //   this.getTeamDetailPlayerList();
+  // },
   methods: {
     getTeamDetailPlayerList() {
       getTeamDetailPlayerList(this.value).then((res) => {

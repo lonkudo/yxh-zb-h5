@@ -17,7 +17,6 @@ Vue.component('t-th', tTh)
 Vue.component('t-tr', tTr)
 Vue.component('t-td', tTd)
 
-import '@/static/styles/css/common.scss'; // global css
 
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)

@@ -1,6 +1,11 @@
 <template>
   <view class="flex flex-wrap bg-white padding-lg">
-    <view class="w-50-p flex padding-sm" v-for="item of list" :key="item.id">
+    <view
+      class="w-50-p flex padding-sm"
+      v-for="item of list"
+      :key="item.id"
+      @click="goPlayer(item)"
+    >
       <view class="img-box">
         <image mode="aspectFit" :src="item.logo" alt="" />
       </view>
@@ -22,6 +27,15 @@ export default {
       default: () => {
         return [];
       },
+    },
+  },
+  methods: {
+    goPlayer(item) {
+      uni.navigateTo({
+        url:
+          "/pages/data/player/player?item=" +
+          encodeURIComponent(JSON.stringify(item)),
+      });
     },
   },
 };

@@ -84,6 +84,15 @@
 			}
 		},
 		{
+			"path": "pages/data/team/team",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/data/league/league",
 			"style": {
 				"navigationBarTitleText": "",

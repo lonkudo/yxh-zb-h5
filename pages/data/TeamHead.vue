@@ -1,15 +1,16 @@
 <template>
   <div :style="{ backgroundColor: bgColor }" class="team-head">
-    <view class="goback flex align-center" @tap="back()">
+    <view class="goback flex align-center justify-between" @tap="back()">
       <text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text>
+      <slot name="leagueName"></slot>
     </view>
     <view class="team-head-content">
       <view class="img-box">
         <image mode="aspectFit" :src="info.logo" alt="" />
       </view>
-      <text>{{ info.name }}</text>
+      <view class="margin-top-sm">{{ info.name }}</view>
     </view>
-    <slot></slot>
+    <slot name="data"></slot>
   </div>
 </template>
 <script>
@@ -58,7 +59,7 @@ export default {
 }
 .team-head-content {
   text-align: center;
-  color: #FFFFFF;
+  color: #ffffff;
   text {
     margin-top: 12rpx;
   }

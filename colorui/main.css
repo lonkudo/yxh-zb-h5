@@ -3915,3 +3915,7 @@ scroll-view.cu-steps .cu-item {
 .lines-white {
 	color: #ffffff;
 }
+
+.text-very-black {
+	color: #000000;
+}

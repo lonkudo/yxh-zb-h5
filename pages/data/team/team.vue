@@ -87,8 +87,10 @@
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
+          :key="'team-player'"
           :style="{ height: myHeight + 'rpx' }"
         >
+          <team-player v-model="teamId" :myHeight="myHeight"></team-player>
         </swiper-item>
         <swiper-item
           class="swiper-item"

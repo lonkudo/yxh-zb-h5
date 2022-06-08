@@ -1,19 +1,19 @@
 <template>
   <view class="bg-white">
     <view class="flex justify-center border-b padding-sm">
-      <view class="flex-sub">
+      <view class="flex-sub" @click="preSeason(1)">
         <text class="text-green">Last Season</text>
       </view>
       <view class="flex-sub text-center" @click="show = true">
         <text class="">{{ seasonYear }}</text>
         <text class="iconfont icon-xiangshang xuanzuan-2"></text>
       </view>
-      <view class="flex-sub text-right">
+      <view class="flex-sub text-right" @click="preSeason(2)">
         <text class="text-green">next Season</text>
       </view>
     </view>
     <t-table>
-      <scroll-view scroll-y :style="{ height: (myHeight-76) + 'rpx' }">
+      <scroll-view scroll-y :style="{ height: myHeight - 76 + 'rpx' }">
         <view v-for="table in tableData" :key="table.date">
           <view class="text-center bg-gray padding-sm">
             {{ table.date }}
@@ -55,8 +55,11 @@
         class="text-center padding-tb-sm"
         v-for="item of yearOptions"
         :key="item.id"
+        @click="changeSeason(item)"
       >
-        <text>{{ item.year }}</text>
+        <text :class="{ 'text-green': item.id == seasonId }">
+          {{ item.year }}
+        </text>
       </view>
     </u-popup>
   </view>
@@ -64,7 +67,7 @@
 <script>
 import { getLeagueSeasonTime, getTeamDetailSchedule } from "@/api/data";
 export default {
-  name: "Club",
+  name: "Schedule",
   props: ["myHeight", "teamId", "competition_id", "season_id", "season_year"],
   components: {},
   data() {
@@ -100,6 +103,33 @@ export default {
     },
   },
   methods: {
+    preSeason(type) {
+      let result = null;
+      if (type == 1) {
+        this.yearOptions.find((item, index) => {
+          if (item.id == this.seasonId) {
+            if (index > 0) result = this.yearOptions[index - 1];
+          }
+          return item.id == this.seasonId;
+        });
+      } else {
+        this.yearOptions.find((item, index) => {
+          if (item.id == this.seasonId) {
+            result = this.yearOptions[index + 1];
+          }
+          return item.id == this.seasonId;
+        });
+      }
+      if (result) this.changeSeason(result);
+    },
+    changeSeason(item) {
+      console.log(item);
+      let param = item;
+      this.seasonId = param.id;
+      this.seasonYear = param.year;
+      this.show = false;
+      this.getTeamDetailSchedule();
+    },
     change(item) {
       uni.navigateTo({
         url:
@@ -110,7 +140,11 @@ export default {
     getTeamDetailSchedule() {
       this.tableData = [];
       console.log(this.competitionId);
-      getTeamDetailSchedule(this.teamId, this.competitionId).then((res) => {
+      getTeamDetailSchedule(
+        this.teamId,
+        this.competitionId,
+        this.seasonId
+      ).then((res) => {
         this.tableData = res.info;
       });
     },

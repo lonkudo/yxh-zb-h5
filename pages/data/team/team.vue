@@ -65,14 +65,24 @@
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
+          :key="'schedule'"
           :style="{ height: myHeight + 'rpx' }"
         >
+          <schedule
+            :teamId="teamId"
+            :competition_id="rankInfo.competition_id"
+            :season_id="rankInfo.season_id"
+            :season_year="rankInfo.season_year"
+            :myHeight="myHeight"
+          ></schedule>
         </swiper-item>
         <swiper-item
           class="swiper-item"
+          :key="'team-data'"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
+          <team-data :teamInfo="teamInfo"></team-data>
         </swiper-item>
         <swiper-item
           class="swiper-item"
@@ -93,7 +103,7 @@
 <script>
 import TeamHead from "../TeamHead";
 import { swiperAutoHeight, swiperUTabs } from "@/mixin";
-import { Dynamic } from "./index";
+import { Dynamic, Schedule, TeamData, TeamPlayer, TeamTransfer } from "./index";
 import {
   getTeamDetailBasicInfo,
   getLeagueRankPoint,
@@ -106,6 +116,10 @@ export default {
   components: {
     TeamHead,
     Dynamic,
+    Schedule,
+    TeamData,
+    TeamPlayer,
+    TeamTransfer,
   },
   data() {
     return {

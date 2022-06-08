@@ -15,7 +15,7 @@
 				>
 			</view>
 			<view class="progress-con">
-				<!-- <handicap-trend :trendList="trendList"></handicap-trend> -->
+				<handicap-trend :trendList="trendList"></handicap-trend>
 				<text>handicap</text>
 			</view>
 			<!-- <handicap-table
@@ -31,7 +31,7 @@
 	import { Mqtt } from '@/utils/mqtt'
 	// import HuTable from '@/components/Table'
 	// import DataBtm from './DataBtm'
-	// import HandicapTrend from '../components/HandicapTrend'
+	import HandicapTrend from './HandicapTrend.vue'
 	// import HandicapTable from '../components/HandicapTable'
 	import { getOdds } from '@/api/odds'
 
@@ -42,6 +42,9 @@
 	export default {
 		name: 'Handicap',
 		props: ['game_id', 'myHeight'],
+		components: {
+			HandicapTrend,
+		},
 		data() {
 			return {
 				columnLabels,
@@ -63,9 +66,9 @@
 				],
 			}
 		},
-		created() {
-			// this.getOdds()
-			// this.connetOdds()
+		async created() {
+			this.getOdds()
+			this.connetOdds()
 		},
 		methods: {
 			changeTag(index, item) {
@@ -122,9 +125,9 @@
 					this.trendType(ta.chupan[4], ta.jishi[4], 'away')
 				})
 			},
-
 			getOdds() {
-				getOdds(this.value).then((res) => {
+				getOdds(this.game_id).then((res) => {
+					console.log('res', res)
 					if (JSON.stringify(res.info) === '{}') {
 						this.$emit('childMsg', false)
 						return

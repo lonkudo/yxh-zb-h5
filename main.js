@@ -11,13 +11,23 @@ import Request from '@/utils/request.js'
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
-import { tTable, tTh, tTr, tTd } from "@/components/t-table";
+import { tTable, tTh, tTr, tTd } from '@/components/t-table'
 Vue.component('t-table', tTable)
 Vue.component('t-th', tTh)
 Vue.component('t-tr', tTr)
 Vue.component('t-td', tTd)
 
-import '@/static/styles/css/common.scss'; // global css
+// import UTable from '@/uni_modules/uview-ui/components/u_table/u-table.vue'
+// import UTable from '@/uni_modules/uview-ui/components/u_table/u-table.vue'
+// import UTable from '@/uni_modules/uview-ui/components/u_table/u-table.vue'
+// import UTable from '@/uni_modules/uview-ui/components/u_table/u-table.vue'
+
+// Vue.component('u-table', UTable)
+// Vue.component('t-th', UTh)
+// Vue.component('t-tr', UTr)
+// Vue.component('t-td', UTd)
+
+import '@/static/styles/css/common.scss' // global css
 
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)

@@ -105,7 +105,7 @@
 					<view class="flex-sub padding-xs">
 						<my-line-progress
 							active-color="#ed0505"
-							:percent="parseFloat(battleLikeInfo.home_percent)"
+							:percent="percent"
 							:inactiveColor="'#1942B8'"
 							:showPercent="false"
 						>

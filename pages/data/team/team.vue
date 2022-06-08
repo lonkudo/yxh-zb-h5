@@ -97,6 +97,7 @@
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
+          <team-transfer v-model="teamId"></team-transfer>
         </swiper-item>
       </swiper>
     </view>

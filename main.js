@@ -17,8 +17,6 @@ Vue.component('t-th', tTh)
 Vue.component('t-tr', tTr)
 Vue.component('t-td', tTd)
 
-// 因为uView使用的是easycom模式，是按需导入。所以在进行JSX动态渲染的会因为不是全局组件，提示
-// did you register .. 为了避免重名在复制了一个新组件并且全局导入。
 import UTableMy from '@/components/uTableMy/u-table-my/u-table-my.vue'
 import UTrMy from '@/components/uTableMy/u-tr-my/u-tr-my.vue'
 import UThMy from '@/components/uTableMy/u-th-my/u-th-my.vue'

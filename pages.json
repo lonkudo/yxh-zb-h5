@@ -84,10 +84,28 @@
 			}
 		},
 		{
+			"path": "pages/data/team/team",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/data/league/league",
 			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/data/player/player",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false,
+				"backgroundColor": "#FFFFFF",
 				"navigationStyle": "custom"
 			}
 		},

@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       thBorder: "1",
-      borderColor: "#d0dee5",
+      borderColor: "#ffffff",
       fontSize: "14",
       color: "#555c60",
       tdAlign: "center",
@@ -40,10 +40,10 @@ export default {
   inject: ["table", "tr"],
 
   created() {
-    this.thBorder = this.table.border;
-    this.borderColor = this.table.borderColor;
-    this.fontSize = this.tr.fontSize;
-    this.color = this.tr.color;
+    // this.thBorder = this.table.border;
+    // this.borderColor = this.table.borderColor;
+    // this.fontSize = this.tr.fontSize;
+    // this.color = this.tr.color;
     if (this.align) {
       this.tdAlign = this.align;
     } else {
@@ -108,8 +108,8 @@ export default {
   font-size: 24rpx;
   text-align: center;
   align-items: center;
-  border-bottom: 1px solid #e5e5e5;
-	box-sizing: border-box;
-	overflow: hidden;
+  /* border-bottom: 1px solid #e5e5e5; */
+  box-sizing: border-box;
+  overflow: hidden;
 }
 </style>

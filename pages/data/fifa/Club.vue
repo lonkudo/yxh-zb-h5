@@ -11,7 +11,11 @@
       @scrolltolower="onreachBottom"
       :style="{ height: myHeight + 'rpx' }"
     >
-      <t-tr v-for="(item, i) in tableList" :key="item.id + i">
+      <t-tr
+        v-for="(item, i) in tableList"
+        :key="item.id + i"
+        @change="change(item)"
+      >
         <t-td width="80">{{ item.ranking }}</t-td>
         <t-td flexWidth="1" align="left">
           <view class="table-cell-image">
@@ -47,6 +51,13 @@ export default {
     this.getFifaRankClub();
   },
   methods: {
+    change(item) {
+      uni.navigateTo({
+        url:
+          "/pages/data/team/team?item=" +
+          encodeURIComponent(JSON.stringify(item)),
+      });
+    },
     getFifaRankClub({ p = this.page, num = 20 } = {}) {
       getFifaRankClub({ p, num }).then((res) => {
         this.tableList = [...this.tableList, ...res.info];
@@ -58,6 +69,4 @@ export default {
   },
 };
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

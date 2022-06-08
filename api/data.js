@@ -1,6 +1,6 @@
-import Request from '@/utils/request'
+import Request from "@/utils/request";
 
-const request = new Request().http
+const request = new Request().http;
 
 /**
  *
@@ -8,47 +8,47 @@ const request = new Request().http
  * @returns
  */
 export function getLeagueSeasonTime(competition_id) {
-	return request({
-		url: '?service=Data.GetSeasonTime',
-		method: 'POST',
-		data: { competition_id },
-	})
+  return request({
+    url: "?service=Data.GetSeasonTime",
+    method: "POST",
+    data: { competition_id },
+  });
 }
 
 //  数据首页
 export function getDataIndex(query) {
-	return request({
-		url: '?service=Data.Index',
-		method: 'POST',
-		data: query,
-	})
+  return request({
+    url: "?service=Data.Index",
+    method: "POST",
+    data: query,
+  });
 }
 
 //  数据首页分类
 export function getDataCategory(classid) {
-	return request({
-		url: '?service=Data.Category',
-		method: 'POST',
-		data: { classid },
-	})
+  return request({
+    url: "?service=Data.Category",
+    method: "POST",
+    data: { classid },
+  });
 }
 
 //  FIFA联合排名-国家
 export function getFifaRankCountry(order) {
-	return request({
-		url: '?service=Data.RankingCountry',
-		method: 'POST',
-		data: order,
-	})
+  return request({
+    url: "?service=Data.RankingCountry",
+    method: "POST",
+    data: order,
+  });
 }
 
 //  FIFA联合排名-俱乐部
 export function getFifaRankClub(order) {
-	return request({
-		url: '?service=Data.RankingClub',
-		method: 'POST',
-		data: order,
-	})
+  return request({
+    url: "?service=Data.RankingClub",
+    method: "POST",
+    data: order,
+  });
 }
 
 /**
@@ -59,11 +59,11 @@ export function getFifaRankClub(order) {
  * @returns
  */
 export function getLeagueRankPoint(competition_id, season_id) {
-	return request({
-		url: '?service=Data.GetCompetitionPoints',
-		method: 'POST',
-		data: { competition_id, season_id },
-	})
+  return request({
+    url: "?service=Data.GetCompetitionPoints",
+    method: "POST",
+    data: { competition_id, season_id },
+  });
 }
 
 /**
@@ -77,17 +77,17 @@ export function getLeagueRankPoint(competition_id, season_id) {
  * @returns
  */
 export function getLeagueRankTeamTheTable(
-	p,
-	num,
-	competition_id,
-	season_id,
-	type
+  p,
+  num,
+  competition_id,
+  season_id,
+  type
 ) {
-	return request({
-		url: '?service=Data.TeamRanking',
-		method: 'POST',
-		data: { p, num, competition_id, season_id, type },
-	})
+  return request({
+    url: "?service=Data.TeamRanking",
+    method: "POST",
+    data: { p, num, competition_id, season_id, type },
+  });
 }
 
 /**
@@ -101,79 +101,90 @@ export function getLeagueRankTeamTheTable(
  * @returns
  */
 export function getLeagueRankTopScorer(
-	p,
-	num,
-	competition_id,
-	season_id,
-	type
+  p,
+  num,
+  competition_id,
+  season_id,
+  type
 ) {
-	return request({
-		url: '?service=Data.PlayerRanking',
-		method: 'POST',
-		data: { p, num, competition_id, season_id, type },
-	})
+  return request({
+    url: "?service=Data.PlayerRanking",
+    method: "POST",
+    data: { p, num, competition_id, season_id, type },
+  });
 }
 
 // 球队资料
 export function getTeamData(data) {
-	return request({
-		url: '?service=Data.LeagueRank',
-		method: 'POST',
-		data,
-	})
+  return request({
+    url: "?service=Data.LeagueRank",
+    method: "POST",
+    data,
+  });
 }
 
 // 球队资料
 export function getTeamDataList(data) {
-	return request({
-		url: '?service=Data.LeagueRank',
-		method: 'POST',
-		data,
-	})
+  return request({
+    url: "?service=Data.LeagueRank",
+    method: "POST",
+    data,
+  });
 }
 
 // 球队资料-动态
 export function getTeamDetailDynamic(data) {
-	return request({
-		url: '?service=Data.LeagueRank',
-		method: 'POST',
-		data,
-	})
+  return request({
+    url: "?service=Data.LeagueRank",
+    method: "POST",
+    data,
+  });
 }
 
 // 球队资料-基本信息
 export function getTeamDetailBasicInfo(team_id) {
-	return request({
-		url: '?service=Data.TeamInfo',
-		method: 'POST',
-		data: { team_id },
-	})
+  return request({
+    url: "?service=Data.TeamInfo",
+    method: "POST",
+    data: { team_id },
+  });
 }
 
 // 球队资料-联赛排名
 /**
- * 
+ *
  * @param {required} competition_id  	赛事id
  * @param {required} team_id 队伍id
- * @returns 
+ * @returns
  */
 export function getTeamLeagueRank(competition_id, team_id) {
-	return request({
-		url: '?service=Data.TeamCompetitionRank',
-		method: 'POST',
-		data: { competition_id, team_id },
-	})
+  return request({
+    url: "?service=Data.TeamCompetitionRank",
+    method: "POST",
+    data: { competition_id, team_id },
+  });
 }
 
 // 球队资料-球员列表
 export function getTeamDetailPlayerList(team_id) {
-	return request({
-		url: '?service=Data.TeamPlayer',
-		method: 'POST',
-		data: { team_id },
-	})
+  return request({
+    url: "?service=Data.TeamPlayer",
+    method: "POST",
+    data: { team_id },
+  });
 }
 
+/**
+ *
+ * @returns
+ */
+// 球队资料-球队赛程
+export function getTransferTime() {
+  return request({
+    url: "?service=Data.TransferTime",
+    method: "POST",
+  });
+}
 /**
  *
  * @param {	队伍id required} team_id
@@ -183,29 +194,29 @@ export function getTeamDetailPlayerList(team_id) {
  */
 // 球队资料-球队赛程
 export function getTeamDetailSchedule(team_id, competition_id, season_id) {
-	return request({
-		url: '?service=Data.TeamSchedule',
-		method: 'POST',
-		data: { team_id, competition_id, season_id },
-	})
+  return request({
+    url: "?service=Data.TeamSchedule",
+    method: "POST",
+    data: { team_id, competition_id, season_id },
+  });
 }
 
 // 球队资料-球员转会
 export function getTeamDetailTransfer(team_id, timestamp) {
-	return request({
-		url: '?service=Data.TeamPlayerTransfer',
-		method: 'POST',
-		data: { team_id, timestamp },
-	})
+  return request({
+    url: "?service=Data.TeamPlayerTransfer",
+    method: "POST",
+    data: { team_id, timestamp },
+  });
 }
 
 // 球员-基本信息
 export function getPlayerInfo(player_id) {
-	return request({
-		url: '?service=Data.PlayerInfo',
-		method: 'POST',
-		data: { player_id },
-	})
+  return request({
+    url: "?service=Data.PlayerInfo",
+    method: "POST",
+    data: { player_id },
+  });
 }
 
 /**
@@ -215,11 +226,11 @@ export function getPlayerInfo(player_id) {
  * @returns Promise
  */
 export function getPlayerLeagueData(player_id, competition_id) {
-	return request({
-		url: '?service=Data.PlayerDataCompetition',
-		method: 'POST',
-		data: { player_id, competition_id },
-	})
+  return request({
+    url: "?service=Data.PlayerDataCompetition",
+    method: "POST",
+    data: { player_id, competition_id },
+  });
 }
 
 /**
@@ -228,11 +239,11 @@ export function getPlayerLeagueData(player_id, competition_id) {
  * @returns Promise
  */
 export function getPlayerTeamMate(player_id) {
-	return request({
-		url: '?service=Data.TeamMate',
-		method: 'POST',
-		data: { player_id },
-	})
+  return request({
+    url: "?service=Data.TeamMate",
+    method: "POST",
+    data: { player_id },
+  });
 }
 
 /**
@@ -247,11 +258,11 @@ export function getPlayerTeamMate(player_id) {
  * @returns
  */
 export function getDynamic(data) {
-	return request({
-		url: '?service=Data.Dynamic',
-		method: 'POST',
-		data: data,
-	})
+  return request({
+    url: "?service=Data.Dynamic",
+    method: "POST",
+    data: data,
+  });
 }
 
 /**
@@ -262,11 +273,11 @@ export function getDynamic(data) {
  * @returns
  */
 export function getCompetitions(data) {
-	return request({
-		url: '?service=Data.GetCompetition',
-		method: 'POST',
-		data: data,
-	})
+  return request({
+    url: "?service=Data.GetCompetition",
+    method: "POST",
+    data: data,
+  });
 }
 /*
  *
@@ -275,11 +286,11 @@ export function getCompetitions(data) {
  * @returns
  */
 export function getCountrySchedule(team_id, year) {
-	return request({
-		url: '?service=Data.CountryCompe',
-		method: 'POST',
-		data: { team_id, year },
-	})
+  return request({
+    url: "?service=Data.CountryCompe",
+    method: "POST",
+    data: { team_id, year },
+  });
 }
 
 /**
@@ -288,11 +299,11 @@ export function getCountrySchedule(team_id, year) {
  * @returns
  */
 export function getCountryDetail(team_id) {
-	return request({
-		url: '?service=Data.CountryDetail',
-		method: 'POST',
-		data: { team_id },
-	})
+  return request({
+    url: "?service=Data.CountryDetail",
+    method: "POST",
+    data: { team_id },
+  });
 }
 
 /**
@@ -301,11 +312,11 @@ export function getCountryDetail(team_id) {
  * @returns
  */
 export function getCountryInfo(team_id) {
-	return request({
-		url: '?service=Data.CountryInfo',
-		method: 'POST',
-		data: { team_id },
-	})
+  return request({
+    url: "?service=Data.CountryInfo",
+    method: "POST",
+    data: { team_id },
+  });
 }
 
 /**
@@ -314,9 +325,9 @@ export function getCountryInfo(team_id) {
  * @returns
  */
 export function getCountryPlayer(team_id) {
-	return request({
-		url: '?service=Data.CountryPlayer',
-		method: 'POST',
-		data: { team_id },
-	})
+  return request({
+    url: "?service=Data.CountryPlayer",
+    method: "POST",
+    data: { team_id },
+  });
 }

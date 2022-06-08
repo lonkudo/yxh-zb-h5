@@ -1,6 +1,6 @@
 <template>
   <view>
-    <team-head :info="league"> </team-head>
+    <team-head :info="playerInfo"></team-head>
     <view>
       <u-tabs-swiper
         ref="uTabs"
@@ -26,7 +26,7 @@
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <club :myHeight="myHeight"></club>
+          <player-data :myHeight="myHeight" v-model="playerId"></player-data>
         </swiper-item>
         <swiper-item
           class="swiper-item"
@@ -34,35 +34,39 @@
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <country :myHeight="myHeight"></country>
+          <!-- <country :myHeight="myHeight"></country> -->
         </swiper-item>
       </swiper>
     </view>
   </view>
 </template>
 <script>
-import Club from "./Club";
-import Country from "./Country";
 import TeamHead from "../TeamHead";
+import { Data, PlayerData, PlayerDynamic } from "./index";
 import { swiperAutoHeight, swiperUTabs } from "@/mixin";
 export default {
-  name: "Fifa",
+  name: "Player",
   mixins: [swiperAutoHeight, swiperUTabs],
   components: {
-    Club,
-    Country,
     TeamHead,
+    Data,
+    PlayerData,
+    PlayerDynamic,
   },
   data() {
     return {
-      league: {},
-      menu: [{ name: "Club" }, { name: "Countries" }],
+      playerInfo: {},
+      playerId: "",
+      menu: [{ name: "Player Data" }, { name: "Data" }, { name: "Dynamic" }],
       myHeight: 0,
     };
   },
   onLoad(option) {
-    this.league = JSON.parse(decodeURIComponent(option.league));
-    // console.log(this.league);
+    const player = JSON.parse(decodeURIComponent(option.item));
+    if (player.player) this.playerInfo = player.player;
+    else this.playerInfo = player;
+    this.playerId = this.playerInfo.player_id;
+    console.log(this.playerId);
   },
   mounted() {
     this.myHeight = this.initScrollHeight(350);

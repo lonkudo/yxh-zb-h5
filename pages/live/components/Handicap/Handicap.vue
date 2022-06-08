@@ -2,9 +2,9 @@
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Handicap'"
-		:style="{ height: myHeight + 'rrpx' }"
+		:style="{ height: myHeight + 'rpx' }"
 	>
-		<view class="container padding-top-sm b-f">
+		<view class="flex flex-direction padding-top-sm b-f">
 			<view class="line">
 				<view
 					:class="activeIndex === index ? 'active' : ''"
@@ -14,15 +14,13 @@
 					><text>{{ item.value }}</text></view
 				>
 			</view>
-			<view class="progress-con">
+			<view class="progress-con margin-bottom-xs">
 				<handicap-trend :trendList="trendList"></handicap-trend>
-				<text>handicap</text>
 			</view>
-			<!-- <handicap-table
+			<handicap-table
 				:tableData="tableData"
 				:columnLabel="columnLabel"
-			></handicap-table> -->
-			<text>handicap</text>
+			></handicap-table>
 		</view>
 	</scroll-view>
 </template>
@@ -32,7 +30,7 @@
 	// import HuTable from '@/components/Table'
 	// import DataBtm from './DataBtm'
 	import HandicapTrend from './HandicapTrend.vue'
-	// import HandicapTable from '../components/HandicapTable'
+	import HandicapTable from './HandicapTable'
 	import { getOdds } from '@/api/odds'
 
 	const columnLabels = [
@@ -44,6 +42,7 @@
 		props: ['game_id', 'myHeight'],
 		components: {
 			HandicapTrend,
+			HandicapTable,
 		},
 		data() {
 			return {
@@ -68,7 +67,7 @@
 		},
 		async created() {
 			this.getOdds()
-			this.connetOdds()
+			// this.connetOdds()
 		},
 		methods: {
 			changeTag(index, item) {
@@ -119,6 +118,7 @@
 			// "2:"主胜 "3:"和局 " 4:"客胜 "
 			setTrendList() {
 				this.resetTrendList()
+				if (!this.tableData) return
 				this.tableData.forEach((ta) => {
 					this.trendType(ta.chupan[2], ta.jishi[2], 'home')
 					this.trendType(ta.chupan[3], ta.jishi[3], 'equal')

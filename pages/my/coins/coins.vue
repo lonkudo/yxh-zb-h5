@@ -175,13 +175,18 @@
 
 		onLoad() {
 			this.guard()
+			if (!this.$store.state.task.isSign) {
+				let item = this.$store.state.task.taskList.list.find(
+					(ele) => ele.date === 'Today'
+				)
+				this.signTask(item)
+			}
 		},
 		onShow() {},
 		methods: {
 			signTask(item) {
 				signTask(this.uid, item.day, this.token)
 					.then((res) => {
-						// console.log('sign', res)
 						if (res.code === 0) {
 							uni.showToast({ title: 'Signed', duration: 2000, icon: 'success' })
 							this.addCoin(item.coin)
@@ -199,6 +204,8 @@
 								icon: 'error',
 							})
 						}
+
+						this.$store.commit('SIGN_IN')
 					})
 					.catch((err) => {
 						console.log(err)

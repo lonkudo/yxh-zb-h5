@@ -2,32 +2,46 @@
 	<scroll-view scroll-y="true">
 		<view class="b-f">
 			<template v-if="goldLogs.length > 0">
-				<view
-					v-for="(item, index) in goldLogs"
-					:key="index"
-					class="flex align-center padding-xs padding-top-sm padding-bottom-sm"
+				<scroll-view
+					scroll-y
+					@scrolltolower="loadMore()"
+					:style="{ height: myHeight + 'rpx' }"
 				>
-					<view class="flex flex-direction w-130 align-center">
-						<text class="fc-b-9 fs-20">{{ item.dateformat.date }}</text>
-						<text class="fc-b-9 fs-20">{{ item.dateformat.time }}</text>
-					</view>
-					<view class="flex align-center">
-						<view
-							:class="['ava-60 flex align-center justify-center', bgColor(item.type)]"
-							><text :class="['iconfont  fc-b-f fs-36', iconType(item.type)]"></text
-						></view>
-						<text class="margin-left-xs">{{ item.type | giftType }}</text>
-					</view>
-					<text class="margin-left-auto"
-						>{{ item.mod === '1' ? '+' : '-' }}{{ item.coin }}</text
+					<view
+						v-for="(item, index) in goldLogs"
+						:key="index"
+						class="flex align-center padding-xs padding-top-sm padding-bottom-sm"
 					>
-				</view>
+						<view class="flex flex-direction w-130 align-center">
+							<text class="fc-b-9 fs-20">{{ item.dateformat.date }}</text>
+							<text class="fc-b-9 fs-20">{{ item.dateformat.time }}</text>
+						</view>
+						<view class="flex align-center">
+							<view
+								:class="['ava-60 flex align-center justify-center', bgColor(item.type)]"
+								><text :class="['iconfont  fc-b-f fs-36', iconType(item.type)]"></text
+							></view>
+							<text class="margin-left-xs">{{ item.type | giftType }}</text>
+						</view>
+						<text class="margin-left-auto"
+							>{{ item.mod === '1' ? '+' : '-' }}{{ item.coin }}</text
+						>
+					</view>
+
+					<u-loadmore
+						class="h-100"
+						:status="status"
+						:icon-type="'flower'"
+						:load-text="loadText"
+					/>
+				</scroll-view>
 			</template>
 			<template v-else>
-				<no-content></no-content>
+				<no-content :style="{ height: myHeight + 'rpx' }"></no-content>
 			</template>
 		</view>
 	</scroll-view>
+	<!-- 新版goldLog还有选择类型和时间选择还有统计 -->
 </template>
 
 <script>
@@ -38,16 +52,53 @@
 		data() {
 			return {
 				goldLogs: [],
+				status: 'loadmore',
+				loadText: {
+					loadmore: '',
+					loading: 'loading',
+					nomore: 'no more data',
+				},
+				loadingFlag: false,
+				goldLogsPage: {
+					p: 1,
+					num: 20,
+					isAll: false,
+				},
+				myHeight: 0,
 			}
 		},
 		onLoad() {
 			this.getGoldLog()
+			this.myHeight = this.initScrollHeight(0)
 		},
 		methods: {
+			loadMore() {
+				if (this.loadingFlag) return
+				this.loadingFlag = true // 防止重复发送请求
+				if (this.goldLogsPage.isAll) return (this.status = 'nomore')
+				this.status = 'loading'
+				this.goldLogsPage.p += 1
+				this.getGoldLog()
+			},
 			getGoldLog() {
-				goldLog({ uid: this.uid, token: this.token })
+				goldLog({
+					uid: this.uid,
+					token: this.token,
+					p: this.goldLogsPage.p,
+					num: this.goldLogsPage.num,
+				})
 					.then((res) => {
-						this.goldLogs = res.info
+						this.goldLogs = this.goldLogs.concat(res.info.data)
+						console.log('this.goldLogs', res.info, this.goldLogs.length)
+						if (this.goldLogs.length > res.info.count) {
+							this.goldLogsPage.isAll = true
+						}
+						if (this.goldLogsPage.isAll) {
+							this.status = 'nomore'
+						} else {
+							this.status = 'loadmore'
+						}
+						this.loadingFlag = false
 					})
 					.catch((err) => {
 						console.log(err)

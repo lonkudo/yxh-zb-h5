@@ -3,7 +3,7 @@
 		<template v-if="!this.isEmpty(videoData)">
 			<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
 				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-				><text class="fc-b-f">{{ videoData.detail.title }}</text>
+				><text class="fc-b-f w-600 f-hide">{{ videoData.detail.title }}</text>
 			</view>
 			<view class="video-container">
 				<video
@@ -63,8 +63,10 @@
 											mana
 										></my-button>
 									</view>
-									<view class="margin-bottom-sm f-hide w-700">
-										<text>{{ videoData.detail.title }}</text>
+									<view class="margin-bottom-sm">
+										<text style="word-break: break-all">{{
+											videoData.detail.title
+										}}</text>
 									</view>
 									<view class="flex align-center margin-bottom-sm">
 										<view class="flex align-center">

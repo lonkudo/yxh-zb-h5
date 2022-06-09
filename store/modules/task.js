@@ -3,17 +3,21 @@ import { getTaskList, liveOrDailyTask } from '@/api/my'
 const task = {
 	state: {
 		taskList: {},
+		isSign: false,
 	},
 	mutations: {
 		SET_TASKLIST: (state, taskList) => {
 			state.taskList = taskList
+		},
+		SIGN_IN: (state) => {
+			state.isSign = true
 		},
 	},
 	actions: {
 		GET_TASKLIST: ({ commit }, userInfo) => {
 			getTaskList(userInfo.uid, userInfo.token, 1)
 				.then((res) => {
-					console.log('---run----run----run----run----run---')
+					console.log('task', res)
 					commit('SET_TASKLIST', res.info)
 				})
 				.catch((err) => {

@@ -31,15 +31,10 @@ export function GetGameType() {
 
 //  根据直播分类获取直播列表
 export function getListByType(data) {
-	const params = {
-		...data,
-		...{ version },
-	}
-	// console.log(params);
 	return request({
 		url: '?service=Live.GetLiveListByType',
 		method: 'POST',
-		data: params,
+		data: data,
 	})
 }
 

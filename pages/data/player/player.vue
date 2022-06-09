@@ -22,7 +22,7 @@
       >
         <swiper-item
           class="swiper-item"
-          :key="'Squad'"
+          key="player-data"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
@@ -30,11 +30,11 @@
         </swiper-item>
         <swiper-item
           class="swiper-item"
-          :key="'Analyse'"
+          key="data"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <!-- <country :myHeight="myHeight"></country> -->
+          <s-data :myHeight="myHeight" v-model="playerId"></s-data>
         </swiper-item>
       </swiper>
     </view>
@@ -42,14 +42,14 @@
 </template>
 <script>
 import TeamHead from "../TeamHead";
-import { Data, PlayerData, PlayerDynamic } from "./index";
+import { SData, PlayerData, PlayerDynamic } from "./index";
 import { swiperAutoHeight, swiperUTabs } from "@/mixin";
 export default {
   name: "Player",
   mixins: [swiperAutoHeight, swiperUTabs],
   components: {
     TeamHead,
-    Data,
+    SData,
     PlayerData,
     PlayerDynamic,
   },

@@ -210,6 +210,19 @@ export function getTeamDetailTransfer(team_id, timestamp) {
   });
 }
 
+/**
+ * 球员-数据（赛事下拉列表）
+ * @param {*} player_id 
+ * @returns 
+ */
+export function getPlayerDataCompetitionSelect(player_id) {
+  return request({
+    url: "?service=Data.PlayerDataCompetitionSelect",
+    method: "POST",
+    data: { player_id },
+  });
+}
+
 // 球员-基本信息
 export function getPlayerInfo(player_id) {
   return request({
@@ -225,7 +238,7 @@ export function getPlayerInfo(player_id) {
  * @param {赛事id} competition_id
  * @returns Promise
  */
-export function getPlayerLeagueData(player_id, competition_id) {
+export function getPlayerDataCompetition(player_id, competition_id) {
   return request({
     url: "?service=Data.PlayerDataCompetition",
     method: "POST",

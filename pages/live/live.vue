@@ -24,14 +24,13 @@
 			</template>
 			<template v-else-if="liveDetail.uid === '2'">
 				<template v-if="livingStatus">
-					<video
-						id="myVideo"
-						:src="liveDetail.pull"
-						object-fit="contain"
-						@play="showBack = false"
-						@pause="showBack = true"
-						@ended="showBack = true"
-					></video>
+					<player
+						ref="tcplayer"
+						:isShow="true"
+						@reload="reload($event)"
+						@loadVideoError="loadVideoError($event)"
+						@on-close="destroy"
+					></player>
 				</template>
 				<template v-else>
 					<view class="w100 h100 preview flex flex-direction align-center fc-b-f">
@@ -415,6 +414,7 @@
 	import Action from './components/Action.vue'
 	import BattleLike from './components/BattleLike/BattleLike.vue'
 	import Handicap from './components/Handicap/Handicap.vue'
+	import Player from '@/components/TCPlayer'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -428,9 +428,14 @@
 			Action,
 			BattleLike,
 			Handicap,
+			Player,
 		},
 		data() {
 			return {
+				// 视屏加载失败
+				reloadBtnShow: false,
+				// 视屏加载失败
+				playerError: false,
 				liveuid: '',
 				stream: '',
 				game_id: '',
@@ -476,6 +481,7 @@
 				battleLikeInfo: {},
 				livingStatus: false,
 				timer: null, // 用于直播间任务计时。
+				playerInfo: {},
 			}
 		},
 		async onLoad(options) {
@@ -565,6 +571,28 @@
 			},
 		},
 		methods: {
+			/***初始化直播播放器
+		   		@path {String} m3u8地址,
+		   		@live {Boolean} true:直播  false:点播
+		   	*/
+			initPlayer() {
+				this.$refs.tcplayer.init(this.playerInfo.pull, this.playerInfo.live)
+			},
+			// 播放器销毁
+			destroy() {
+				this.$refs.tcplayer.destroy()
+			},
+			loadVideoError(flag) {
+				this.playerError = flag
+				// if (flag) this.getAnchorRecommend()
+			},
+			reload(flag) {
+				this.reloadBtnShow = flag
+			},
+			reloadHandle() {
+				this.reloadBtnShow = false
+				this.initPlayer()
+			},
 			dianzan(team) {
 				this.guard()
 				console.log('team', team)
@@ -617,7 +645,7 @@
 
 			getCoin() {
 				/* 获取账户金币余额金币 */
-				console.log('---getCOin----getCOin----getCOin----getCOin----getCOin---')
+				console.log('---coin----coin----coin----coin----coin---')
 				getCoin(this.uid, this.token).then((res) => {
 					if (res.code == 0) {
 						this.coin = parseInt(res.info.coin)
@@ -770,6 +798,25 @@
 								})
 							}, 15000)
 						}
+						if (res.info.uid === '2') {
+							console.log('---init----init----init----init----init---')
+							this.playerInfo = {
+								pull: res.info.origin_video,
+								live: true,
+							}
+							this.$nextTick(() => {
+								this.initPlayer()
+							})
+						} else if (res.info.uid !== '3') {
+							/* 个人直播 */
+							this.playerInfo = {
+								pull: res.info.pull,
+								live: true,
+							}
+							this.$nextTick(() => {
+								this.initPlayer()
+							})
+						}
 					})
 					.catch((err) => {
 						console.log(err)
@@ -894,8 +941,8 @@
 				this.guard()
 				const uid = this.uid
 				const token = this.token
-				if (this.giftlist.length !== 0) return (this.showGift = true)
 				this.getCoin()
+				if (this.giftlist.length !== 0) return (this.showGift = true)
 				getGiftList({ uid, token })
 					.then((res) => {
 						if (res.code == 0) {

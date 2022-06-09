@@ -32,6 +32,8 @@ import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)
 Vue.prototype.formatGiven = formatGiven
 
+import { TcPlayer } from '@/utils/TcPlayer-module-2.4.1'
+Vue.prototype.TcPlayer = TcPlayer
 import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty
 import toNum from '@/utils/toNum.js'

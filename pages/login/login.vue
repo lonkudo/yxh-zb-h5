@@ -74,6 +74,7 @@
 				expired: false,
 			}
 		},
+		onLoad() {},
 		methods: {
 			show() {
 				uni.showToast({

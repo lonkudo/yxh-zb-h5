@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import { updateInfo, liveOrDailyTask } from '@/api/my'
+	import { updateInfo } from '@/api/my'
 
 	export default {
 		data() {
@@ -45,27 +45,12 @@
 						// 	that.go()
 						// }, 1500)
 						// //更新头像，修改昵称的任务
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-					.finally(() => {
-						this.liveOrDailyTask()
-					})
-			},
-			liveOrDailyTask() {
-				this.guard()
-				liveOrDailyTask(this.uid, 1, 6)
-					.then((res) => {
-						if (res.code === 0) {
-							this.$u.toast('task completed')
-							this.$store.dispatch('GetInfo', { uid: this.uid, token: this.token })
-							// let that = this
-						} else if (res.code === 433) {
-							// this.$message.warning(
-							// 	'The task has been completed. Please do not submit it again.'
-							// )
-						}
+
+						this.$store.dispatch('FINISH_TASK', {
+							type: 1,
+							taskid: 6,
+							that: this,
+						})
 					})
 					.catch((err) => {
 						console.log(err)

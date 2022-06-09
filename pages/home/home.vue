@@ -52,9 +52,6 @@
 			this.getHomeIndex()
 		},
 		methods: {
-			call() {
-				console.log('call')
-			},
 			getHomeIndex() {
 				getHomeIndex(
 					1,

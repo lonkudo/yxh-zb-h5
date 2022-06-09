@@ -82,6 +82,7 @@ export function getUserInfo(uid, token) {
 			uid,
 			token,
 		},
+		hideLoading: true,
 	})
 }
 

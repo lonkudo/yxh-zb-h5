@@ -22,9 +22,6 @@ const task = {
 		},
 		FINISH_TASK: ({ commit, state, dispatch }, info) => {
 			// 如果任务已完成则直接终止，不发送请求。
-			console.log(
-				'---taskFinish----taskFinish----taskFinish----taskFinish----taskFinish---'
-			)
 			let that = info.that
 			let item
 			if (info.type === 1) {
@@ -37,15 +34,11 @@ const task = {
 				})
 			}
 
-			if (item.current_num === item.num) return
+			if (item && item.current_num === item.num) return
 
 			liveOrDailyTask(that.uid, info.type, info.taskid)
 				.then((res) => {
 					if (res.code === 0) {
-						console.log(
-							'---taskFinish----taskFinish----taskFinish----taskFinish----taskFinish---',
-							res
-						)
 						// setTimeout(() => {
 						// 	that.$u.toast('task completed')
 						// }, 1000)

@@ -212,16 +212,19 @@
 				if (taskType === 'task') {
 					switch (id) {
 						case 1:
+							uni.setStorageSync('discoverTab', { tab: 'news', isSwitch: true })
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
 							break
 						case 2:
+							uni.setStorageSync('discoverTab', { tab: 'news', isSwitch: true }) // switchTab 不能传递参数
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
 							break
 						case 3:
+							uni.setStorageSync('discoverTab', { tab: 'video', isSwitch: true })
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
@@ -236,14 +239,34 @@
 								url: '/pages/my/modify/modify',
 							})
 							break
+						case 6:
+							uni.navigateTo({
+								url: '/pages/my/modify/modify',
+							})
+							break
+						case 7:
+							uni.switchTab({
+								url: '/pages/score/score',
+							})
+							break
 						default:
 							break
 					}
 				} else if (taskType === 'go') {
 					switch (id) {
 						case 1:
-							uni.switchTab({
-								url: '/pages/discover/discover',
+							uni.navigateTo({
+								url: '/pages/live/livelist',
+							})
+							break
+						case 2:
+							uni.navigateTo({
+								url: '/pages/live/livelist',
+							})
+							break
+						case 3:
+							uni.navigateTo({
+								url: '/pages/live/livelist',
 							})
 							break
 						default:

@@ -274,7 +274,7 @@
 		computed: {
 			openFlag: function () {
 				// console.log('??', this.$store.state.settings)
-				return this.$store.state.live.battleLikeFlag
+				return this.$store.state.flag.battleLikeFlag
 			},
 			percent: function () {
 				let a = parseFloat(this.battleLikeInfo.home_percent)

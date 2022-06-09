@@ -95,12 +95,13 @@ export function getAppointmentList(data) {
 }
 
 // 获取任务列表
-export function getTaskList(uid, p) {
+export function getTaskList(uid, token, p) {
 	return request({
 		url: '?service=Sign.GetTaskList',
 		method: 'POST',
 		data: {
 			uid,
+			token,
 			p,
 		},
 	})

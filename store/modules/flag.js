@@ -1,4 +1,4 @@
-const live = {
+const flag = {
 	state: {
 		battleLikeFlag: false,
 	},
@@ -9,4 +9,4 @@ const live = {
 	},
 }
 
-export default live
+export default flag

@@ -475,6 +475,7 @@
 				teamInfo: {},
 				battleLikeInfo: {},
 				livingStatus: false,
+				timer: null, // 用于直播间任务计时。
 			}
 		},
 		async onLoad(options) {
@@ -492,6 +493,10 @@
 		async onShow() {},
 		onUnload() {
 			this.ws.disconnect()
+			if (this.timer !== null) {
+				clearTimeout(this.timer)
+				this.timer = null
+			}
 		},
 		onHide() {},
 		computed: {
@@ -542,7 +547,7 @@
 				}
 			},
 			battleLikeHeight: function () {
-				if (this.$store.state.live.battleLikeFlag) {
+				if (this.$store.state.flag.battleLikeFlag) {
 					return 230
 				} else {
 					return 80
@@ -693,6 +698,12 @@
 							obj.action = '0'
 							broadcastObj.msg.push(obj)
 							this.ws.emit('broadcast', broadcastObj)
+
+							this.$store.dispatch('FINISH_TASK', {
+								type: 2,
+								taskid: 3,
+								that: this,
+							})
 						} else {
 							this.$u.toast(res.msg)
 						}
@@ -748,6 +759,16 @@
 								name: res.info.away_name,
 								logo: res.info.away_logo,
 							},
+						}
+
+						if (!this.isEmpty(this.uid)) {
+							this.timer = setTimeout(() => {
+								this.$store.dispatch('FINISH_TASK', {
+									type: 2,
+									taskid: 1,
+									that: this,
+								})
+							}, 15000)
 						}
 					})
 					.catch((err) => {
@@ -857,8 +878,15 @@
 				obj.level = JSON.parse(window.localStorage.getItem('userInfo')).level
 				broadcastObj.msg.push(obj)
 				broadcastObj.token = window.localStorage.getItem('token')
+
 				this.ws.emit('broadcast', broadcastObj)
 				this.inputContent = ''
+
+				this.$store.dispatch('FINISH_TASK', {
+					type: 2,
+					taskid: 2,
+					that: this,
+				})
 			},
 			getGiftList() {
 				/* 获取礼物列表 */

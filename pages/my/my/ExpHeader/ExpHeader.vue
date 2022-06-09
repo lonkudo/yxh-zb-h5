@@ -4,7 +4,7 @@
 			<view class="flex align-start flex-direction">
 				<view class="flex align-center">
 					<image
-						@tap="go('login')"
+						@tap="go('modify')"
 						class="ava-112"
 						:src="userInfo.avatar || require('@/static/styles/png/avatar.png')"
 						mode=""
@@ -49,19 +49,14 @@
 		},
 		methods: {
 			go(val) {
+				this.guard()
+				if (this.isEmpty(this.uid)) return
 				switch (val) {
-					case 'login':
-						if (this.isEmpty(this.userInfo)) {
-							uni.navigateTo({
-								url: '/pages/login/login',
-							})
-						} else {
-							uni.navigateTo({
-								url: val,
-							})
-						}
+					case 'modify':
+						uni.navigateTo({
+							url: '/pages/my/modify/modify',
+						})
 						break
-
 					default:
 						break
 				}

@@ -1063,6 +1063,11 @@
 						} else if (res.info.isappointment === 1) {
 							item.is_appointment = 1
 							this.$u.toast('subscribed')
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 7,
+								that: this,
+							})
 						}
 					})
 					.catch((err) => {

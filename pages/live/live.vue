@@ -1,18 +1,23 @@
 <template>
 	<view>
-		<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
-			><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-			><text
-				class="fc-b-f"
-				v-if="liveDetail.uid !== '3' && liveDetail.uid !== '2'"
-				>{{ liveDetail.title }}</text
-			>
-		</view>
 		<view
-			class="switch flex align-center"
-			v-show="showBack"
-			@tap="showAnchor = true"
-			><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
+			class="control-bar flex align-center justify-between"
+			@tap="toggleControl"
+		>
+			<view class="flex align-center" @tap.stop="go('back')" v-show="showBack"
+				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
+				><text
+					class="fc-b-f"
+					v-if="liveDetail.uid !== '3' && liveDetail.uid !== '2'"
+					>{{ liveDetail.title }}</text
+				>
+			</view>
+			<view
+				class="flex align-center"
+				@tap.stop="showAnchor = true"
+				v-show="showBack"
+				><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
+			</view>
 		</view>
 		<!-- 视频区域 -->
 		<view class="video-container" :style="{ height: videoHeight + 'rpx' }">
@@ -998,6 +1003,9 @@
 						this.$u.toast('error')
 					})
 			},
+			toggleControl() {
+				this.showBack = !this.showBack
+			},
 		},
 	}
 </script>
@@ -1006,19 +1014,15 @@
 	.video-container {
 		width: 750rpx;
 	}
-	.goback {
+	.control-bar {
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: 10;
-	}
-	.switch {
-		position: fixed;
-		top: 0;
 		right: 0;
-		z-index: 10;
+		height: 100rpx;
+		z-index: 100;
 	}
-	#myVideo {
+	.go #myVideo {
 		width: 100%;
 		height: 100%;
 	}

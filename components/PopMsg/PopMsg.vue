@@ -51,6 +51,9 @@
 				tmp.dealItem(item)
 			})
 		},
+		beforeDestroy() {
+			GiftPoolBus.$off('push')
+		},
 		computed: {
 			tempList: function () {
 				let arr = []

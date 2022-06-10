@@ -9,7 +9,7 @@
 		},
 		methods: {
 			getProgress(num, total) {
-				console.log('num', total)
+				// console.log('num', total)
 				if (total > 0) return (num / total) * 100
 				else return 0
 			},

@@ -481,6 +481,7 @@
 				livingStatus: false,
 				timer: null, // 用于直播间任务计时。
 				playerInfo: {},
+				connObj: {},
 			}
 		},
 		async onLoad(options) {
@@ -491,22 +492,56 @@
 			// this.chatHeight = this.initScrollHeight(624)
 			this.getLiveDetail()
 			await this.enterLiveRoom()
-			this.createChatServerClient()
 			this.getRoomsList()
 			/*  */
 		},
 		async onShow() {},
 		onUnload() {
-			console.log('---dnnec--rerewrew--disnect----disconnect---')
-			console.log(this.io)
-			this.ws.emit('disconnect')
-			this.ws.disconnect()
 			if (this.timer !== null) {
 				clearTimeout(this.timer)
 				this.timer = null
 			}
 		},
-		onHide() {},
+		sockets: {
+			disconnect() {
+				// this.$socket.connected = false;
+				console.log('socket.io断开链接1')
+			}, //检测socket断开链接
+			reconnect() {
+				console.log('socket.io重新链接')
+				// this.sockets.reconnect();
+			},
+			connect(data) {
+				console.log('socket.io建立链接', data)
+			},
+			// 服务端发送连接信息
+			conn(data) {
+				console.log('进入直播间ok表示成功', data)
+			},
+			broadcastingListen(mes) {
+				let pMes = JSON.parse(mes[0])
+				console.log('---pMes----pMes----pMes----pMes----pMes---')
+				if (pMes.msg[0]._method_ === 'SendGift') {
+					GiftPoolBus.$emit('push', {
+						id: pMes.msg[0].uid,
+						giftId: pMes.msg[0].ct.giftid,
+						userInfo: {
+							user_nicename: pMes.msg[0].uname,
+							avatar: pMes.msg[0].uhead,
+						},
+						giftInfo: {
+							giftNum: pMes.msg[0].ct.giftcount,
+							giftIcon: pMes.msg[0].ct.gifticon,
+							giftName: pMes.msg[0].ct.giftname,
+						},
+					})
+				}
+				if (pMes.msg[0]._method_ === 'Liked') {
+					this.battleLikeInfo = pMes.msg[0].ct
+				}
+				this.chatList.push(pMes)
+			},
+		},
 		computed: {
 			timeGap: function () {
 				if (this.isEmpty(this.liveDetail)) return ''
@@ -610,7 +645,7 @@
 				})
 				obj.uid = this.uid
 				broadcastObj.msg.push(obj)
-				this.ws.emit('broadcast', broadcastObj)
+				this.$socket.emit('broadcast', broadcastObj)
 			},
 			switchRoom(item) {
 				uni.navigateTo({
@@ -647,7 +682,6 @@
 
 			getCoin() {
 				/* 获取账户金币余额金币 */
-				console.log('---coin----coin----coin----coin----coin---')
 				getCoin(this.uid, this.token).then((res) => {
 					if (res.code == 0) {
 						this.coin = parseInt(res.info.coin)
@@ -727,7 +761,7 @@
 							obj.livename = '000'
 							obj.action = '0'
 							broadcastObj.msg.push(obj)
-							this.ws.emit('broadcast', broadcastObj)
+							this.$socket.emit('broadcast', broadcastObj)
 
 							this.$store.dispatch('FINISH_TASK', {
 								type: 2,
@@ -818,6 +852,67 @@
 								this.initPlayer()
 							})
 						}
+
+						this.$socket.removeAllListeners()
+
+						if (this.isEmpty(this.token)) {
+							// 连接socket
+							this.$socket.emit('connect', '类型：游客连接3')
+							let connObj = {
+								token: '1000',
+								uid: 1000,
+								roomnum: res.info.room_num,
+								stream: res.info.stream,
+								liveuid: res.info.uid,
+							}
+							this.$socket.emit('conn', connObj)
+							this.connObj = connObj
+						} else {
+							this.$socket.emit('connect', '类型：用户连接')
+							let connObj = {
+								uid: this.uid,
+								token: this.token,
+								roomnum: res.info.room_num,
+								stream: res.info.stream,
+								lan: '1',
+								username: this.userInfo.user_nicename,
+							}
+							this.$socket.emit('conn', connObj)
+							this.connObj = connObj
+						}
+
+						// console.log('---out----out----out----out----out---')
+						// if (!this.$store.state.flag.singleChat) {
+						// 	console.log('---in----in----in----in----in---')
+						// 	this.sockets.subscribe('broadcastingListen', (mes) => {
+						// 		let pMes = JSON.parse(mes[0])
+						// 		console.log('---pMes----pMes----pMes----pMes----pMes---')
+						// 		if (pMes.msg[0]._method_ === 'SendGift') {
+						// 			GiftPoolBus.$emit('push', {
+						// 				id: pMes.msg[0].uid,
+						// 				giftId: pMes.msg[0].ct.giftid,
+						// 				userInfo: {
+						// 					user_nicename: pMes.msg[0].uname,
+						// 					avatar: pMes.msg[0].uhead,
+						// 				},
+						// 				giftInfo: {
+						// 					giftNum: pMes.msg[0].ct.giftcount,
+						// 					giftIcon: pMes.msg[0].ct.gifticon,
+						// 					giftName: pMes.msg[0].ct.giftname,
+						// 				},
+						// 			})
+						// 		}
+						// 		if (pMes.msg[0]._method_ === 'Liked') {
+						// 			this.battleLikeInfo = pMes.msg[0].ct
+						// 		}
+						// 		this.chatList.push(pMes)
+						// 	})
+
+						// 	this.$store.commit('SET_SINGLE_CHAT')
+						// }
+
+						console.log('---socket----socket----socket----socket----socket---')
+						console.log('socket', this.$socket)
 					})
 					.catch((err) => {
 						console.log(err)
@@ -840,71 +935,7 @@
 						})
 					})
 			},
-			createChatServerClient() {
-				this.ws = this.io(this.roomInfo.chatserver, {
-					'force new connection': true,
-				})
 
-				this.ws.on('connect', (e) => {
-					console.log('---connect----connect----connect----connect----connect---')
-					let roomObj = {
-						token: this.isEmpty(this.token) ? 1000 : this.token,
-						uid: this.isEmpty(this.uid) ? 1000 : this.uid,
-						roomnum: this.liveuid,
-						stream: this.stream,
-						liveuid: this.liveuid,
-					}
-					this.ws.emit('conn', roomObj)
-				})
-				this.ws.on('message', (mes) => {
-					// console.log('mes', mes)
-				})
-				this.ws.on('broadcastingListen', (mes) => {
-					// console.log('Mes', mes)
-					let pMes = JSON.parse(mes[0])
-					// console.log('pMes', pMes)
-					if (pMes.msg[0]._method_ === 'SendGift') {
-						GiftPoolBus.$emit('push', {
-							id: pMes.msg[0].uid,
-							giftId: pMes.msg[0].ct.giftid,
-							userInfo: {
-								user_nicename: pMes.msg[0].uname,
-								avatar: pMes.msg[0].uhead,
-							},
-							giftInfo: {
-								giftNum: pMes.msg[0].ct.giftcount,
-								giftIcon: pMes.msg[0].ct.gifticon,
-								giftName: pMes.msg[0].ct.giftname,
-							},
-						})
-					}
-					if (pMes.msg[0]._method_ === 'Liked') {
-						this.battleLikeInfo = pMes.msg[0].ct
-						// console.log('ok')
-					}
-					// console.log('---2----23---2----2----2---')
-					this.chatList.push(pMes)
-				})
-				this.ws.on('disconnect', (e) => {
-					console.log('断开链接', e)
-				})
-				this.ws.on('reconnect', (e) => {
-					console.log('重新链接', e)
-				})
-				this.ws.on('connect', (e) => {
-					console.log('建立链接', e)
-				})
-				this.ws.on('conn', (e) => {
-					console.log('进入房间', e)
-				})
-
-				this.ws.on('close', (e) => {
-					console.log('关闭', e)
-				})
-				this.ws.on('error', (e) => {
-					console.log('错误', e)
-				})
-			},
 			inputSend() {
 				// console.log('inputSend')
 				if (this.inputContent.trim().length > 0) {
@@ -931,7 +962,7 @@
 				broadcastObj.msg.push(obj)
 				broadcastObj.token = window.localStorage.getItem('token')
 
-				this.ws.emit('broadcast', broadcastObj)
+				this.$socket.emit('broadcast', broadcastObj)
 				this.inputContent = ''
 
 				this.$store.dispatch('FINISH_TASK', {

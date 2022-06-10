@@ -107,7 +107,7 @@
 			getBattleHistoryOfThem(match_id) {
 				getBattleHistoryOfThem({ match_id })
 					.then((res) => {
-						console.log('his', res)
+						// console.log('his', res)
 						this.battleOfThemList = res.info.list
 						this.teamInfo = res.info.team
 						this.statistics = res.info.statistics

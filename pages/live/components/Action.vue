@@ -105,7 +105,7 @@
 						})
 						this.sortList()
 						this.flag = true
-						console.log('res.info', this.stats)
+						// console.log('res.info', this.stats)
 					}
 				})
 			},
@@ -208,9 +208,9 @@
 		},
 		created() {
 			this.getMatchData()
-			console.log('this', this.teamInfo)
+			// console.log('this', this.teamInfo)
 			this.$nextTick(() => {
-				console.log('this', this.teamInfo)
+				// console.log('this', this.teamInfo)
 			})
 		},
 	}

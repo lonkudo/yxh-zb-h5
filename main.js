@@ -59,10 +59,20 @@ Vue.component('image-right', ImageRight)
 import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 
-store.dispatch('settings/GetSiteInfo')
-
-import io from '@/uni_modules/socket.io-client'
-Vue.prototype.io = io
+import VueSocketIO from 'vue-socket.io'
+store.dispatch('settings/GetSiteInfo').then((res) => {
+	document.title = res.site_name
+	let vueSocketIo = new VueSocketIO({
+		debug: true,
+		connection: res.chatserver, //
+		// connection: "http://8.219.63.244:1988", //
+	})
+	// 监听connect事件，设置isSuccessConnect为true
+	vueSocketIo.io.on('connect', () => {
+		store.commit('settings/SET_ISSUCCESSCONNECT', true)
+	})
+	Vue.use(vueSocketIo)
+})
 
 Vue.config.productionTip = false
 App.mpType = 'app'

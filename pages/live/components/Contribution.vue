@@ -46,9 +46,6 @@
 			getRankList() {
 				getRankList(this.stream).then((res) => {
 					if (res.code == 0) {
-						console.log('---1----1----1----1----1---')
-						console.log('---22----22----22----22----22---')
-
 						this.phblist = res.info
 					}
 				})

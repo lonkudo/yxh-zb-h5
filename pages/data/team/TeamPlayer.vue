@@ -39,7 +39,9 @@ export default {
   props: ["value", "myHeight"],
   data() {
     return {
-      tableData: [],
+      tableData: {
+        coach: { name: "", logo: "" },
+      },
     };
   },
   watch: {

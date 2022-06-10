@@ -75,32 +75,34 @@
       </view>
       <view class="text-center bg-gray padding-sm"> The Transfer Record </view>
       <view>
-        <t-tr v-for="item in transferList" :key="item.id">
-          <t-td flexWidth="1">
-            <view>
-              <view>{{ item.transfer_time }}</view>
-            </view>
-          </t-td>
-          <t-td width="130" align="right">
-            <text>{{ item.from_team_name }}</text>
-            <view class="table-cell-image">
-              <image mode="aspectFit" :src="item.from_team_logo" />
-            </view>
-          </t-td>
-          <t-td width="40">
-            <image
-              style="height: 50rpx; width: 50rpx"
-              mode="aspectFit"
-              src="@/static/styles/png/player_transfer.png"
-            />
-          </t-td>
-          <t-td width="130" align="left">
-            <view class="table-cell-image">
-              <image mode="aspectFit" :src="item.to_team_logo" />
-            </view>
-            <text>{{ item.to_team_name }}</text>
-          </t-td>
-        </t-tr>
+        <t-table>
+          <t-tr v-for="item in transferList" :key="item.id">
+            <t-td flexWidth="1">
+              <view>
+                <view>{{ item.transfer_time }}</view>
+              </view>
+            </t-td>
+            <t-td width="130" align="right">
+              <text>{{ item.from_team_name }}</text>
+              <view class="table-cell-image">
+                <image mode="aspectFit" :src="item.from_team_logo" />
+              </view>
+            </t-td>
+            <t-td width="40">
+              <image
+                style="height: 50rpx; width: 50rpx"
+                mode="aspectFit"
+                src="@/static/styles/png/player_transfer.png"
+              />
+            </t-td>
+            <t-td width="130" align="left">
+              <view class="table-cell-image">
+                <image mode="aspectFit" :src="item.to_team_logo" />
+              </view>
+              <text>{{ item.to_team_name }}</text>
+            </t-td>
+          </t-tr>
+        </t-table>
       </view>
       <view class="text-center bg-gray padding-sm"> Hornor </view>
       <view>
@@ -124,9 +126,10 @@
 <script>
 const echarts = require("echarts");
 import { getPlayerInfo, getPlayerTeamMate } from "@/api/data";
+import TTable from "../../../components/t-table/t-table.vue";
 export default {
   name: "PlayerData",
-  components: {},
+  components: { TTable },
   props: {
     value: {
       type: String,
@@ -137,7 +140,9 @@ export default {
   },
   data() {
     return {
-      info: {},
+      info: {
+        country: { name: "" },
+      },
       team: {},
       honor_list: [],
       transferList: [],

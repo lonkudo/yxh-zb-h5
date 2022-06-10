@@ -48,6 +48,12 @@ export default {
   props: {
     info: {
       type: Object,
+      // default: {
+      //   coach: {
+      //     name: "",
+      //   },
+      //   country: { name: "" },
+      // },
     },
   },
 };

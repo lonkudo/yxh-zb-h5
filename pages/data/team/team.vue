@@ -127,7 +127,11 @@ export default {
   data() {
     return {
       teamId: "",
-      teamInfo: {},
+      teamInfo: {
+        // coach: {
+        //   name: "",
+        // },
+      },
       rankInfo: {
         competition: {
           name_en: "",

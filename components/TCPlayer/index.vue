@@ -1,9 +1,9 @@
 <template name="tc-player">
 	<div class="tc-player-main">
 		<div class="cview-video-container" id="id-video-container"></div>
-		<div class="tc-player-img" v-if="showLogo">
+		<!-- <div class="tc-player-img" v-if="showLogo">
 			<img src="@/static/styles/png/avatar.png" alt="" />
-		</div>
+		</div> -->
 	</div>
 </template>
 <script>

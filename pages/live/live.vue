@@ -68,14 +68,13 @@
 				</template>
 			</template>
 			<template v-else>
-				<video
-					id="myVideo"
-					:src="liveDetail.pull"
-					object-fit="contain"
-					@play="showBack = false"
-					@pause="showBack = true"
-					@ended="showBack = true"
-				></video>
+				<player
+					ref="tcplayer"
+					:isShow="true"
+					@reload="reload($event)"
+					@loadVideoError="loadVideoError($event)"
+					@on-close="destroy"
+				></player>
 			</template>
 		</view>
 		<u-tabs-swiper
@@ -498,6 +497,9 @@
 		},
 		async onShow() {},
 		onUnload() {
+			console.log('---dnnec--rerewrew--disnect----disconnect---')
+			console.log(this.io)
+			this.ws.emit('disconnect')
 			this.ws.disconnect()
 			if (this.timer !== null) {
 				clearTimeout(this.timer)
@@ -799,7 +801,6 @@
 							}, 15000)
 						}
 						if (res.info.uid === '2') {
-							console.log('---init----init----init----init----init---')
 							this.playerInfo = {
 								pull: res.info.origin_video,
 								live: true,
@@ -840,8 +841,12 @@
 					})
 			},
 			createChatServerClient() {
-				this.ws = this.io(this.roomInfo.chatserver)
+				this.ws = this.io(this.roomInfo.chatserver, {
+					'force new connection': true,
+				})
+
 				this.ws.on('connect', (e) => {
+					console.log('---connect----connect----connect----connect----connect---')
 					let roomObj = {
 						token: this.isEmpty(this.token) ? 1000 : this.token,
 						uid: this.isEmpty(this.uid) ? 1000 : this.uid,

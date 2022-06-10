@@ -54,7 +54,7 @@
 						</view>
 					</template>
 					<template v-else>
-						<no-content></no-content>
+						<no-message :height="myHeight"></no-message>
 					</template>
 				</scroll-view>
 			</swiper-item>
@@ -87,7 +87,7 @@
 						</view>
 					</template>
 					<template v-else>
-						<no-content></no-content>
+						<no-message :height="myHeight"></no-message>
 					</template>
 				</scroll-view>
 			</swiper-item>
@@ -98,11 +98,11 @@
 <script>
 	import { myReport, wasReported } from '@/api/my'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
-	import NoContent from '@/components/NoContent/NoContent.vue'
+	import NoMessage from '../../../components/NoMessage/NoMessage.vue'
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
 		components: {
-			NoContent,
+			NoMessage,
 		},
 		data() {
 			return {
@@ -118,11 +118,13 @@
 				myReportList: [],
 				wasReportedList: [],
 				menu: [{ name: 'My reports' }, { name: 'Reported' }],
+				myHeight: 0,
 			}
 		},
 		onLoad() {
 			this.getMyReport()
 			this.getWasReported()
+			this.myHeight = this.initScrollHeight(80)
 		},
 		methods: {
 			getMyReport() {

@@ -4,7 +4,7 @@
 		v-if="!this.isEmpty(info)"
 		@tap="goLiving"
 	>
-		<view class="fs-14">
+		<view class="fs-20">
 			<view class="flex align-center justify-center">
 				<view class="flex align-center w-300 justify-start">
 					<text
@@ -54,17 +54,17 @@
 					<view class="flex align-center margin-left-xs">
 						<view class="flex align-center">
 							<text
-								class="bg-red fc-b-f fs-14 margin-right-xs"
+								class="bg-red fc-b-f fs-20 margin-right-xs"
 								v-if="control[0] && info.home_scores[2]"
 								>{{ info.home_scores[2] }}</text
 							>
 							<text
-								class="bg-gold fc-b-f fs-14 margin-right-xs"
+								class="bg-gold fc-b-f fs-20 margin-right-xs"
 								v-if="control[1] && info.home_scores[3]"
 								>{{ info.home_scores[3] }}</text
 							>
 							<text
-								class="fc-b-9 fs-14 margin-right-xs"
+								class="fc-b-9 fs-20 margin-right-xs"
 								v-if="control[2] && info.home_position"
 								>{{ '[' + info.home_position + ']' }}</text
 							>
@@ -88,17 +88,17 @@
 					<view class="flex align-center margin-right-xs">
 						<view class="flex align-center">
 							<text
-								class="fc-b-9 fs-14 margin-left-xs"
+								class="fc-b-9 fs-20 margin-left-xs"
 								v-if="control[2] && info.away_position"
 								>{{ '[' + info.away_position + ']' }}</text
 							>
 							<text
-								class="bg-gold fc-b-f fs-14 margin-left-xs"
+								class="bg-gold fc-b-f fs-20 margin-left-xs"
 								v-if="control[1] && info.away_scores[3]"
 								>{{ info.away_scores[3] }}</text
 							>
 							<text
-								class="bg-red fc-b-f fs-14 margin-left-xs"
+								class="bg-red fc-b-f fs-20 margin-left-xs"
 								v-if="control[0] && info.away_scores[2]"
 								>{{ info.away_scores[2] }}</text
 							>
@@ -111,7 +111,7 @@
 			</view>
 		</view>
 		<view
-			class="fs-14 margin-bottom-xs flex align-center fc-b-9"
+			class="fs-20 margin-bottom-xs flex align-center fc-b-9"
 			v-if="control[5] && info.odds.asia_text"
 		>
 			<view class="w-350 text-right">

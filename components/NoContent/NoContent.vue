@@ -8,7 +8,9 @@
 			class="my-img"
 			mode="aspectFit"
 		/>
-		<text class="fs-30 fc-b-9 margin-bottom-lg">No content yet</text>
+		<text class="fs-30 fc-b-9 margin-bottom-lg"
+			><slot name="default">No content yet</slot></text
+		>
 	</view>
 </template>
 

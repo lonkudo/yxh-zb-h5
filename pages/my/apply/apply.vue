@@ -79,7 +79,7 @@
 				</view>
 			</u-form-item>
 		</u-form>
-		<u-button @click="submit" class="margin-left-lg margin-right-lg"
+		<u-button @click="submit" class="margin-left-lg margin-right-lg margin-top-lg"
 			>submit</u-button
 		>
 	</view>

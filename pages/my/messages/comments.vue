@@ -54,7 +54,7 @@
 				</view>
 			</template>
 			<template v-else>
-				<no-message></no-message>
+				<no-message :height="myHeight"></no-message>
 			</template>
 		</view>
 	</scroll-view>
@@ -77,10 +77,12 @@
 					flag: false,
 				},
 				commentsList: [],
+				myHeight: 0,
 			}
 		},
 		onLoad() {
 			this.getMessages()
+			this.myHeight = this.initScrollHeight(0)
 		},
 		methods: {
 			getMessages() {

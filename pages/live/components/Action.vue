@@ -76,7 +76,7 @@
 			</view>
 		</template>
 		<template v-else>
-			<no-content></no-content>
+			<no-content :height="myHeight">No informations yet</no-content>
 		</template>
 	</scroll-view>
 </template>

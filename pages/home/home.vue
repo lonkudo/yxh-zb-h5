@@ -60,6 +60,7 @@
 					uni.getStorageSync('token')
 				).then((res) => {
 					if (res.info.notice.length > 0) {
+						console.log('res', res)
 						const info = res.info
 						this.noticeList = info.notice
 						this.newsList = info.news.splice(1, 10)

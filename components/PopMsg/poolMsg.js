@@ -117,7 +117,7 @@ class TempDisplay {
 		}
 		this.displayList.splice(this.index, 1, item)
 		this.index++
-		console.log('displayList', this.displayList)
+		// console.log('displayList', this.displayList)
 	}
 	removeItem(tmpItem) {
 		/* 显示列表里面对应的元素置换为false */
@@ -125,7 +125,7 @@ class TempDisplay {
 			return ele === tmpItem
 		})
 		this.displayList.splice(index, 1, false)
-		console.log('displayList', this.displayList)
+		// console.log('displayList', this.displayList)
 	}
 	clearList() {
 		this.displayList = []
@@ -134,6 +134,6 @@ class TempDisplay {
 			this.displayList.push(false)
 		}
 
-		console.log('displayList', this.displayList)
+		// console.log('displayList', this.displayList)
 	}
 }

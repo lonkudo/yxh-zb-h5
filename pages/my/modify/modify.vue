@@ -70,7 +70,7 @@
 	export default {
 		data() {
 			return {
-				action: '/appapi',
+				action: '/appapi/',
 				fileList: [],
 				form: {
 					avatar: '',

@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-direction align-center b-f h-500">
 		<image
-			src="/static/styles/png/NoNetwork@2x.png"
+			src="@/static/styles/png/NoNetwork@2x.png"
 			class="my-img"
 			mode="aspectFit"
 		/>
@@ -11,15 +11,11 @@
 
 <script>
 	export default {
-		name:"NoNetwork",
+		name: 'NoNetwork',
 		data() {
-			return {
-				
-			};
-		}
+			return {}
+		},
 	}
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

@@ -92,24 +92,24 @@
 	export default {
 		data() {
 			return {
-				action: '/appapi',
+				action: '/appapi/',
 				fileList: [],
 				uploadGroup: [
 					{
 						ref: 'idFront',
-						img: '/static/styles/png/idFront.png',
+						img: '@/static/styles/png/idFront.png',
 						label: 'Front Face of ID Card',
 						show: true,
 					},
 					{
 						ref: 'idBack',
-						img: '/static/styles/png/idBack.png',
+						img: '@/static/styles/png/idBack.png',
 						label: 'Back of ID Card',
 						show: true,
 					},
 					{
 						ref: 'idHand',
-						img: '/static/styles/png/idHand.png',
+						img: '@/static/styles/png/idHand.png',
 						label: 'ID Card in Hand',
 						show: true,
 					},

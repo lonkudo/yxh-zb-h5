@@ -25,7 +25,7 @@
 										v-for="(item, index) in homeLike"
 										:key="index"
 										v-if="item"
-										src="/static/styles/png/soccerball.png"
+										src="@/static/styles/png/soccerball.png"
 									></image>
 								</transition-group> -->
 							</view>
@@ -139,7 +139,7 @@
 				v-for="(item, index) in homeLike"
 				:key="index"
 				v-if="item"
-				src="/static/styles/png/soccerball.png"
+				src="@/static/styles/png/soccerball.png"
 			></image>
 		</transition-group> -->
 	</view>
@@ -298,7 +298,7 @@
 				let parent = window.document.body
 				// console.log('parent', parent)
 				let img = document.createElement('img')
-				img.src = '/static/styles/png/soccerball.png'
+				img.src = '@/static/styles/png/soccerball.png'
 				img.style.width = this.rpx2px(40) + 'px'
 				img.style.height = this.rpx2px(40) + 'px'
 				img.style.position = 'fixed'
@@ -477,7 +477,7 @@
 		height: 40rpx;
 	}
 	.full-vote {
-		background: url('/static/styles/png/bg-battle-like.png');
+		background: url('@/static/styles/png/bg-battle-like.png');
 		background-size: auto 100%;
 		background-repeat: no-repeat;
 	}

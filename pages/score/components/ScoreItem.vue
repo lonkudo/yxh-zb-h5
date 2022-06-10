@@ -28,7 +28,7 @@
 						>
 					</view>
 					<view class="flex align-center margin-left-xs">
-						<image src="/static/styles/png/corner.png" class="h-30 w-30" mode="" />
+						<image src="@/static/styles/png/corner.png" class="h-30 w-30" mode="" />
 						<text class="fc-b-9 margin-left-xs"
 							>{{ info.home_scores[4] }} - {{ info.away_scores[4] }}</text
 						>

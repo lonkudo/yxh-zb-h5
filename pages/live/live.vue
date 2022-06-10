@@ -986,15 +986,15 @@
 		background-size: 60rpx 60rpx;
 	}
 	.btn-snippet {
-		background-image: url('/static/styles/png/snippet.png');
+		background-image: url('@/static/styles/png/snippet.png');
 	}
 	.btn-gift {
-		background-image: url('/static/styles/png/gift.png');
+		background-image: url('@/static/styles/png/gift.png');
 		background-repeat: no-repeat;
 		background-position: 10rpx 10rpx;
 	}
 	.preview {
-		background-image: url('/static/styles/png/preview-bg.png');
+		background-image: url('@/static/styles/png/preview-bg.png');
 		background-repeat: no-repeat;
 		background-size: 750rpx auto;
 	}

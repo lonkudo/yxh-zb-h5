@@ -4,7 +4,7 @@
 		:style="{ height: height + 'rpx' }"
 	>
 		<image
-			src="/static/styles/png/NoContent@2x.png"
+			src="@/static/styles/png/NoContent@2x.png"
 			class="my-img"
 			mode="aspectFit"
 		/>

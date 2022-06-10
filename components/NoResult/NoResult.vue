@@ -1,7 +1,7 @@
 <template>
 	<view class="flex flex-direction align-center b-f h-500">
 		<image
-			src="/static/styles/png/NoResult@2x.png"
+			src="@/static/styles/png/NoResult@2x.png"
 			class="my-img"
 			mode="aspectFit"
 		/>

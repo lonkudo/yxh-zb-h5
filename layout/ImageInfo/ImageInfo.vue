@@ -33,7 +33,7 @@
 		props: {
 			img: {
 				type: String,
-				default: '/static/helo1.jpg',
+				default: '@/static/helo1.jpg',
 			},
 			title: {
 				type: String,

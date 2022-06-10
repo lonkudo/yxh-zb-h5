@@ -36,7 +36,7 @@
     		@live {Boolean} true:直播  false:点播
     	*/
 			init(path, live = true, options) {
-				// console.log("options", options);
+				console.log('options', options)
 				this.loadJS(path, live, options)
 			},
 			// init(path, live = true) {
@@ -80,7 +80,7 @@
 					dom.removeChild(dom.firstChild)
 					// this.player.destroy();
 				}
-				// console.log("path", path);
+				console.log('path', path)
 				this.tencentPlay = new this.TcPlayer('id-video-container', {
 					m3u8: path, // 原画m3u8 播放URL
 					// m3u8_hd: path, // 高清m3u8 播放URL
@@ -100,8 +100,8 @@
 					live: false, // 设置视频是否为直播类型，将决定是否渲染时间轴等控件，以及区分点直播的处理逻辑
 					autoplay: true, // 是否自动播放
 					coverpic: { style: 'cover', src: '' }, // 预览封面，可以传入一个图片地址或者一个包含图片地址 src 和显示样式 style 的对象。
-					controls: 'default', // default 显示默认控件，none 不显示控件，system 移动端显示系统控件
-					flash: 'true', // 是否优先使用 flash 播放视频，备注：该选项只对PC平台生效
+					controls: 'system', // default 显示默认控件，none 不显示控件，system 移动端显示系统控件
+					// flash: 'true', // 是否优先使用 flash 播放视频，备注：该选项只对PC平台生效
 					h5_flv: true, // 是否启用 flv.js 的播放 flv
 					x5_player: true, // 是否启用 TBS 的播放 flv
 					// x5_type: "h5", // 通过 video 属性 “x5-video-player-type” 声明启用同层H5播放器，支持的值：h5

@@ -62,7 +62,7 @@
 					content: '',
 					thumb: '',
 				},
-				action: '/appapi',
+				action: '/appapi/',
 				fileList: [],
 			}
 		},

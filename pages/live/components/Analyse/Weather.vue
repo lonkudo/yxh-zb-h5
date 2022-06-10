@@ -63,38 +63,38 @@
 	let weatherPics = [
 		{
 			name: 'Partly cloudy',
-			pic: '/static/styles/png/weather-cloudy.png',
+			pic: '@/static/styles/png/weather-cloudy.png',
 		},
-		{ name: 'Cloudy', pic: '/static/styles/png/weather-cloudy.png' },
+		{ name: 'Cloudy', pic: '@/static/styles/png/weather-cloudy.png' },
 		{
 			name: 'Partly cloudy/rain',
-			pic: '/static/styles/png/weather-raining.png',
+			pic: '@/static/styles/png/weather-raining.png',
 		},
-		{ name: 'Snow', pic: '/static/styles/png/weather-snowy.png' },
-		{ name: 'Sunny', pic: '/static/styles/png/weather-sunny.png' },
+		{ name: 'Snow', pic: '@/static/styles/png/weather-snowy.png' },
+		{ name: 'Sunny', pic: '@/static/styles/png/weather-sunny.png' },
 		{
 			name: 'Overcast with rain/partial thunderstorm',
-			pic: '/static/styles/png/weather-thunder.png',
+			pic: '@/static/styles/png/weather-thunder.png',
 		},
-		{ name: 'Overcast', pic: '/static/styles/png/weather-raining.png' },
-		{ name: 'Misty', pic: '/static/styles/png/weather-foggy.png' },
+		{ name: 'Overcast', pic: '@/static/styles/png/weather-raining.png' },
+		{ name: 'Misty', pic: '@/static/styles/png/weather-foggy.png' },
 		{
 			name: 'Overcast and rainy',
-			pic: '/static/styles/png/weather-drizzle.png',
+			pic: '@/static/styles/png/weather-drizzle.png',
 		},
 		{
 			name: 'Cloudy with rain',
-			pic: '/static/styles/png/weather-drizzle.png',
+			pic: '@/static/styles/png/weather-drizzle.png',
 		},
 		{
 			name: 'Cloudy with rain/partial thunderstorm',
-			pic: '/static/styles/png/weather-raining.png',
+			pic: '@/static/styles/png/weather-raining.png',
 		},
 		{
 			name: 'Partial cloud/rain and thunderstorm',
-			pic: '/static/styles/png/weather-raining.png',
+			pic: '@/static/styles/png/weather-raining.png',
 		},
-		{ name: 'Fog', pic: '/static/styles/png/weather-foggy.png' },
+		{ name: 'Fog', pic: '@/static/styles/png/weather-foggy.png' },
 	]
 
 	import { getWeather } from '@/api/live'

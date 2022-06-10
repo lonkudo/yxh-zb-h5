@@ -73,7 +73,7 @@
 									>
 										<view class="ava-60 bg-green"
 											><image
-												:src="'/static/styles/png/task_' + daily.icon_tag + '.png'"
+												:src="'@/static/styles/png/task_' + daily.icon_tag + '.png'"
 												mode=""
 												class="ava-60"
 											/>
@@ -119,7 +119,7 @@
 									>
 										<view class="ava-60 bg-green"
 											><image
-												:src="'/static/styles/png/task_' + live.icon_tag + '.png'"
+												:src="'@/static/styles/png/task_' + live.icon_tag + '.png'"
 												mode=""
 												class="ava-60"
 											/>

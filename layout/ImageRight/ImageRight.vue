@@ -25,7 +25,7 @@
 		props: {
 			img: {
 				type: String,
-				default: '/static/logo.png',
+				default: '@/static/logo.png',
 			},
 			top: {
 				type: String,

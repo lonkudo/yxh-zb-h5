@@ -159,7 +159,7 @@
 						this.awayInjury = res.info.away.injury
 						this.homeInfo = res.info.home_team
 						this.awayInfo = res.info.away_team
-						console.log('homeInfo', this.homeInfo)
+						// console.log('homeInfo', this.homeInfo)
 						if (this.homeFormation.length === 0) {
 							this.squadFlag = false
 						} else {

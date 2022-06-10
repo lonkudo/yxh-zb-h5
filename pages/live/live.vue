@@ -203,7 +203,7 @@
 								@confirm="inputSend"
 							/>
 						</view>
-						<view class="btn ava-80 btn-gift" @tap="getGiftList"></view>
+						<view class="btn ava-80 btn-gift" @tap="clickGift"></view>
 					</view>
 				</view>
 			</swiper-item>
@@ -493,9 +493,12 @@
 			this.getLiveDetail()
 			await this.enterLiveRoom()
 			this.getRoomsList()
+			this.getGiftList()
 			/*  */
 		},
-		async onShow() {},
+		async onShow() {
+			this.getCoin()
+		},
 		onUnload() {
 			if (this.timer !== null) {
 				clearTimeout(this.timer)
@@ -579,14 +582,14 @@
 				if (this.liveuid === '3') {
 					return 568
 				} else {
-					return 464
+					return 424 // -40
 				}
 			},
 			chatHeight: function () {
 				if (this.liveuid === '3') {
 					return this.initScrollHeight(728)
 				} else {
-					return this.initScrollHeight(624)
+					return this.initScrollHeight(584)
 				}
 			},
 			battleLikeHeight: function () {
@@ -600,7 +603,7 @@
 				if (this.liveuid === '3') {
 					return this.initScrollHeight(648)
 				} else {
-					return this.initScrollHeight(544)
+					return this.initScrollHeight(504)
 				}
 			},
 			snippetList: function () {
@@ -687,6 +690,12 @@
 						this.coin = parseInt(res.info.coin)
 					}
 				})
+			},
+			clickGift() {
+				this.guard()
+				if (!this.isEmpty(this.uid)) {
+					this.showGift = true
+				}
 			},
 			sendGift(giftId, giftInfo, giftNum) {
 				/* 赠送礼物 */
@@ -973,12 +982,8 @@
 			},
 			getGiftList() {
 				/* 获取礼物列表 */
-				console.log('---11----11----11----11----11---')
-				this.guard()
 				const uid = this.uid
 				const token = this.token
-				this.getCoin()
-				if (this.giftlist.length !== 0) return (this.showGift = true)
 				getGiftList({ uid, token })
 					.then((res) => {
 						if (res.code == 0) {
@@ -987,7 +992,6 @@
 							})
 							this.giftlist = create2DArray(res.info.giftlist, 8)
 							// console.log('giftList', this.giftlist)
-							this.showGift = true
 						}
 					})
 					.catch(() => {

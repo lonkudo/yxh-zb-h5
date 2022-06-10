@@ -503,6 +503,7 @@
 					soundType: 'Default',
 				},
 				displaySetting: [true, true, true],
+				mq: null,
 				/* -------------------------mqtt---------------------------- */
 			}
 		},
@@ -568,9 +569,16 @@
 				}
 			})
 		},
+		// onHide() {
+		// 	console.log('---onHide----onHide----onHide----onHide----onHide---')
+		// 	if (this.mq) this.mq.unconnect()
+		// },
+		// onUnload() {
+		// 	console.log('---unload----unload----unload----unload----unload---')
+		// 	if (this.mq) this.mq.unconnect()
+		// },
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
-
 			// 连接MQTT服务器
 			connectMqtt(host, username, password, clean, clientId, topics, callback) {
 				this.mq = new Mqtt(host, topics, callback)

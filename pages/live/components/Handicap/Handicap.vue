@@ -143,7 +143,7 @@
 			},
 			getOdds() {
 				getOdds(this.game_id).then((res) => {
-					console.log('res', res)
+					// console.log('res', res)
 					if (JSON.stringify(res.info) === '{}') {
 						this.$emit('childMsg', false)
 						return

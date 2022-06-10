@@ -150,7 +150,7 @@
 			return {}
 		},
 		created() {
-			console.log('control', this.control)
+			// console.log('control', this.control)
 		},
 		methods: {
 			subscribe() {
@@ -169,7 +169,7 @@
 						'2_' +
 						this.info.id,
 				})
-				console.log('info', this.info)
+				// console.log('info', this.info)
 			},
 			getStatus: function (val) {
 				// console.log('this', this)

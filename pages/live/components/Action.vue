@@ -99,7 +99,7 @@
 			getMatchData() {
 				getMatchData(this.game_id).then((res) => {
 					if (JSON.stringify(res.info) !== '{}' && res.info.stats) {
-						this.stats = res.info.stats
+						// this.stats = res.info.stats
 						this.stats.forEach((element) => {
 							this.setChildSort(element)
 						})

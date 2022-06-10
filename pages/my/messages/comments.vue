@@ -16,7 +16,7 @@
 						<view class="flex flex-direction justify-between">
 							<text class="fs-20 fc-b-3">{{ item.user.user_nicename }}</text>
 							<view
-								><text class="fs-12 fc-b-9 margin-right-sm">commented on me </text
+								><text class="fs-16 fc-b-9 margin-right-sm">commented on me </text
 								><text class="fs-20 fc-b-9">{{ item.addtime }}</text></view
 							>
 						</view>

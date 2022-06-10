@@ -238,7 +238,7 @@
 			}
 		},
 		async onLoad(options) {
-			this.myHeight = this.initScrollHeight(180)
+			this.myHeight = this.initScrollHeight(100)
 			this.screenHeight = this.initScrollHeight(0)
 
 			this.videoid = options.id

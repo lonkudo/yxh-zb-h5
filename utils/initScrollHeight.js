@@ -6,6 +6,8 @@
 */
 
 export default function (height) {
+	// var Height = uni.getSystemInfoSync().screenHeight
+	// var Width = uni.getSystemInfoSync().screenWidth
 	var Height = uni.getSystemInfoSync().windowHeight
 	var Width = uni.getSystemInfoSync().windowWidth
 

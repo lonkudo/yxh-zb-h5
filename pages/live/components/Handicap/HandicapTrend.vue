@@ -27,25 +27,28 @@
 							trend.up + trend.down + trend.draw
 						)
 						return (
-							<view class="progress-row fs-14">
-								<view class="progress-left fs-14 w-150">{trend.name}</view>
-								<view>
-									<view>
-										<view class="red fs-14">{trend.up} companies tend to rise</view>
-										<view class="huise fs-14" style="text-align: center">
+							<view class="progress-row fs-20">
+								<view class="progress-left fs-20 w-150">{trend.name}</view>
+								<view class="w-580">
+									<view class="flex justify-between">
+										<view class="red fs-20">{trend.up} companies tend to rise</view>
+										<view
+											class="huise fs-20 margin-left-sm margin-right-sm"
+											style="text-align: center"
+										>
 											{trend.draw} unchanged
 										</view>
-										<view class="green fs-14" style="text-align: right">
+										<view class="green fs-20" style="text-align: right">
 											{trend.down} tend to decline
 										</view>
 									</view>
-									<div class="time-line-bar fs-14">
+									<div class="time-line-bar fs-20">
 										<span
-											class="red-line fs-14"
+											class="red-line fs-20"
 											style={{ width: homeProgress + '%' }}
 										></span>
 										<span
-											class="green-line fs-14"
+											class="green-line fs-20"
 											style={{ width: awayProgress + '%' }}
 										></span>
 									</div>

@@ -63,26 +63,26 @@
 					>
 						<view class="flex flex-direction">
 							<view
-								class="margin-xs flex align-center justify-between margin-bottom-lg"
+								class="margin-xs flex align-center justify-between margin-bottom-lg padding-left-sm padding-right-sm"
 								v-for="(daily, j) in taskList.task"
 								:key="j"
 							>
 								<view class="flex">
-									<view
-										class="bg-green icon flex align-center justify-around margin-right-xs"
-									>
-										<view class="ava-60 bg-green"
+									<view class="bg-green icon flex align-center justify-around">
+										<view class="ava-80 bg-green"
 											><image
-												:src="'@/static/styles/png/task_' + daily.icon_tag + '.png'"
+												:src="
+													require('@/static/styles/png/task_' + daily.icon_tag + '.png')
+												"
 												mode=""
-												class="ava-60"
+												class="ava-80"
 											/>
 										</view>
 									</view>
 
-									<view class="flex flex-direction justify-between">
-										<text class="fs-10 fc-b-3">{{ daily.name }}</text>
-										<text class="fs-10 fc-b-9"
+									<view class="flex flex-direction justify-between margin-left-sm">
+										<text class="fs-20 fc-b-3">{{ daily.name }}</text>
+										<text class="fs-20 fc-b-9"
 											>Finish task will earn {{ daily.coin }} coins.</text
 										>
 									</view>
@@ -109,25 +109,23 @@
 					>
 						<view class="flex flex-direction">
 							<view
-								class="margin-xs flex align-center justify-between margin-bottom-lg"
+								class="margin-xs flex align-center justify-between margin-bottom-lg padding-left-sm padding-right-sm"
 								v-for="(live, j) in taskList.go"
 								:key="'l' + j"
 							>
 								<view class="flex">
-									<view
-										class="bg-green icon flex align-center justify-around margin-right-xs"
-									>
-										<view class="ava-60 bg-green"
+									<view class="bg-green icon flex align-center justify-around">
+										<view class="ava-80 bg-green"
 											><image
-												:src="'@/static/styles/png/task_' + live.icon_tag + '.png'"
+												:src="require('@/static/styles/png/task_' + live.icon_tag + '.png')"
 												mode=""
-												class="ava-60"
+												class="ava-80"
 											/>
 										</view>
 									</view>
-									<view class="flex flex-direction justify-between">
-										<text class="fs-10 fc-b-3">{{ live.name }}</text>
-										<text class="fs-10 fc-b-9"
+									<view class="flex flex-direction justify-between margin-left-sm">
+										<text class="fs-20 fc-b-3">{{ live.name }}</text>
+										<text class="fs-20 fc-b-9"
 											>Finish task will earn {{ live.coin }} coins.</text
 										>
 									</view>

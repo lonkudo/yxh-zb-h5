@@ -298,7 +298,7 @@
 				let parent = window.document.body
 				// console.log('parent', parent)
 				let img = document.createElement('img')
-				img.src = '@/static/styles/png/soccerball.png'
+				img.src = require('@/static/styles/png/soccerball.png')
 				img.style.width = this.rpx2px(40) + 'px'
 				img.style.height = this.rpx2px(40) + 'px'
 				img.style.position = 'fixed'

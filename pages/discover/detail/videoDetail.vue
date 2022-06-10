@@ -76,7 +76,7 @@
 											</text>
 										</view>
 
-										<text class="fs-14 fc-b-9 margin-left-lg">{{
+										<text class="fs-16 fc-b-9 margin-left-lg">{{
 											videoData.detail.class_name
 										}}</text>
 									</view>

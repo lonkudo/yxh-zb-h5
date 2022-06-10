@@ -259,7 +259,6 @@
 			</swiper-item>
 		</swiper>
 		<view class="football-goal-list">
-			<text>2132rjewkljrewklrew1</text>
 			<!-- key 不变化的时候render就不会刷新 -->
 			<view class="football-goal-item" v-for="goal of goalList" :key="goal.id">
 				<scores-card :item="goal" @close="close($event)"></scores-card>
@@ -509,8 +508,8 @@
 		},
 		onLoad() {
 			/* 初始化高度  */
-			this.myHeight = this.initScrollHeight(268)
-			this.myHeight2 = this.initScrollHeight(348)
+			this.myHeight = this.initScrollHeight(78)
+			this.myHeight2 = this.initScrollHeight(158)
 			/* 过滤页面传回数据,更新对应的区域,更新vuex */
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data.compe_id

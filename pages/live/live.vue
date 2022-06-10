@@ -503,6 +503,7 @@
 		},
 		async onShow() {
 			this.getCoin()
+			console.log('1123')
 		},
 		onUnload() {
 			if (this.timer !== null) {

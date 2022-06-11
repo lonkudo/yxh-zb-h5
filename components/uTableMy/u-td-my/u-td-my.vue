@@ -38,7 +38,9 @@
 				style.textAlign = this.parent.align
 				style.fontSize = this.parent.fontSize + 'rpx'
 				style.padding = this.parent.padding
-				style.borderBottom = `solid 1rpx ${this.parent.borderColor}`
+				if (this.parent.border) {
+					style.borderBottom = `solid 1rpx ${this.parent.borderColor}`
+				}
 				style.color = this.parent.color
 				this.tdStyle = style
 			}

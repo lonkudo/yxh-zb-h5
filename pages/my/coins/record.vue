@@ -394,16 +394,17 @@
 		},
 		computed: {
 			typeCombined: function () {
-				return this.goldLogsPage.type + '-' + this.goldLogsPage.mod
+				return (
+					this.goldLogsPage.type +
+					'-' +
+					this.goldLogsPage.mod +
+					'-' +
+					this.goldLogsPage.range_time
+				)
 			},
 		},
 		watch: {
 			typeCombined: function () {
-				this.goldLogs = []
-				this.goldLogsPage.p = 1
-				this.getGoldLog()
-			},
-			'goldLogsPage.range_time': function () {
 				this.goldLogs = []
 				this.goldLogsPage.p = 1
 				this.getGoldLog()

@@ -37,6 +37,8 @@
 				if (this.width) style.flex = `0 0 ${this.width}`
 				style.textAlign = this.parent.align
 				style.padding = this.parent.padding
+				if (this.parent.border) {
+				}
 				Object.assign(style, this.parent.thStyle)
 				this.thStyle = style
 			}

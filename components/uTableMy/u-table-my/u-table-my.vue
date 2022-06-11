@@ -58,6 +58,10 @@
 				type: String,
 				default: '#ffffff',
 			},
+			border: {
+				type: Boolean,
+				default: true,
+			},
 		},
 		data() {
 			return {}

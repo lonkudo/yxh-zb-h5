@@ -124,11 +124,7 @@
 			"path": "pages/my/coins/record",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "Gold Detail",
-				"navigationBarBackgroundColor": "#FFF",
-				"backgroundColor": "#FFF",
-				"navigationStyle": "default"
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -369,18 +365,16 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-		}
-	    ,{
-            "path" : "pages/live/oddsHistory",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/my/modify/modify",
+		},
+		{
+			"path": "pages/live/oddsHistory",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/my/modify/modify",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
@@ -389,10 +383,9 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-            
-        }
-        ,{
-            "path" : "pages/my/modify/nickname",
+		},
+		{
+			"path": "pages/my/modify/nickname",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
@@ -401,10 +394,9 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-            
-        }
-        ,{
-            "path" : "pages/live/livelist",
+		},
+		{
+			"path": "pages/live/livelist",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
@@ -413,9 +405,8 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-            
-        }
-    ],
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

@@ -245,6 +245,18 @@
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
+				:key="'intelligence'"
+				@touchmove.stop=""
+				:style="{ height: myHeight + 'rpx' }"
+			>
+				<intelligence
+					:myHeight="myHeight"
+					:game_id="game_id"
+					:teamInfo="teamInfo"
+				></intelligence>
+			</swiper-item>
+			<swiper-item
+				class="swiper-item"
 				:key="'Contributon'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
@@ -419,6 +431,7 @@
 	import BattleLike from './components/BattleLike/BattleLike.vue'
 	import Handicap from './components/Handicap/Handicap.vue'
 	import Player from '@/components/TCPlayer'
+	import Intelligence from './components/Intelligence.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -433,6 +446,7 @@
 			BattleLike,
 			Handicap,
 			Player,
+			Intelligence,
 		},
 		data() {
 			return {
@@ -454,6 +468,7 @@
 					{ name: 'Line-up' },
 					{ name: 'Analyse' },
 					{ name: 'Handicap' },
+					{ name: 'Intelligence' },
 					{ name: 'Contribution' },
 				],
 				showBack: true,

@@ -4,7 +4,7 @@
 		:style="{ height: myHeight + 'rpx' }"
 		:id="'content-wrap' + 'Action'"
 	>
-		<template v-if="!this.isEmpty(teamInfo) && this.flag">
+		<template v-if="!isEmpty(teamInfo) && flag">
 			<view :style="{ height: myHeight + 'rpx' }" class="b-f">
 				<view class="padding-sm b-f">Technical statistics</view>
 				<view class="b-f">
@@ -32,7 +32,7 @@
 						</u-tr>
 						<u-tr
 							class="margin-bottom-sm"
-							v-for="(item, index) in stats"
+							v-for="(item, index) in result"
 							:key="index"
 						>
 							<u-td width="8%">
@@ -93,17 +93,19 @@
 			return {
 				stats: [],
 				flag: false,
+				result: [],
 			}
 		},
 		methods: {
 			getMatchData() {
 				getMatchData(this.game_id).then((res) => {
+					console.log('---res----res----res----res----res---', res)
 					if (JSON.stringify(res.info) !== '{}' && res.info.stats) {
-						// this.stats = res.info.stats
+						this.stats = res.info.stats
 						this.stats.forEach((element) => {
 							this.setChildSort(element)
 						})
-						this.sortList()
+						this.result = this.sortList()
 						this.flag = true
 						// console.log('res.info', this.stats)
 					}

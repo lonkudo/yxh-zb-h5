@@ -96,7 +96,7 @@
           </text>
         </view>
       </view>
-      <view>
+      <view v-else>
         <view
           class="text-center padding-tb-sm"
           v-for="item of yearOptions"

@@ -280,9 +280,9 @@ export function getDynamic(data) {
 
 /**
  * @description 联赛数据
- * @param {赛事id,动态类型为1时传递} competition_id
- * @param {赛季id,动态类型为1时传递} season_id
- * @param {动态类型 1：赛事动态；2球队动态；3球员动态；4国家动态} type
+ * @param competition_id {赛事id,动态类型为1时传递}
+ * @param season_id {赛季id,动态类型为1时传递}
+ * @param type {0-未知、1-联赛、2-杯赛、3-友谊赛}
  * @returns
  */
 export function getCompetitions(data) {

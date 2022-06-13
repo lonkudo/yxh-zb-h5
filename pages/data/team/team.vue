@@ -2,18 +2,23 @@
   <view>
     <team-head :info="teamInfo">
       <template v-slot:leagueName>
-        <text class="text-white margin-right">League</text>
+        <view @tap="goPage()">
+          <text class="text-white margin-right">League</text>
+        </view>
       </template>
       <template v-slot:data>
-        <view class="text-white text-center margin-tb">
+        <view class="text-white text-center margin-tb" v-if="isCountryTeam">
+          Ranking&nbsp;{{ rankInfo.ranking }}
+        </view>
+        <view class="text-white text-center margin-tb" v-else>
           {{ rankInfo.competition.name_en }}
         </view>
         <view class="flex margin-lr-lg">
           <view class="text-white flex-sub">
             <view class="text-center">
-              {{ rankInfo.won }}&nbsp;win /{{ rankInfo.draw }}&nbsp;draw /{{
-                rankInfo.loss
-              }}&nbsp;loss
+              {{ rankInfo.won ? rankInfo.won : 0 }}&nbsp;win /{{
+                rankInfo.draw ? rankInfo.draw : 0
+              }}&nbsp;draw /{{ rankInfo.loss ? rankInfo.loss : 0 }}&nbsp;loss
             </view>
             <view class="text-center margin-top-sm">Record</view>
           </view>
@@ -60,7 +65,11 @@
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <dynamic v-model="teamId" :myHeight="myHeight"></dynamic>
+          <dynamic
+            v-model="teamId"
+            :myHeight="myHeight"
+            :isCountryTeam="isCountryTeam"
+          ></dynamic>
         </swiper-item>
         <swiper-item
           class="swiper-item"
@@ -70,10 +79,13 @@
         >
           <schedule
             :teamId="teamId"
-            :competition_id="rankInfo.competition_id"
+            :competition_id="
+              rankInfo.competition_id ? rankInfo.competition_id : 0
+            "
             :season_id="rankInfo.season_id"
             :season_year="rankInfo.season_year"
             :myHeight="myHeight"
+            :isCountryTeam="isCountryTeam"
           ></schedule>
         </swiper-item>
         <swiper-item
@@ -90,7 +102,7 @@
           :key="'team-player'"
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-player v-model="teamId" :myHeight="myHeight"></team-player>
+          <team-player v-model="teamId" :myHeight="myHeight" :isCountryTeam="isCountryTeam"></team-player>
         </swiper-item>
         <swiper-item
           class="swiper-item"
@@ -109,9 +121,9 @@ import { swiperAutoHeight, swiperUTabs } from "@/mixin";
 import { Dynamic, Schedule, TeamData, TeamPlayer, TeamTransfer } from "./index";
 import {
   getTeamDetailBasicInfo,
-  getLeagueRankPoint,
-  getFifaRankClub,
   getTeamLeagueRank,
+  getCountryInfo,
+  getCountryDetail,
 } from "@/api/data";
 export default {
   name: "Team",
@@ -127,7 +139,20 @@ export default {
   data() {
     return {
       teamId: "",
-      teamInfo: {},
+      teamInfo: {
+        competition_id: "",
+        coach: {
+          name: "",
+        },
+        country: {
+          name: "",
+        },
+        venue: {
+          name_en: "",
+          capacity: "",
+        },
+      },
+      isCountryTeam: false,
       rankInfo: {
         competition: {
           name_en: "",
@@ -144,15 +169,51 @@ export default {
     };
   },
   onLoad(option) {
-    this.teamInfo = JSON.parse(decodeURIComponent(option.item));
-    this.teamId = this.teamInfo.id;
-    this.getTeamInfo();
-    this.getTeamLeagueRank();
+    let item = JSON.parse(decodeURIComponent(option.item));
+    // this.teamInfo = JSON.parse(decodeURIComponent(option.item));
+    this.teamId = item.id;
+    // console.log(this.teamInfo);
+    if (item.isCountryTeam) {
+      this.isCountryTeam = true;
+      this.getCountryInfo();
+      this.getCountryDetail();
+    } else {
+      this.teamInfo.competition_id = item.competition_id;
+      this.getTeamInfo();
+      this.getTeamLeagueRank();
+    }
   },
   mounted() {
     this.myHeight = this.initScrollHeight(350);
   },
   methods: {
+    goPage() {
+      let item = { team_id: this.teamInfo.competition_id };
+      uni.navigateTo({
+        url:
+          "/pages/data/league/league?item=" +
+          encodeURIComponent(JSON.stringify(item)),
+      });
+    },
+    getCountryDetail() {
+      getCountryDetail(this.teamId).then((res) => {
+        this.rankInfo = res.info;
+        // console.log(this.rankInfo.five_match);
+      });
+    },
+    getCountryInfo() {
+      getCountryInfo(this.teamId).then((res) => {
+        // console.log(res.info);
+        // this.teamInfo = res.info;
+        this.teamInfo.coach.name = res.info.coach;
+        this.teamInfo.foundation_time = res.info.foundation_time;
+        this.teamInfo.country.name = res.info.country;
+        this.teamInfo.venue.name_en = res.info.venue_name;
+        this.teamInfo.venue.capacity = res.info.venue_capacity;
+        this.teamInfo.honor_list = res.info.honor_list;
+        console.log(666666666666, this.teamInfo);
+      });
+    },
     getTeamInfo() {
       getTeamDetailBasicInfo(this.teamId).then((res) => {
         this.teamInfo = res.info;
@@ -171,7 +232,7 @@ export default {
         case 0:
           return "yellow";
         case -1:
-          return "loss";
+          return "blue";
       }
     },
   },
@@ -183,7 +244,7 @@ export default {
         case 0:
           return "draw";
         case -1:
-          return "blue";
+          return "loss";
       }
     },
   },

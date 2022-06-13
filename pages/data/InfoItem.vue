@@ -19,8 +19,13 @@ export default {
             encodeURIComponent(JSON.stringify(this.infoItem)),
         });
       } else {
+        // uni.navigateTo({
+        //   url: "/pages/data/league/league",
+        // });
         uni.navigateTo({
-          url: "/pages/data/league/league",
+          url:
+            "/pages/data/league/league?item=" +
+            encodeURIComponent(JSON.stringify(this.infoItem)),
         });
       }
     },

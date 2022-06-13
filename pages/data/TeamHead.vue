@@ -1,7 +1,9 @@
 <template>
   <div :style="{ backgroundColor: bgColor }" class="team-head">
-    <view class="goback flex align-center justify-between" @tap="back()">
-      <text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text>
+    <view class="goback flex align-center justify-between">
+      <view>
+        <text class="iconfont icon-left fs-40 fc-b-f margin-sm"  @tap="back()"></text>
+      </view>
       <slot name="leagueName"></slot>
     </view>
     <view class="team-head-content">

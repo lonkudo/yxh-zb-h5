@@ -18,57 +18,115 @@
           <view class="text-center bg-gray padding-sm">
             {{ table.date }}
           </view>
-          <t-tr
-            v-for="(item, i) in table.list"
-            :key="item.id + i"
-            @change="change(item)"
-          >
-            <t-td flexWidth="1">
-              <view>
-                <view>{{ item.day }} {{ item.time }}</view>
-                <view class="f-hide w-160">
-                  {{ item.competition_name }}
+          <view v-if="isCountryTeam">
+            <t-tr
+              v-for="(item, i) in table.list"
+              :key="item.id + i"
+              @change="change(item)"
+            >
+              <t-td flexWidth="1">
+                <view>
+                  <view>{{ item.day }} {{ item.time }}</view>
+                  <view class="f-hide w-160">
+                    {{ item.competition_name }}
+                  </view>
                 </view>
-              </view>
-            </t-td>
-            <t-td width="120" align="right">
-              <text>{{ item.home_team.name }}</text>
-              <view class="table-cell-image">
-                <image mode="aspectFit" :src="item.home_team.logo" />
-              </view>
-            </t-td>
-            <t-td width="40">
-              {{ item.home_team.score }}:{{ item.away_team.score }}
-            </t-td>
-            <t-td width="120" align="left">
-              <view class="table-cell-image">
-                <image mode="aspectFit" :src="item.away_team.logo" />
-              </view>
-              <text>{{ item.away_team.name }}</text>
-            </t-td>
-          </t-tr>
+              </t-td>
+              <t-td width="120" align="right">
+                <text>{{ item.home_team_name }}</text>
+                <view class="table-cell-image">
+                  <image mode="aspectFit" :src="item.home_team_logo" />
+                </view>
+              </t-td>
+              <t-td width="40">
+                {{ item.home_scores }}:{{ item.away_scores }}
+              </t-td>
+              <t-td width="120" align="left">
+                <view class="table-cell-image">
+                  <image mode="aspectFit" :src="item.away_team_logo" />
+                </view>
+                <text>{{ item.away_team_name }}</text>
+              </t-td>
+            </t-tr>
+          </view>
+          <view v-else>
+            <t-tr
+              v-for="(item, i) in table.list"
+              :key="item.id + i"
+              @change="change(item)"
+            >
+              <t-td flexWidth="1">
+                <view>
+                  <view>{{ item.day }} {{ item.time }}</view>
+                  <view class="f-hide w-160">
+                    {{ item.competition_name }}
+                  </view>
+                </view>
+              </t-td>
+              <t-td width="120" align="right">
+                <text>{{ item.home_team.name }}</text>
+                <view class="table-cell-image">
+                  <image mode="aspectFit" :src="item.home_team.logo" />
+                </view>
+              </t-td>
+              <t-td width="40">
+                {{ item.home_team.score }}:{{ item.away_team.score }}
+              </t-td>
+              <t-td width="120" align="left">
+                <view class="table-cell-image">
+                  <image mode="aspectFit" :src="item.away_team.logo" />
+                </view>
+                <text>{{ item.away_team.name }}</text>
+              </t-td>
+            </t-tr>
+          </view>
         </view>
       </scroll-view>
     </t-table>
     <u-popup v-model="show" mode="bottom" border-radius="14" height="780">
-      <view
-        class="text-center padding-tb-sm"
-        v-for="item of yearOptions"
-        :key="item.id"
-        @click="changeSeason(item)"
-      >
-        <text :class="{ 'text-green': item.id == seasonId }">
-          {{ item.year }}
-        </text>
+      <view v-if="isCountryTeam">
+        <view
+          class="text-center padding-tb-sm"
+          v-for="item of yearOptions"
+          :key="item.id"
+          @click="changeSeason(item)"
+        >
+          <text :class="{ 'text-green': item.id == seasonId }">
+            {{ item.name }}
+          </text>
+        </view>
+      </view>
+      <view v-else>
+        <view
+          class="text-center padding-tb-sm"
+          v-for="item of yearOptions"
+          :key="item.id"
+          @click="changeSeason(item)"
+        >
+          <text :class="{ 'text-green': item.id == seasonId }">
+            {{ item.year }}
+          </text>
+        </view>
       </view>
     </u-popup>
   </view>
 </template>
 <script>
-import { getLeagueSeasonTime, getTeamDetailSchedule } from "@/api/data";
+import {
+  getLeagueSeasonTime,
+  getTeamDetailSchedule,
+  getCountrySchedule,
+} from "@/api/data";
 export default {
   name: "Schedule",
-  props: ["myHeight", "teamId", "competition_id", "season_id", "season_year"],
+  props: [
+    "myHeight",
+    "teamId",
+    "competition_id",
+    "season_id",
+    "season_year",
+    "isCountryTeam",
+  ],
   components: {},
   data() {
     return {
@@ -91,6 +149,19 @@ export default {
       },
       immediate: true,
     },
+    // 国家队获取赛程
+    teamId: {
+      handler(newVal, oldVal) {
+        console.log(this.isCountryTeam);
+        if (newVal) {
+          if (this.isCountryTeam) {
+            this.getCountrySchedule();
+          }
+        }
+      },
+      immediate: true,
+    },
+    // 普通球队获取赛程
     competition_id: {
       handler(newVal, oldVal) {
         if (newVal) {
@@ -123,12 +194,17 @@ export default {
       if (result) this.changeSeason(result);
     },
     changeSeason(item) {
-      console.log(item);
       let param = item;
-      this.seasonId = param.id;
-      this.seasonYear = param.year;
       this.show = false;
-      this.getTeamDetailSchedule();
+      if (this.isCountryTeam) {
+        this.seasonId = param.id;
+        this.seasonYear = param.name;
+        this.getCountrySchedule();
+      } else {
+        this.seasonId = param.id;
+        this.seasonYear = param.year;
+        this.getTeamDetailSchedule();
+      }
     },
     change(item) {
       uni.navigateTo({
@@ -137,9 +213,19 @@ export default {
           encodeURIComponent(JSON.stringify(item)),
       });
     },
+    getCountrySchedule() {
+      this.tableData = [];
+      getCountrySchedule(this.teamId, this.seasonId).then((res) => {
+        this.tableData = res.info.list;
+        this.yearOptions = res.info.year;
+        if (!this.seasonId) {
+          this.seasonId = this.yearOptions[0].id;
+          this.seasonYear = this.yearOptions[0].name;
+        }
+      });
+    },
     getTeamDetailSchedule() {
       this.tableData = [];
-      console.log(this.competitionId);
       getTeamDetailSchedule(
         this.teamId,
         this.competitionId,

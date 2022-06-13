@@ -11,19 +11,13 @@
 import InfoNews from "../InfoNews";
 export default {
   components: { InfoNews },
-  name: "PlayerDynamic",
-  props: ["myHeight", "value"],
-  data() {
-    return {
-      newsList: [],
-      page: 1,
-    };
-  },
+  name: "LeagueDynamic",
+  props: ["myHeight", "value", "isCountryTeam"],
   computed: {
     params() {
       return {
-        type: "3",
-        player_id: this.value,
+        type: "1",
+        competition_id: this.value,
       };
     },
   },

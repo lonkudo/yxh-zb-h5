@@ -10,7 +10,11 @@
       @scrolltolower="onreachBottom"
       :style="{ height: myHeight + 'rpx' }"
     >
-      <t-tr v-for="(item, i) in tableList" :key="item.id + i">
+      <t-tr
+        v-for="(item, i) in tableList"
+        :key="item.id + i"
+        @change="goPage(item)"
+      >
         <t-td width="80">{{ item.ranking }}</t-td>
         <t-td flexWidth="1" align="left">
           <view class="table-cell-image">
@@ -39,6 +43,14 @@ export default {
     this.getFifaRankCountry();
   },
   methods: {
+    goPage(item) {
+      item.isCountryTeam = true;
+      uni.navigateTo({
+        url:
+          "/pages/data/team/team?item=" +
+          encodeURIComponent(JSON.stringify(item)),
+      });
+    },
     getFifaRankCountry({ p = this.page, num = 20 } = {}) {
       getFifaRankCountry({ p, num }).then((res) => {
         this.tableList = [...this.tableList, ...res.info];

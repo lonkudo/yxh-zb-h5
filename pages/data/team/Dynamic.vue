@@ -12,19 +12,31 @@ import InfoNews from "../InfoNews";
 export default {
   components: { InfoNews },
   name: "Dynamic",
-  props: ["myHeight", "value"],
+  props: ["myHeight", "value", "isCountryTeam"],
   data() {
     return {
       newsList: [],
       page: 1,
+      params: {},
     };
   },
-  computed: {
-    params() {
-      return {
-        type: "2",
-        team_id: this.value,
-      };
+  watch: {
+    isCountryTeam: {
+      handler(newVal, oldVal) {
+        // console.log(newVal);
+        if (newVal) {
+          this.params = {
+            type: "4",
+            country_id: this.value,
+          };
+        } else {
+          this.params = {
+            type: "2",
+            team_id: this.value,
+          };
+        }
+      },
+      immediate: true,
     },
   },
 };

@@ -143,6 +143,8 @@
 	</scroll-view>
 </template>
 <script>
+	// console.log = function () {}
+
 	import { getIntelligence } from '@/api/live'
 	import NoContent from '../../../components/NoContent/NoContent.vue'
 	export default {
@@ -160,7 +162,7 @@
 			}
 		},
 		created() {
-			console.log('', this.teamInfo)
+			console.log('team', this.teamInfo)
 		},
 		watch: {
 			teamInfo: {

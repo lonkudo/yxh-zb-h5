@@ -82,17 +82,30 @@
 				></player>
 			</template>
 		</view>
-		<u-tabs-swiper
-			ref="uTabs"
-			:list="menu"
-			:current="current"
-			@change="tabsChange"
-			:is-scroll="false"
-			swiperWidth="750"
-			active-color="#02b875"
-			font-size="24"
-			gutter="40"
-		></u-tabs-swiper>
+		<view class="p-r">
+			<u-tabs-swiper
+				ref="uTabs"
+				:list="menu"
+				:current="current"
+				@change="tabsChange"
+				:is-scroll="false"
+				swiperWidth="750"
+				active-color="#02b875"
+				font-size="24"
+				gutter="40"
+			></u-tabs-swiper>
+			<view
+				class="p-a flex flex-direction right-0 top-0 align-center justify-center h-80 w-80"
+				style="z-index: 400"
+				v-if="liveDetail.is_attention === 0"
+			>
+				<image :src="liveDetail.anchor.avatar" class="ava-60" mode="" />
+				<view
+					class="p-a bottom add-anchor-btn bg-green flex align-center justify-center bottom-5"
+					><text class="iconfont icon-add-bold fs-16 fc-b-f"></text
+				></view>
+			</view>
+		</view>
 		<swiper
 			:current="swiperCurrent"
 			@transition="transition"
@@ -298,11 +311,11 @@
 				<view
 					class="flex align-center h-60 justify-between padding-left-sm padding-right-sm b-f"
 				>
-					<u-tabs-swiper
+					<my-tabs-swiper
 						:list="[{ name: 'Gift' }]"
 						swiperWidth="750"
 						active-color="#02b875"
-					></u-tabs-swiper>
+					></my-tabs-swiper>
 				</view>
 				<swiper
 					class="swiper"
@@ -410,6 +423,8 @@
 </template>
 
 <script>
+	// console.log = function(){}
+
 	import {
 		getLiveDetail,
 		enterLiveRoom,
@@ -432,6 +447,7 @@
 	import Handicap from './components/Handicap/Handicap.vue'
 	import Player from '@/components/TCPlayer'
 	import Intelligence from './components/Intelligence.vue'
+	// import MyTabsSwiper from '@/components/my-tabs-swiper/my-tabs-swiper.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -447,6 +463,7 @@
 			Handicap,
 			Player,
 			Intelligence,
+			// MyTabsSwiper,
 		},
 		data() {
 			return {
@@ -572,15 +589,15 @@
 				let startTimestamp = this.toNum(this.liveDetail.starttime) * 1000
 				let curTimestamp = Number(new Date())
 				let gap = curTimestamp - startTimestamp
-				console.log(
-					'gap',
-					curTimestamp,
-					startTimestamp,
-					gap,
-					'status:',
-					this.livingStatus
-				)
-				console.log('gap', new Date(curTimestamp), new Date(startTimestamp))
+				// console.log(
+				// 	'gap',
+				// 	curTimestamp,
+				// 	startTimestamp,
+				// 	gap,
+				// 	'status:',
+				// 	this.livingStatus
+				// )
+				// console.log('gap', new Date(curTimestamp), new Date(startTimestamp))
 				if (this.livingStatus) {
 					return 'living'
 				} else if (gap > 10800000) {
@@ -837,6 +854,7 @@
 				getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id)
 					.then((res) => {
 						this.liveDetail = res.info
+						console.log('liveDetail', this.liveDetail)
 						let num = this.toNum(res.info.status_id)
 						if (num > 1 && num < 8) {
 							this.livingStatus = true
@@ -1057,5 +1075,10 @@
 		background-image: url('@/static/styles/png/preview-bg.png');
 		background-repeat: no-repeat;
 		background-size: 750rpx auto;
+	}
+	.add-anchor-btn {
+		width: 40rpx;
+		height: 20rpx;
+		border-radius: 10rpx;
 	}
 </style>

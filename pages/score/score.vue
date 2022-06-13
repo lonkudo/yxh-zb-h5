@@ -1088,7 +1088,11 @@
 				if (this.loadingFlag) return
 				this.loadingFlag = true // 防止重复发送请求
 				if (target === 'finished') {
-					if (this.finishedPage.isAll) return (this.statusFinished = 'nomore')
+					if (this.finishedPage.isAll) {
+						this.statusFinished = 'nomore'
+						this.loadingFlag = false
+						return
+					}
 					this.statusFinished = 'loading'
 					this.finishedPage.p += 1
 					this.getScores(
@@ -1106,7 +1110,11 @@
 					)
 				}
 				if (target === 'future') {
-					if (this.futurePage.isAll) return (this.statusFuture = 'nomore')
+					if (this.futurePage.isAll) {
+						this.statusFuture = 'nomore'
+						this.loadingFlag = false
+						return
+					}
 					this.statusFuture = 'loading'
 					this.futurePage.p += 1
 					this.getScores('futureList', this.futurePage, 'futurePage.isAll', () => {
@@ -1119,7 +1127,11 @@
 					})
 				}
 				if (target === 'reserved') {
-					if (this.appointmentPage.isAll) return (this.statusAppointment = 'nomore')
+					if (this.appointmentPage.isAll) {
+						this.statusAppointment = 'nomore'
+						this.loadingFlag = false
+						return
+					}
 					this.statusAppointment = 'loading'
 					this.appointmentPage.p += 1
 					this.reservationNext(() => {

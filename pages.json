@@ -418,6 +418,18 @@
 			}
             
         }
+        ,{
+            "path" : "pages/my/fans/fans",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Fans",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

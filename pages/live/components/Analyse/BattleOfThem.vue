@@ -24,7 +24,7 @@
 					:draw="this.statistics.draw"
 					:lose="this.statistics.loss"
 				></color-bar>
-				<u-table
+				<u-table-my
 					font-size="20"
 					:th-style="{
 						fontSize: '20rpx',
@@ -32,32 +32,36 @@
 						backgroundColor: '#fff',
 						color: '#777',
 					}"
-					border-color="#fff"
+					:border="false"
 				>
-					<u-tr class="u-tr">
-						<u-th class="u-th">Date</u-th>
-						<u-th class="u-th">Event</u-th>
-						<u-th class="u-th">Host Team</u-th>
-						<u-th class="u-th">Score</u-th>
-						<u-th class="u-th">Guest Team</u-th>
-					</u-tr>
-					<u-tr class="u-tr" v-for="(item, index) in battleOfThemList" :key="index">
-						<u-td class="u-td"
+					<u-tr-my class="u-tr-my">
+						<u-th-my class="u-th-my">Date</u-th-my>
+						<u-th-my class="u-th-my">Event</u-th-my>
+						<u-th-my class="u-th-my">Host Team</u-th-my>
+						<u-th-my class="u-th-my">Score</u-th-my>
+						<u-th-my class="u-th-my">Guest Team</u-th-my>
+					</u-tr-my>
+					<u-tr-my
+						class="u-tr-my"
+						v-for="(item, index) in battleOfThemList"
+						:key="index"
+					>
+						<u-td-my class="u-td-my"
 							><view class="flex flex-direction align-center justify-center h-50">{{
 								item.match_time
-							}}</view></u-td
+							}}</view></u-td-my
 						>
-						<u-td class="u-td"
+						<u-td-my class="u-td-my"
 							><view class="flex flex-direction align-center justify-center h-50">{{
 								item.competition_name
-							}}</view></u-td
+							}}</view></u-td-my
 						>
-						<u-td class="u-td"
+						<u-td-my class="u-td-my"
 							><view class="flex flex-direction align-center justify-center h-50">{{
 								item.home_team.name
-							}}</view></u-td
+							}}</view></u-td-my
 						>
-						<u-td class="u-td flex flex-direction align-center justify-center">
+						<u-td-my class="u-td-my flex flex-direction align-center justify-center">
 							<template v-if="teamInfo.home.id === item.home_team.id">
 								<small-color-bar
 									:home="item.home_team.score"
@@ -71,14 +75,14 @@
 									reverse
 								></small-color-bar>
 							</template>
-						</u-td>
-						<u-td class="u-td"
+						</u-td-my>
+						<u-td-my class="u-td-my"
 							><view class="flex flex-direction align-center justify-center h-50">{{
 								item.away_team.name
-							}}</view></u-td
+							}}</view></u-td-my
 						>
-					</u-tr>
-				</u-table>
+					</u-tr-my>
+				</u-table-my>
 			</view>
 		</template>
 	</view>
@@ -107,7 +111,7 @@
 			getBattleHistoryOfThem(match_id) {
 				getBattleHistoryOfThem({ match_id })
 					.then((res) => {
-						console.log('his', res)
+						// console.log('his', res)
 						this.battleOfThemList = res.info.list
 						this.teamInfo = res.info.team
 						this.statistics = res.info.statistics

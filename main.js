@@ -11,17 +11,29 @@ import Request from '@/utils/request.js'
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
-import { tTable, tTh, tTr, tTd } from "@/components/t-table";
+import { tTable, tTh, tTr, tTd } from '@/components/t-table'
 Vue.component('t-table', tTable)
 Vue.component('t-th', tTh)
 Vue.component('t-tr', tTr)
 Vue.component('t-td', tTd)
 
+import UTableMy from '@/components/uTableMy/u-table-my/u-table-my.vue'
+import UTrMy from '@/components/uTableMy/u-tr-my/u-tr-my.vue'
+import UThMy from '@/components/uTableMy/u-th-my/u-th-my.vue'
+import UTdMy from '@/components/uTableMy/u-td-my/u-td-my.vue'
+Vue.component('u-table-my', UTableMy)
+Vue.component('u-tr-my', UTrMy)
+Vue.component('u-td-my', UTdMy)
+Vue.component('u-th-my', UThMy)
+
+import '@/static/styles/css/common.scss' // global css
 
 import { formatGiven } from '@/utils/index.js'
 Vue.filter('formatGiven', formatGiven)
 Vue.prototype.formatGiven = formatGiven
 
+import { TcPlayer } from '@/utils/TcPlayer-module-2.4.1'
+Vue.prototype.TcPlayer = TcPlayer
 import isEmpty from '@/utils/isEmpty.js'
 Vue.prototype.isEmpty = isEmpty
 import toNum from '@/utils/toNum.js'
@@ -47,10 +59,20 @@ Vue.component('image-right', ImageRight)
 import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
 
-store.dispatch('settings/GetSiteInfo')
-
-import io from '@/uni_modules/socket.io-client'
-Vue.prototype.io = io
+import VueSocketIO from 'vue-socket.io'
+store.dispatch('settings/GetSiteInfo').then((res) => {
+	document.title = res.site_name
+	let vueSocketIo = new VueSocketIO({
+		debug: true,
+		connection: res.chatserver, //
+		// connection: "http://8.219.63.244:1988", //
+	})
+	// 监听connect事件，设置isSuccessConnect为true
+	vueSocketIo.io.on('connect', () => {
+		store.commit('settings/SET_ISSUCCESSCONNECT', true)
+	})
+	Vue.use(vueSocketIo)
+})
 
 Vue.config.productionTip = false
 App.mpType = 'app'

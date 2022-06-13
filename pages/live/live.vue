@@ -1,17 +1,25 @@
 <template>
 	<view>
-		<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
-			><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-			><text class="fc-b-f" v-if="liveDetail.uid !== '3'">{{
-				liveDetail.title
-			}}</text>
-		</view>
 		<view
-			class="switch flex align-center"
-			v-show="showBack"
-			@tap="showAnchor = true"
-			><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
+			class="control-bar flex align-center justify-between"
+			@tap="toggleControl"
+		>
+			<view class="flex align-center" @tap.stop="go('back')" v-show="showBack"
+				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
+				><text
+					class="fc-b-f"
+					v-if="liveDetail.uid !== '3' && liveDetail.uid !== '2'"
+					>{{ liveDetail.title }}</text
+				>
+			</view>
+			<view
+				class="flex align-center"
+				@tap.stop="showAnchor = true"
+				v-show="showBack"
+				><text class="iconfont icon-qiehuan fs-40 fc-b-f margin-sm"></text>
+			</view>
 		</view>
+		<!-- 视频区域 -->
 		<view class="video-container" :style="{ height: videoHeight + 'rpx' }">
 			<template v-if="liveDetail.uid === '3'">
 				<web-view
@@ -19,15 +27,59 @@
 					:style="{ height: '568rpx' }"
 				></web-view>
 			</template>
+			<template v-else-if="liveDetail.uid === '2'">
+				<template v-if="livingStatus">
+					<player
+						ref="tcplayer"
+						:isShow="true"
+						@reload="reload($event)"
+						@loadVideoError="loadVideoError($event)"
+						@on-close="destroy"
+					></player>
+				</template>
+				<template v-else>
+					<view class="w100 h100 preview flex flex-direction align-center fc-b-f">
+						<text class="margin-top-sm">{{ liveDetail.competition_name }}</text>
+						<text class="margin-top-sm margin-bottom-sm">{{
+							liveDetail.starttime | formatGiven('yyyy-MM-dd hh:ss')
+						}}</text>
+						<view class="flex margin-top-lg justify-around">
+							<view class="flex flex-direction w-250 align-center">
+								<image :src="liveDetail.home_logo" mode="" class="w-120 h-120" />
+								<text
+									class="margin-top-sm w-250 text-center"
+									style="word-break: break-word"
+									>{{ liveDetail.home_name }}</text
+								>
+							</view>
+							<view class="flex flex-direction align-center margin-top-lg">
+								<text class="w-150 text-center fs-20">{{ timeGap }}</text>
+								<view class="fs-36 fw-6 margin-top-sm">
+									<text>{{ liveDetail.home_scores }}</text>
+									<text class="margin-left-sm margin-right-sm">-</text>
+									<text>{{ liveDetail.away_scores }}</text>
+								</view>
+							</view>
+							<view class="flex flex-direction w-250 align-center">
+								<image :src="liveDetail.away_logo" mode="" class="w-120 h-120" />
+								<text
+									class="margin-top-sm w-250 text-center"
+									style="word-break: break-word"
+									>{{ liveDetail.away_name }}</text
+								>
+							</view>
+						</view>
+					</view>
+				</template>
+			</template>
 			<template v-else>
-				<video
-					id="myVideo"
-					:src="liveDetail.pull"
-					object-fit="contain"
-					@play="showBack = false"
-					@pause="showBack = true"
-					@ended="showBack = true"
-				></video>
+				<player
+					ref="tcplayer"
+					:isShow="true"
+					@reload="reload($event)"
+					@loadVideoError="loadVideoError($event)"
+					@on-close="destroy"
+				></player>
 			</template>
 		</view>
 		<u-tabs-swiper
@@ -156,7 +208,7 @@
 								@confirm="inputSend"
 							/>
 						</view>
-						<view class="btn ava-80 btn-gift" @tap="getGiftList"></view>
+						<view class="btn ava-80 btn-gift" @tap="clickGift"></view>
 					</view>
 				</view>
 			</swiper-item>
@@ -366,6 +418,7 @@
 	import Action from './components/Action.vue'
 	import BattleLike from './components/BattleLike/BattleLike.vue'
 	import Handicap from './components/Handicap/Handicap.vue'
+	import Player from '@/components/TCPlayer'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -379,9 +432,14 @@
 			Action,
 			BattleLike,
 			Handicap,
+			Player,
 		},
 		data() {
 			return {
+				// 视屏加载失败
+				reloadBtnShow: false,
+				// 视屏加载失败
+				playerError: false,
 				liveuid: '',
 				stream: '',
 				game_id: '',
@@ -426,6 +484,9 @@
 				teamInfo: {},
 				battleLikeInfo: {},
 				livingStatus: false,
+				timer: null, // 用于直播间任务计时。
+				playerInfo: {},
+				connObj: {},
 			}
 		},
 		async onLoad(options) {
@@ -436,15 +497,60 @@
 			// this.chatHeight = this.initScrollHeight(624)
 			this.getLiveDetail()
 			await this.enterLiveRoom()
-			this.createChatServerClient()
 			this.getRoomsList()
+			this.getGiftList()
 			/*  */
 		},
-		async onShow() {},
-		onUnload() {
-			this.ws.disconnect()
+		async onShow() {
+			this.getCoin()
+			console.log('1123')
 		},
-		onHide() {},
+		onUnload() {
+			if (this.timer !== null) {
+				clearTimeout(this.timer)
+				this.timer = null
+			}
+		},
+		sockets: {
+			disconnect() {
+				// this.$socket.connected = false;
+				console.log('socket.io断开链接1')
+			}, //检测socket断开链接
+			reconnect() {
+				console.log('socket.io重新链接')
+				// this.sockets.reconnect();
+			},
+			connect(data) {
+				console.log('socket.io建立链接', data)
+			},
+			// 服务端发送连接信息
+			conn(data) {
+				console.log('进入直播间ok表示成功', data)
+			},
+			broadcastingListen(mes) {
+				let pMes = JSON.parse(mes[0])
+				console.log('---pMes----pMes----pMes----pMes----pMes---')
+				if (pMes.msg[0]._method_ === 'SendGift') {
+					GiftPoolBus.$emit('push', {
+						id: pMes.msg[0].uid,
+						giftId: pMes.msg[0].ct.giftid,
+						userInfo: {
+							user_nicename: pMes.msg[0].uname,
+							avatar: pMes.msg[0].uhead,
+						},
+						giftInfo: {
+							giftNum: pMes.msg[0].ct.giftcount,
+							giftIcon: pMes.msg[0].ct.gifticon,
+							giftName: pMes.msg[0].ct.giftname,
+						},
+					})
+				}
+				if (pMes.msg[0]._method_ === 'Liked') {
+					this.battleLikeInfo = pMes.msg[0].ct
+				}
+				this.chatList.push(pMes)
+			},
+		},
 		computed: {
 			timeGap: function () {
 				if (this.isEmpty(this.liveDetail)) return ''
@@ -463,7 +569,7 @@
 				if (this.livingStatus) {
 					return 'living'
 				} else if (gap > 10800000) {
-					return 'Ended'
+					return 'End'
 				} else if (gap > -600000 && gap < 0) {
 					return (
 						Math.floor(-gap / 60000)
@@ -482,18 +588,18 @@
 				if (this.liveuid === '3') {
 					return 568
 				} else {
-					return 464
+					return 424 // -40
 				}
 			},
 			chatHeight: function () {
 				if (this.liveuid === '3') {
 					return this.initScrollHeight(728)
 				} else {
-					return this.initScrollHeight(624)
+					return this.initScrollHeight(584)
 				}
 			},
 			battleLikeHeight: function () {
-				if (this.$store.state.live.battleLikeFlag) {
+				if (this.$store.state.flag.battleLikeFlag) {
 					return 230
 				} else {
 					return 80
@@ -503,7 +609,7 @@
 				if (this.liveuid === '3') {
 					return this.initScrollHeight(648)
 				} else {
-					return this.initScrollHeight(544)
+					return this.initScrollHeight(504)
 				}
 			},
 			snippetList: function () {
@@ -511,6 +617,28 @@
 			},
 		},
 		methods: {
+			/***初始化直播播放器
+		   		@path {String} m3u8地址,
+		   		@live {Boolean} true:直播  false:点播
+		   	*/
+			initPlayer() {
+				this.$refs.tcplayer.init(this.playerInfo.pull, this.playerInfo.live)
+			},
+			// 播放器销毁
+			destroy() {
+				this.$refs.tcplayer.destroy()
+			},
+			loadVideoError(flag) {
+				this.playerError = flag
+				// if (flag) this.getAnchorRecommend()
+			},
+			reload(flag) {
+				this.reloadBtnShow = flag
+			},
+			reloadHandle() {
+				this.reloadBtnShow = false
+				this.initPlayer()
+			},
 			dianzan(team) {
 				this.guard()
 				console.log('team', team)
@@ -526,7 +654,7 @@
 				})
 				obj.uid = this.uid
 				broadcastObj.msg.push(obj)
-				this.ws.emit('broadcast', broadcastObj)
+				this.$socket.emit('broadcast', broadcastObj)
 			},
 			switchRoom(item) {
 				uni.navigateTo({
@@ -563,12 +691,17 @@
 
 			getCoin() {
 				/* 获取账户金币余额金币 */
-				console.log('---getCOin----getCOin----getCOin----getCOin----getCOin---')
 				getCoin(this.uid, this.token).then((res) => {
 					if (res.code == 0) {
 						this.coin = parseInt(res.info.coin)
 					}
 				})
+			},
+			clickGift() {
+				this.guard()
+				if (!this.isEmpty(this.uid)) {
+					this.showGift = true
+				}
 			},
 			sendGift(giftId, giftInfo, giftNum) {
 				/* 赠送礼物 */
@@ -643,7 +776,13 @@
 							obj.livename = '000'
 							obj.action = '0'
 							broadcastObj.msg.push(obj)
-							this.ws.emit('broadcast', broadcastObj)
+							this.$socket.emit('broadcast', broadcastObj)
+
+							this.$store.dispatch('FINISH_TASK', {
+								type: 2,
+								taskid: 3,
+								that: this,
+							})
 						} else {
 							this.$u.toast(res.msg)
 						}
@@ -700,6 +839,95 @@
 								logo: res.info.away_logo,
 							},
 						}
+
+						if (!this.isEmpty(this.uid)) {
+							this.timer = setTimeout(() => {
+								this.$store.dispatch('FINISH_TASK', {
+									type: 2,
+									taskid: 1,
+									that: this,
+								})
+							}, 15000)
+						}
+						if (res.info.uid === '2') {
+							this.playerInfo = {
+								pull: res.info.origin_video,
+								live: true,
+							}
+							this.$nextTick(() => {
+								this.initPlayer()
+							})
+						} else if (res.info.uid !== '3') {
+							/* 个人直播 */
+							this.playerInfo = {
+								pull: res.info.pull,
+								live: true,
+							}
+							this.$nextTick(() => {
+								this.initPlayer()
+							})
+						}
+
+						this.$socket.removeAllListeners()
+
+						if (this.isEmpty(this.token)) {
+							// 连接socket
+							this.$socket.emit('connect', '类型：游客连接3')
+							let connObj = {
+								token: '1000',
+								uid: 1000,
+								roomnum: res.info.room_num,
+								stream: res.info.stream,
+								liveuid: res.info.uid,
+							}
+							this.$socket.emit('conn', connObj)
+							this.connObj = connObj
+						} else {
+							this.$socket.emit('connect', '类型：用户连接')
+							let connObj = {
+								uid: this.uid,
+								token: this.token,
+								roomnum: res.info.room_num,
+								stream: res.info.stream,
+								lan: '1',
+								username: this.userInfo.user_nicename,
+							}
+							this.$socket.emit('conn', connObj)
+							this.connObj = connObj
+						}
+
+						// console.log('---out----out----out----out----out---')
+						// if (!this.$store.state.flag.singleChat) {
+						// 	console.log('---in----in----in----in----in---')
+						// 	this.sockets.subscribe('broadcastingListen', (mes) => {
+						// 		let pMes = JSON.parse(mes[0])
+						// 		console.log('---pMes----pMes----pMes----pMes----pMes---')
+						// 		if (pMes.msg[0]._method_ === 'SendGift') {
+						// 			GiftPoolBus.$emit('push', {
+						// 				id: pMes.msg[0].uid,
+						// 				giftId: pMes.msg[0].ct.giftid,
+						// 				userInfo: {
+						// 					user_nicename: pMes.msg[0].uname,
+						// 					avatar: pMes.msg[0].uhead,
+						// 				},
+						// 				giftInfo: {
+						// 					giftNum: pMes.msg[0].ct.giftcount,
+						// 					giftIcon: pMes.msg[0].ct.gifticon,
+						// 					giftName: pMes.msg[0].ct.giftname,
+						// 				},
+						// 			})
+						// 		}
+						// 		if (pMes.msg[0]._method_ === 'Liked') {
+						// 			this.battleLikeInfo = pMes.msg[0].ct
+						// 		}
+						// 		this.chatList.push(pMes)
+						// 	})
+
+						// 	this.$store.commit('SET_SINGLE_CHAT')
+						// }
+
+						console.log('---socket----socket----socket----socket----socket---')
+						console.log('socket', this.$socket)
 					})
 					.catch((err) => {
 						console.log(err)
@@ -722,67 +950,7 @@
 						})
 					})
 			},
-			createChatServerClient() {
-				this.ws = this.io(this.roomInfo.chatserver)
-				this.ws.on('connect', (e) => {
-					let roomObj = {
-						token: this.isEmpty(this.token) ? 1000 : this.token,
-						uid: this.isEmpty(this.uid) ? 1000 : this.uid,
-						roomnum: this.liveuid,
-						stream: this.stream,
-						liveuid: this.liveuid,
-					}
-					this.ws.emit('conn', roomObj)
-				})
-				this.ws.on('message', (mes) => {
-					// console.log('mes', mes)
-				})
-				this.ws.on('broadcastingListen', (mes) => {
-					// console.log('Mes', mes)
-					let pMes = JSON.parse(mes[0])
-					// console.log('pMes', pMes)
-					if (pMes.msg[0]._method_ === 'SendGift') {
-						GiftPoolBus.$emit('push', {
-							id: pMes.msg[0].uid,
-							giftId: pMes.msg[0].ct.giftid,
-							userInfo: {
-								user_nicename: pMes.msg[0].uname,
-								avatar: pMes.msg[0].uhead,
-							},
-							giftInfo: {
-								giftNum: pMes.msg[0].ct.giftcount,
-								giftIcon: pMes.msg[0].ct.gifticon,
-								giftName: pMes.msg[0].ct.giftname,
-							},
-						})
-					}
-					if (pMes.msg[0]._method_ === 'Liked') {
-						this.battleLikeInfo = pMes.msg[0].ct
-						// console.log('ok')
-					}
-					// console.log('---2----23---2----2----2---')
-					this.chatList.push(pMes)
-				})
-				this.ws.on('disconnect', (e) => {
-					console.log('断开链接', e)
-				})
-				this.ws.on('reconnect', (e) => {
-					console.log('重新链接', e)
-				})
-				this.ws.on('connect', (e) => {
-					console.log('建立链接', e)
-				})
-				this.ws.on('conn', (e) => {
-					console.log('进入房间', e)
-				})
 
-				this.ws.on('close', (e) => {
-					console.log('关闭', e)
-				})
-				this.ws.on('error', (e) => {
-					console.log('错误', e)
-				})
-			},
 			inputSend() {
 				// console.log('inputSend')
 				if (this.inputContent.trim().length > 0) {
@@ -808,17 +976,20 @@
 				obj.level = JSON.parse(window.localStorage.getItem('userInfo')).level
 				broadcastObj.msg.push(obj)
 				broadcastObj.token = window.localStorage.getItem('token')
-				this.ws.emit('broadcast', broadcastObj)
+
+				this.$socket.emit('broadcast', broadcastObj)
 				this.inputContent = ''
+
+				this.$store.dispatch('FINISH_TASK', {
+					type: 2,
+					taskid: 2,
+					that: this,
+				})
 			},
 			getGiftList() {
 				/* 获取礼物列表 */
-				console.log('---11----11----11----11----11---')
-				this.guard()
 				const uid = this.uid
 				const token = this.token
-				if (this.giftlist.length !== 0) return (this.showGift = true)
-				this.getCoin()
 				getGiftList({ uid, token })
 					.then((res) => {
 						if (res.code == 0) {
@@ -827,12 +998,14 @@
 							})
 							this.giftlist = create2DArray(res.info.giftlist, 8)
 							// console.log('giftList', this.giftlist)
-							this.showGift = true
 						}
 					})
 					.catch(() => {
 						this.$u.toast('error')
 					})
+			},
+			toggleControl() {
+				this.showBack = !this.showBack
 			},
 		},
 	}
@@ -842,19 +1015,15 @@
 	.video-container {
 		width: 750rpx;
 	}
-	.goback {
+	.control-bar {
 		position: fixed;
 		top: 0;
 		left: 0;
-		z-index: 10;
-	}
-	.switch {
-		position: fixed;
-		top: 0;
 		right: 0;
-		z-index: 10;
+		height: 100rpx;
+		z-index: 100;
 	}
-	#myVideo {
+	.go #myVideo {
 		width: 100%;
 		height: 100%;
 	}
@@ -862,11 +1031,16 @@
 		background-size: 60rpx 60rpx;
 	}
 	.btn-snippet {
-		background-image: url('/static/styles/png/snippet.png');
+		background-image: url('@/static/styles/png/snippet.png');
 	}
 	.btn-gift {
-		background-image: url('/static/styles/png/gift.png');
+		background-image: url('@/static/styles/png/gift.png');
 		background-repeat: no-repeat;
 		background-position: 10rpx 10rpx;
+	}
+	.preview {
+		background-image: url('@/static/styles/png/preview-bg.png');
+		background-repeat: no-repeat;
+		background-size: 750rpx auto;
 	}
 </style>

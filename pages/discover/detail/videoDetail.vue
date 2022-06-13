@@ -3,7 +3,7 @@
 		<template v-if="!this.isEmpty(videoData)">
 			<view class="goback flex align-center" v-show="showBack" @tap="go('back')"
 				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-				><text class="fc-b-f">{{ videoData.detail.title }}</text>
+				><text class="fc-b-f w-600 f-hide">{{ videoData.detail.title }}</text>
 			</view>
 			<view class="video-container">
 				<video
@@ -63,8 +63,10 @@
 											mana
 										></my-button>
 									</view>
-									<view class="margin-bottom-sm f-hide w-700">
-										<text>{{ videoData.detail.title }}</text>
+									<view class="margin-bottom-sm">
+										<text style="word-break: break-all">{{
+											videoData.detail.title
+										}}</text>
 									</view>
 									<view class="flex align-center margin-bottom-sm">
 										<view class="flex align-center">
@@ -74,7 +76,7 @@
 											</text>
 										</view>
 
-										<text class="fs-14 fc-b-9 margin-left-lg">{{
+										<text class="fs-16 fc-b-9 margin-left-lg">{{
 											videoData.detail.class_name
 										}}</text>
 									</view>
@@ -338,10 +340,10 @@
 				},
 				loadingFlag: false,
 				showBack: true,
+				timer: null,
 			}
 		},
 		async onLoad(options) {
-			// console.log(this.videoData)
 			this.screenHeight = this.initScrollHeight(0)
 			this.myHeight = this.initScrollHeight(544)
 			this.myHeight2 = this.initScrollHeight(644)
@@ -359,36 +361,36 @@
 				this.MEDIA_TYPE
 			)
 		},
-		onShow() {
-			console.log('onshow')
+		onUnload() {
+			if (this.timer !== null) {
+				clearTimeout(this.timer)
+				this.timer = null
+			}
 		},
 		methods: {
-			test: function () {
-				console.log('test')
-			},
 			getVideoDetails: async function (videoid, uid) {
 				await getVideoDetails(videoid, uid).then((res) => {
-					// console.log(res);
-					// console.log('getres', res)s
 					this.videoData = res.info
-					// console.log('this', this.videoData)
-					// const info = res.info
-					// this.videoItem = info.detail
-					// this.initPlayer(info.detail.href_w, false)
 					this.islike = res.info.detail.islike.toString()
 					this.likeNum = res.info.detail.likes
 					this.iscollection = res.info.detail.iscollection.toString()
 					this.collection = res.info.detail.collection.toString()
 					this.isattent = res.info.detail.isattent
-					// this.videoList = info.recommend
-					// this.addTrace('see')
+
 					this.$nextTick(() => {
 						this.setSwiperHeight()
 					})
+					if (!this.isEmpty(this.uid)) {
+						this.timer = setTimeout(() => {
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 3,
+								that: this,
+							})
+						}, 15000)
+					}
 					return Promise.resolve()
 				})
-				// console.log(tt);
-				// this.checkAttent();
 			},
 			/* 获取评论列表 */
 			getComments(uid, videoid, p, type) {
@@ -400,7 +402,6 @@
 							this.setSwiperHeight()
 						})
 						this.total = parseInt(res.info.comments)
-						console.log('commentObj', this.commentObj)
 						this.loadingFlag = false
 					})
 					.catch((err) => {
@@ -408,10 +409,8 @@
 					})
 			},
 			addMore() {
-				console.log('bottom')
 				if (this.loadingFlag) return
 				if (this.commentPage >= this.total / 20) return (this.status = 'nomore')
-				console.log('---1----1----1----1----1---')
 				this.status = 'loading'
 				this.loadingFlag = true
 				this.commentPage = ++this.commentPage
@@ -419,7 +418,6 @@
 					let uid = 100
 					if (!this.isEmpty(this.uid)) uid = this.uid
 					this.getComments(uid, this.videoid, this.commentPage, this.MEDIA_TYPE)
-					console.log('this.total', this.total, this.commentPage, this.total / 20)
 					if (this.commentPage >= this.total / 20) this.status = 'nomore'
 					else this.status = 'loading'
 				}, 2000)
@@ -435,7 +433,6 @@
 			},
 			chooseReply(cInfo, rInfo) {
 				this.guard()
-				console.log('---333----333----333----333----333---')
 				if (rInfo === undefined) {
 					this.inputMsg = 'reply ' + cInfo.userinfo.user_nicename
 				} else {
@@ -515,8 +512,6 @@
 			likeComment(item) {
 				this.guard()
 				this.addCommentLike(item.id, this.MEDIA_TYPE, item.parentid, item) //  id,type,parentid
-				// const uid = window.localStorage.getItem('uid') || 0
-				// this.getComments(uid, this.curNewsId, this.commentPage, 2)
 			},
 			/* 添加喜欢（点赞） */
 			addCommentLike(selfid, type, fatherid, item) {
@@ -592,7 +587,6 @@
 				let token = this.token
 				let uid = this.uid
 				let touid = this.videoData.detail.userinfo.id
-				console.log('---11----11----11----11----11---')
 				setAttent(uid, token, touid).then((res) => {
 					if (res.code !== 0) return this.$u.toast(res.msg)
 					if (res.info.isattent == '1') {
@@ -668,11 +662,6 @@
 		-webkit-line-clamp: 2;
 		line-height: 28rpx;
 	}
-	.fix-bottom {
-		// position: fixed;
-		// top: 0rpx;
-		// bottom: 0rpx;
-	}
 	.bottom-input-group {
 		position: relative;
 		bottom: 0;
@@ -689,8 +678,6 @@
 		.input-con > input {
 			color: #333;
 			font-size: 30rpx;
-			&::placeholder {
-			}
 		}
 	}
 	.goback {

@@ -40,7 +40,7 @@
 									btn-width="180"
 									:type="2"
 								>
-									<view class="flex">
+									<view class="flex" @tap="go(item)">
 										<image
 											:src="item.mediaw.img"
 											mode="aspectFill"
@@ -87,7 +87,7 @@
 									btn-width="200"
 									:type="1"
 								>
-									<view class="flex">
+									<view class="flex" @tap="go(item)">
 										<image
 											:src="item.mediaw.thumb"
 											mode="aspectFill"
@@ -168,6 +168,19 @@
 			)
 		},
 		methods: {
+			go(item) {
+				console.log('---item----item----item----item----item---', item)
+				console.log('')
+				if (item.type === '2') {
+					uni.navigateTo({
+						url: '/pages/discover/detail/newsDetail?id=' + item.mediaid,
+					})
+				} else {
+					uni.navigateTo({
+						url: '/pages/discover/detail/videoDetail?id=' + item.mediaid,
+					})
+				}
+			},
 			onReachBottom() {
 				console.log('bootom')
 			},

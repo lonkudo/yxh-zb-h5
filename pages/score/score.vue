@@ -259,7 +259,6 @@
 			</swiper-item>
 		</swiper>
 		<view class="football-goal-list">
-			<text>2132rjewkljrewklrew1</text>
 			<!-- key 不变化的时候render就不会刷新 -->
 			<view class="football-goal-item" v-for="goal of goalList" :key="goal.id">
 				<scores-card :item="goal" @close="close($event)"></scores-card>
@@ -504,13 +503,14 @@
 					soundType: 'Default',
 				},
 				displaySetting: [true, true, true],
+				mq: null,
 				/* -------------------------mqtt---------------------------- */
 			}
 		},
 		onLoad() {
 			/* 初始化高度  */
-			this.myHeight = this.initScrollHeight(268)
-			this.myHeight2 = this.initScrollHeight(348)
+			this.myHeight = this.initScrollHeight(78)
+			this.myHeight2 = this.initScrollHeight(158)
 			/* 过滤页面传回数据,更新对应的区域,更新vuex */
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data.compe_id
@@ -569,9 +569,16 @@
 				}
 			})
 		},
+		// onHide() {
+		// 	console.log('---onHide----onHide----onHide----onHide----onHide---')
+		// 	if (this.mq) this.mq.unconnect()
+		// },
+		// onUnload() {
+		// 	console.log('---unload----unload----unload----unload----unload---')
+		// 	if (this.mq) this.mq.unconnect()
+		// },
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
-
 			// 连接MQTT服务器
 			connectMqtt(host, username, password, clean, clientId, topics, callback) {
 				this.mq = new Mqtt(host, topics, callback)
@@ -1063,6 +1070,11 @@
 						} else if (res.info.isappointment === 1) {
 							item.is_appointment = 1
 							this.$u.toast('subscribed')
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 7,
+								that: this,
+							})
 						}
 					})
 					.catch((err) => {

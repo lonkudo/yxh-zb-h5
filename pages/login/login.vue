@@ -74,6 +74,7 @@
 				expired: false,
 			}
 		},
+		onLoad() {},
 		methods: {
 			show() {
 				uni.showToast({
@@ -227,6 +228,7 @@
 					})
 					.finally(() => {
 						this.loginMethod()
+						this.$store.dispatch('GET_TASKLIST', { uid: this.uid, token: this.token })
 					})
 			},
 		},

@@ -124,11 +124,7 @@
 			"path": "pages/my/coins/record",
 			"style": {
 				"enablePullDownRefresh": false,
-				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "Gold Detail",
-				"navigationBarBackgroundColor": "#FFF",
-				"backgroundColor": "#FFF",
-				"navigationStyle": "default"
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -365,6 +361,46 @@
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Filter",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/live/oddsHistory",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/my/modify/modify",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Account Information",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/my/modify/nickname",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Modify Your Nickname",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		},
+		{
+			"path": "pages/live/livelist",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "All live",
 				"navigationBarBackgroundColor": "#FFF",
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"

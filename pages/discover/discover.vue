@@ -120,6 +120,24 @@
 				swiperVideoCurrent: 0, // swiper组件的current值，表示当前那个swiper-item是活动的
 			}
 		},
+		onShow() {
+			// 只有从任务中心过来的时候isSwitch 是true，自动切换tab
+			let { tab, isSwitch } = uni.getStorageSync('discoverTab')
+
+			if (isSwitch) {
+				if (tab === 'news') {
+					this.$nextTick(() => {
+						this.swiperCurrent = 1
+						uni.setStorageSync('discoverTab', { tab, isSwitch: false })
+					})
+				} else {
+					this.$nextTick(() => {
+						this.swiperCurrent = 0
+						uni.setStorageSync('discoverTab', { tab, isSwitch: false })
+					})
+				}
+			}
+		},
 		created() {
 			const uid = uni.getStorageSync('uid')
 			// 视频分类

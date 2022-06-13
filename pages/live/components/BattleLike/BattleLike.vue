@@ -2,7 +2,7 @@
 	<view v-if="!this.isEmpty(teamInfo) && !this.isEmpty(battleLikeInfo)">
 		<view class="flex flex-direction">
 			<template v-if="openFlag">
-				<view class="flex flex-direction full-vote h-200 bg-gold padding-lg">
+				<view class="flex flex-direction full-vote h-200 padding-lg">
 					<view class="flex align-center justify-center">
 						<view
 							class="flex align-center"
@@ -25,7 +25,7 @@
 										v-for="(item, index) in homeLike"
 										:key="index"
 										v-if="item"
-										src="/static/styles/png/soccerball.png"
+										src="@/static/styles/png/soccerball.png"
 									></image>
 								</transition-group> -->
 							</view>
@@ -105,7 +105,7 @@
 					<view class="flex-sub padding-xs">
 						<my-line-progress
 							active-color="#ed0505"
-							:percent="parseFloat(battleLikeInfo.home_percent)"
+							:percent="percent"
 							:inactiveColor="'#1942B8'"
 							:showPercent="false"
 						>
@@ -139,7 +139,7 @@
 				v-for="(item, index) in homeLike"
 				:key="index"
 				v-if="item"
-				src="/static/styles/png/soccerball.png"
+				src="@/static/styles/png/soccerball.png"
 			></image>
 		</transition-group> -->
 	</view>
@@ -274,7 +274,7 @@
 		computed: {
 			openFlag: function () {
 				// console.log('??', this.$store.state.settings)
-				return this.$store.state.live.battleLikeFlag
+				return this.$store.state.flag.battleLikeFlag
 			},
 			percent: function () {
 				let a = parseFloat(this.battleLikeInfo.home_percent)
@@ -298,7 +298,7 @@
 				let parent = window.document.body
 				// console.log('parent', parent)
 				let img = document.createElement('img')
-				img.src = '/static/styles/png/soccerball.png'
+				img.src = require('@/static/styles/png/soccerball.png')
 				img.style.width = this.rpx2px(40) + 'px'
 				img.style.height = this.rpx2px(40) + 'px'
 				img.style.position = 'fixed'
@@ -477,7 +477,7 @@
 		height: 40rpx;
 	}
 	.full-vote {
-		background: url('/static/styles/png/bg-battle-like.png');
+		background: url('@/static/styles/png/bg-battle-like.png');
 		background-size: auto 100%;
 		background-repeat: no-repeat;
 	}

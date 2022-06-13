@@ -2,9 +2,9 @@
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Handicap'"
-		:style="{ height: myHeight + 'rrpx' }"
+		:style="{ height: myHeight + 'rpx' }"
 	>
-		<view class="container padding-top-sm b-f">
+		<view class="flex flex-direction padding-top-sm b-f">
 			<view class="line">
 				<view
 					:class="activeIndex === index ? 'active' : ''"
@@ -14,15 +14,14 @@
 					><text>{{ item.value }}</text></view
 				>
 			</view>
-			<view class="progress-con">
-				<!-- <handicap-trend :trendList="trendList"></handicap-trend> -->
-				<text>handicap</text>
+			<view class="progress-con margin-bottom-xs">
+				<handicap-trend :trendList="trendList"></handicap-trend>
 			</view>
-			<!-- <handicap-table
+			<handicap-table
 				:tableData="tableData"
 				:columnLabel="columnLabel"
-			></handicap-table> -->
-			<text>handicap</text>
+				@goOddsHistory="goOddsHistory"
+			></handicap-table>
 		</view>
 	</scroll-view>
 </template>
@@ -31,8 +30,8 @@
 	import { Mqtt } from '@/utils/mqtt'
 	// import HuTable from '@/components/Table'
 	// import DataBtm from './DataBtm'
-	// import HandicapTrend from '../components/HandicapTrend'
-	// import HandicapTable from '../components/HandicapTable'
+	import HandicapTrend from './HandicapTrend.vue'
+	import HandicapTable from './HandicapTable'
 	import { getOdds } from '@/api/odds'
 
 	const columnLabels = [
@@ -42,6 +41,10 @@
 	export default {
 		name: 'Handicap',
 		props: ['game_id', 'myHeight'],
+		components: {
+			HandicapTrend,
+			HandicapTable,
+		},
 		data() {
 			return {
 				columnLabels,
@@ -63,11 +66,26 @@
 				],
 			}
 		},
-		created() {
-			// this.getOdds()
+		async created() {
+			this.getOdds()
 			// this.connetOdds()
 		},
 		methods: {
+			goOddsHistory(company_id, company_name) {
+				let odds_type = this.tagList[this.activeIndex].label
+				let match_id = this.game_id
+				uni.navigateTo({
+					url:
+						'oddsHistory?match_id=' +
+						match_id +
+						'&odds_type=' +
+						odds_type +
+						'&company_id=' +
+						company_id +
+						'&company_name=' +
+						company_name,
+				})
+			},
 			changeTag(index, item) {
 				this.activeIndex = index
 				if (this.activeIndex === 0 || this.activeIndex === 2) {
@@ -116,15 +134,16 @@
 			// "2:"主胜 "3:"和局 " 4:"客胜 "
 			setTrendList() {
 				this.resetTrendList()
+				if (!this.tableData) return
 				this.tableData.forEach((ta) => {
 					this.trendType(ta.chupan[2], ta.jishi[2], 'home')
 					this.trendType(ta.chupan[3], ta.jishi[3], 'equal')
 					this.trendType(ta.chupan[4], ta.jishi[4], 'away')
 				})
 			},
-
 			getOdds() {
-				getOdds(this.value).then((res) => {
+				getOdds(this.game_id).then((res) => {
+					// console.log('res', res)
 					if (JSON.stringify(res.info) === '{}') {
 						this.$emit('childMsg', false)
 						return

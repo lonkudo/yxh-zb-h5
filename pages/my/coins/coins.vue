@@ -63,30 +63,40 @@
 					>
 						<view class="flex flex-direction">
 							<view
-								class="margin-xs flex align-center justify-between margin-bottom-lg"
+								class="margin-xs flex align-center justify-between margin-bottom-lg padding-left-sm padding-right-sm"
 								v-for="(daily, j) in taskList.task"
 								:key="j"
 							>
 								<view class="flex">
-									<view
-										class="bg-green icon flex align-center justify-around margin-right-xs"
-									>
-										<text :class="['iconfont fs-36', 'icon-quanburenwu']"></text>
+									<view class="bg-green icon flex align-center justify-around">
+										<view class="ava-80 bg-green"
+											><image
+												:src="
+													require('@/static/styles/png/task_' + daily.icon_tag + '.png')
+												"
+												mode=""
+												class="ava-80"
+											/>
+										</view>
 									</view>
-									<view class="flex flex-direction justify-between">
-										<text class="fs-10 fc-b-3">{{ daily.name }}</text>
-										<text class="fs-10 fc-b-9"
+
+									<view class="flex flex-direction justify-between margin-left-sm">
+										<text class="fs-20 fc-b-3">{{ daily.name }}</text>
+										<text class="fs-20 fc-b-9"
 											>Finish task will earn {{ daily.coin }} coins.</text
 										>
 									</view>
 								</view>
-								<my-button-reverse
-									:text="'To Complete'"
-									:falseText="'Completed'"
-									:initActive="daily.is_finish === 1 ? false : true"
-									mana
-									@onTap="toWhere(daily.id, 'task', daily.is_finish, daily)"
-								></my-button-reverse>
+								<view class="flex flex-direction justify-center align-center">
+									<text class="fs-20">{{ daily.current_num + '/' + daily.num }}</text>
+									<my-button-reverse
+										:text="'To Complete'"
+										:falseText="'Completed'"
+										:initActive="daily.is_finish === 1 ? false : true"
+										mana
+										@onTap="toWhere(daily.id, 'task', daily.is_finish, daily)"
+									></my-button-reverse>
+								</view>
 							</view>
 						</view>
 					</scroll-view>
@@ -99,30 +109,37 @@
 					>
 						<view class="flex flex-direction">
 							<view
-								class="margin-xs flex align-center justify-between margin-bottom-lg"
+								class="margin-xs flex align-center justify-between margin-bottom-lg padding-left-sm padding-right-sm"
 								v-for="(live, j) in taskList.go"
 								:key="'l' + j"
 							>
 								<view class="flex">
-									<view
-										class="bg-green icon flex align-center justify-around margin-right-xs"
-									>
-										<text :class="['iconfont fs-36', 'icon-quanburenwu']"></text>
+									<view class="bg-green icon flex align-center justify-around">
+										<view class="ava-80 bg-green"
+											><image
+												:src="require('@/static/styles/png/task_' + live.icon_tag + '.png')"
+												mode=""
+												class="ava-80"
+											/>
+										</view>
 									</view>
-									<view class="flex flex-direction justify-between">
-										<text class="fs-10 fc-b-3">{{ live.name }}</text>
-										<text class="fs-10 fc-b-9"
+									<view class="flex flex-direction justify-between margin-left-sm">
+										<text class="fs-20 fc-b-3">{{ live.name }}</text>
+										<text class="fs-20 fc-b-9"
 											>Finish task will earn {{ live.coin }} coins.</text
 										>
 									</view>
 								</view>
-								<my-button-reverse
-									:text="'To Complete'"
-									:falseText="'Completed'"
-									:initActive="live.is_finish === 1 ? false : true"
-									mana
-									@onTap="toWhere(live.id, 'go', live.is_finish, live)"
-								></my-button-reverse>
+								<view class="flex flex-direction justify-center align-center">
+									<text class="fs-20">{{ live.current_num + '/' + live.num }}</text>
+									<my-button-reverse
+										:text="'To Complete'"
+										:falseText="'Completed'"
+										:initActive="live.is_finish === 1 ? false : true"
+										mana
+										@onTap="toWhere(live.id, 'go', live.is_finish, live)"
+									></my-button-reverse>
+								</view>
 							</view>
 						</view>
 					</scroll-view>
@@ -137,7 +154,7 @@
 	import MyButtonReverse from '@/components/MyButtonReverse/MyButtonReverse.vue'
 	import swiperAutoHeight from '@/mixin/swiperAutoHeight.js'
 	import swiperUTabs from '@/mixin/swiperUTabs.js'
-	import { getUserInfo, getTaskList, signTask, liveOrDailyTask } from '@/api/my'
+	import { getUserInfo, signTask, liveOrDailyTask } from '@/api/my'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -147,50 +164,27 @@
 		},
 		data() {
 			return {
-				coinList: [
-					{ label: 'Today' },
-					{ label: '05-17' },
-					{ label: '05-17' },
-					{ label: '05-17' },
-					{ label: '05-17' },
-					{ label: '05-17' },
-					{ label: '05-17' },
-				],
+				coinList: [],
 				/* tabs+swiper内容 */
 				menu: [{ name: 'Daily Task' }, { name: 'Live Task' }],
-				taskList: {},
-				taskStatus: {
-					task2arts: false,
-					thumb1art: false,
-					watch15sVideo: false,
-					checkTeamInfo: false,
-					watchLiveShow: false,
-				},
-				taskList2: [],
+				/* 组队信息查看的任务还没有做。 */
 			}
 		},
-		onLoad() {
-			this.getTaskList(this.uid, 1)
-		},
-		methods: {
-			getTaskList(uid, p) {
-				getTaskList(uid, p)
-					.then((res) => {
-						this.taskList = res.info
-						console.log('tasklist', res.info)
 
-						this.$nextTick(() => {
-							this.setSwiperHeight()
-						})
-					})
-					.catch((err) => {
-						console.log(err)
-					})
-			},
+		onLoad() {
+			this.guard()
+			if (!this.$store.state.task.isSign) {
+				let item = this.$store.state.task.taskList.list.find(
+					(ele) => ele.date === 'Today'
+				)
+				this.signTask(item)
+			}
+		},
+		onShow() {},
+		methods: {
 			signTask(item) {
 				signTask(this.uid, item.day, this.token)
 					.then((res) => {
-						// console.log('sign', res)
 						if (res.code === 0) {
 							uni.showToast({ title: 'Signed', duration: 2000, icon: 'success' })
 							this.addCoin(item.coin)
@@ -208,29 +202,34 @@
 								icon: 'error',
 							})
 						}
+
+						this.$store.commit('SIGN_IN')
 					})
 					.catch((err) => {
 						console.log(err)
 					})
 			},
 			toWhere(id, taskType, is_finish, item) {
-				// console.log('is_finish', is_finish)
+				console.log('is_finish', id, taskType, is_finish, item)
 				if (is_finish === 1) return
 
 				let result = ''
 				if (taskType === 'task') {
 					switch (id) {
 						case 1:
+							uni.setStorageSync('discoverTab', { tab: 'news', isSwitch: true })
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
 							break
 						case 2:
+							uni.setStorageSync('discoverTab', { tab: 'news', isSwitch: true }) // switchTab 不能传递参数
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
 							break
 						case 3:
+							uni.setStorageSync('discoverTab', { tab: 'video', isSwitch: true })
 							uni.switchTab({
 								url: '/pages/discover/discover',
 							})
@@ -240,15 +239,39 @@
 								url: '/pages/data/data',
 							})
 							break
-
+						case 5:
+							uni.navigateTo({
+								url: '/pages/my/modify/modify',
+							})
+							break
+						case 6:
+							uni.navigateTo({
+								url: '/pages/my/modify/modify',
+							})
+							break
+						case 7:
+							uni.switchTab({
+								url: '/pages/score/score',
+							})
+							break
 						default:
 							break
 					}
 				} else if (taskType === 'go') {
 					switch (id) {
 						case 1:
-							uni.switchTab({
-								url: '/pages/discover/discover',
+							uni.navigateTo({
+								url: '/pages/live/livelist',
+							})
+							break
+						case 2:
+							uni.navigateTo({
+								url: '/pages/live/livelist',
+							})
+							break
+						case 3:
+							uni.navigateTo({
+								url: '/pages/live/livelist',
 							})
 							break
 						default:
@@ -260,19 +283,22 @@
 		filters: {},
 		computed: {
 			nextDayCoin: function () {
-				if (this.isEmpty(this.taskList)) {
+				if (this.isEmpty(this.$store.state.task.taskList)) {
 					return ''
 				} else {
-					let index = this.taskList.list.findIndex((ele) => {
+					let index = this.$store.state.task.taskList.list.findIndex((ele) => {
 						return ele.date === 'Today'
 					})
 					console.log('index', index)
-					if (index === this.taskList.list.length) {
-						return this.taskList.list[0].coin
+					if (index === this.$store.state.task.taskList.list.length) {
+						return this.$store.state.task.taskList.list[0].coin
 					} else {
-						return this.taskList.list[index + 1].coin
+						return this.$store.state.task.taskList.list[index + 1].coin
 					}
 				}
+			},
+			taskList: function () {
+				return this.$store.state.task.taskList
 			},
 		},
 	}

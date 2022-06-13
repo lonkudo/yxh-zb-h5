@@ -54,8 +54,8 @@
 			let themeColor = getThemeColor(level)
 			vnodes.push(
 				<view>
-					<text class="level fs-6" style={{ backgroundColor: themeColor }}>
-						<text class="iconfont icon-star-fill fs-6"></text>
+					<text class="level fs-20" style={{ backgroundColor: themeColor }}>
+						<text class="iconfont icon-star-fill fs-20"></text>
 						Lv.{level}
 					</text>
 				</view>
@@ -70,11 +70,5 @@
 		color: #fff;
 		padding: 0rpx 4rpx;
 		border-radius: 4rpx;
-		svg {
-			margin-right: 6rpx;
-			width: 6rpx;
-			height: 6rpx;
-			vertical-align: 0;
-		}
 	}
 </style>

@@ -1,6 +1,7 @@
 <template>
 	<card-con
 		class="margin-top-sm margin-bottom-sm flex align-center justify-between"
+		:bg="'#f6f6f6'"
 	>
 		<text class="fc-b-0 fw-9">{{ title }}</text
 		><text class="fc-b-9">More ></text>

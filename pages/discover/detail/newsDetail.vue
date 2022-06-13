@@ -302,6 +302,14 @@
 							this.likeNum = res.info.details.likes
 							this.iscollection = res.info.details.iscollection.toString()
 							// this.addTrace('see')
+							console.log('---uid----uid----uid----uid----uid---', uid)
+							if (!this.isEmpty(this.uid)) {
+								this.$store.dispatch('FINISH_TASK', {
+									type: 1,
+									taskid: 1,
+									that: this,
+								})
+							}
 							resolve(res)
 						})
 						.catch((err) => {
@@ -351,7 +359,6 @@
 			},
 			chooseReply(cInfo, rInfo) {
 				this.guard()
-				console.log('---333----333----333----333----333---')
 				if (rInfo === undefined) {
 					this.inputMsg = 'reply ' + cInfo.userinfo.user_nicename
 				} else {
@@ -489,6 +496,11 @@
 						this.islike = info.islike
 						this.likeNum = info.likes
 						if (info.islike === '1') {
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 2,
+								that: this,
+							})
 							this.$u.toast('liked')
 							// this.addTrace('like')
 						} else {
@@ -497,6 +509,7 @@
 						}
 					})
 					.catch((err) => {
+						console.log('err', err)
 						this.$u.toast('login first')
 					})
 			},

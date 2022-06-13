@@ -6,6 +6,8 @@ const { lan } = defaultSettings
 const state = {
 	lan: lan,
 	siteInfo: null,
+	// socket连接状态
+	isSuccessConnect: false,
 }
 
 const mutations = {
@@ -17,6 +19,9 @@ const mutations = {
 	SET_SITEINFO: (state, siteInfo) => {
 		state.siteInfo = siteInfo
 	},
+	SET_ISSUCCESSCONNECT: (state, isSuccessConnect) => {
+		state.isSuccessConnect = isSuccessConnect
+	},
 }
 
 const actions = {
@@ -24,11 +29,11 @@ const actions = {
 		commit('CHANGE_SETTING', data)
 	},
 	GetSiteInfo({ commit }) {
-		console.log('getSiteinfo')
 		return new Promise((resolve, reject) => {
 			site()
 				.then((res) => {
 					commit('SET_SITEINFO', res.info)
+					// commit('SET_ISSUCCESSCONNECT', true)
 					resolve(res.info)
 				})
 				.catch((err) => {

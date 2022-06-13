@@ -212,8 +212,8 @@ export function getTeamDetailTransfer(team_id, timestamp) {
 
 /**
  * 球员-数据（赛事下拉列表）
- * @param {*} player_id 
- * @returns 
+ * @param {*} player_id
+ * @returns
  */
 export function getPlayerDataCompetitionSelect(player_id) {
   return request({

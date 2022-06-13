@@ -55,7 +55,11 @@ export default {
   watch: {
     params: {
       handler: function (newVal) {
-        if (typeof newVal === "object" && JSON.stringify(newVal).length > 0)
+        if (
+          typeof newVal === "object" &&
+          JSON.stringify(newVal).length > 0 &&
+          JSON.stringify(newVal) !== "{}"
+        )
           this.getDynamic();
       },
       immediate: true,

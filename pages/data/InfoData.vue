@@ -4,30 +4,30 @@
     <view class="padding-sm">
       <view class="infomation-item">
         <img src="@/static/styles/png/team_date_host.png" alt="" />
-        <text>Coach:{{ info.coach.name }}</text>
+        <text>Coach:{{ infoD.coach.name }}</text>
       </view>
       <view class="infomation-item">
         <img src="@/static/styles/png/team_date_time.png" alt="" />
-        <text>Set up the time:{{ info.foundation_time }}</text>
+        <text>Set up the time:{{ infoD.foundation_time }}</text>
       </view>
       <view class="infomation-item">
         <img src="@/static/styles/png/team_date_country.png" alt="" />
-        <text>Countries:{{ info.country.name }}</text>
+        <text>Countries:{{ infoD.country.name }}</text>
       </view>
       <view class="infomation-item">
         <img src="@/static/styles/png/team_date_area.png" alt="" />
-        <text>Stadium:{{ info.venue.name_en }}</text>
+        <text>Stadium:{{ infoD.venue.name_en }}</text>
       </view>
       <view class="infomation-item">
         <img src="@/static/styles/png/team_date_area.png" alt="" />
-        <text>Capacity:{{ info.venue.capacity }}</text>
+        <text>Capacity:{{ infoD.venue.capacity }}</text>
       </view>
     </view>
     <view class="text-center bg-gray padding-sm"> Hornor </view>
     <view>
       <view
         class="honor-item"
-        v-for="(honor, index) of info.honor_list"
+        v-for="(honor, index) of infoD.honor_list"
         :key="index"
       >
         <view class="img-box">
@@ -48,12 +48,42 @@ export default {
   props: {
     info: {
       type: Object,
-      // default: {
-      //   coach: {
-      //     name: "",
-      //   },
-      //   country: { name: "" },
+      // default: () => {
+      //   return {
+      //     coach: {
+      //       // name: "",
+      //     },
+      //     country: { name: "" },
+      //   };
       // },
+    },
+  },
+  data() {
+    return {
+      infoD: {
+        coach: {
+          name: "",
+        },
+        country: { name: "" },
+        venue: {
+          name_en: "",
+        },
+      },
+    };
+  },
+  computed: {
+    getInfo() {
+      return this.info;
+    },
+  },
+  watch: {
+    getInfo: {
+      handler: function (val) {
+        console.log(val);
+        this.infoD = val;
+      },
+      immediate: true,
+      deep: true,
     },
   },
 };

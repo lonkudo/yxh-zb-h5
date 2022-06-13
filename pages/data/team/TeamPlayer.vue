@@ -29,14 +29,14 @@
   </scroll-view>
 </template>
 <script>
-import { getTeamDetailPlayerList } from "@/api/data";
+import { getTeamDetailPlayerList, getCountryPlayer } from "@/api/data";
 import PlayerItem from "./components/playerItem.vue";
 export default {
   name: "TeamPlayer",
   components: {
     PlayerItem,
   },
-  props: ["value", "myHeight"],
+  props: ["value", "myHeight", "isCountryTeam"],
   data() {
     return {
       tableData: {
@@ -48,21 +48,25 @@ export default {
     value: {
       handler(newVal, oldVal) {
         if (newVal) {
-          this.getTeamDetailPlayerList();
+          if (this.isCountryTeam) {
+            this.getCountryPlayer();
+          } else {
+            this.getTeamDetailPlayerList();
+          }
         }
       },
       immediate: true,
     },
   },
-  // mounted() {
-  //   this.getTeamDetailPlayerList();
-  // },
   methods: {
     getTeamDetailPlayerList() {
       getTeamDetailPlayerList(this.value).then((res) => {
         this.tableData = res.info;
-        // console.log(this.tableData);
-        // console.log(this.tableData.player_F);
+      });
+    },
+    getCountryPlayer() {
+      getCountryPlayer(this.value).then((res) => {
+        this.tableData = res.info;
       });
     },
   },

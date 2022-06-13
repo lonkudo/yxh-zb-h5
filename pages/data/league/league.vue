@@ -31,7 +31,7 @@
       >
         <swiper-item
           class="swiper-item"
-          :key="'dynamic'"
+          key="dynamic"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
@@ -43,7 +43,7 @@
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
-          :key="'schedule'"
+          key="schedule"
           :style="{ height: myHeight + 'rpx' }"
         >
           <league-schedule
@@ -53,15 +53,19 @@
             :myHeight="myHeight"
           ></league-schedule>
         </swiper-item>
-        <!--  <swiper-item
+        <swiper-item
           class="swiper-item"
-          :key="'team-data'"
+          key="integral"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-data :teamInfo="teamInfo"></team-data>
+          <league-integral
+            v-model="competition_id"
+            :season_id="activeYearOption.id"
+            :myHeight="myHeight"
+          ></league-integral>
         </swiper-item>
-        <swiper-item
+        <!--   <swiper-item
           class="swiper-item"
           @touchmove.stop=""
           :key="'team-player'"

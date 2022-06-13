@@ -1,6 +1,7 @@
 <template>
   <view
     class="t-td"
+    :class="className"
     :style="{
       width: customWidth + 'px',
       color: color,
@@ -26,6 +27,9 @@ export default {
     align: {
       type: String,
       default: "center",
+    },
+    className: {
+      type: String,
     },
   },
   data() {
@@ -103,7 +107,7 @@ export default {
 <style>
 .t-td {
   display: flex;
-  background: #ffffff;
+  /* background: #ffffff; */
   padding: 30rpx 12rpx;
   font-size: 24rpx;
   text-align: center;

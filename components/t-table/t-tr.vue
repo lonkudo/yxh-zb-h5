@@ -1,9 +1,20 @@
 <template>
-  <view class="t-tr" @click="change">
+  <view
+    class="t-tr"
+    :class="className"
+    @click="change"
+    :style="{
+      'background-color': bgColor,
+    }"
+  >
     <view
       v-if="isCheck"
       class="t-check-box"
-      :style="{ 'border-width': thBorder + 'px', 'border-color': borderColor }"
+      :style="{
+        'border-width': thBorder + 'px',
+        'border-color': borderColor,
+        'background-color': bgColor,
+      }"
     >
       <checkbox-group @change="checkboxChange">
         <checkbox
@@ -22,6 +33,8 @@ export default {
     fontSize: String,
     color: String,
     align: String,
+    bgColor: String,
+    className: String,
   },
   inject: ["table"],
   provide() {

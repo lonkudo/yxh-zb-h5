@@ -20,7 +20,7 @@
 						>Sign in tomorrow +{{ nextDayCoin }} gold coins</text
 					>
 				</view>
-				<view class="fc-b-9 fs-20">Sign-in Rules ></view>
+				<view class="fc-b-9 fs-20" @tap="go">Sign-in Rules ></view>
 			</view>
 			<view class="flex align-center justify-around">
 				<view
@@ -182,6 +182,11 @@
 		},
 		onShow() {},
 		methods: {
+			go() {
+				uni.navigateTo({
+					url: 'checkInRules',
+				})
+			},
 			signTask(item) {
 				signTask(this.uid, item.day, this.token)
 					.then((res) => {

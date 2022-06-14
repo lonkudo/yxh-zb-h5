@@ -70,7 +70,7 @@
           </view>
         </view>
       </view>
-      <view class="echart-a">
+      <view class="echart-a" v-show="charShow">
         <view style="width: 100%; height: 300px" id="chart"></view>
       </view>
       <view class="text-center bg-gray padding-sm"> The Transfer Record </view>
@@ -146,6 +146,7 @@ export default {
       team: {},
       honor_list: [],
       transferList: [],
+      charShow: true,
     };
   },
   watch: {
@@ -168,7 +169,9 @@ export default {
         this.honor_list = info.honor_list;
         this.transferList = info.transfer;
         this.$nextTick(() => {
-          this.initChar(info.player.ability);
+          if (JSON.stringify(info.player.ability) !== "{}")
+            this.initChar(info.player.ability);
+          else this.charShow = false;
         });
         // console.log(info.transfer);
       });

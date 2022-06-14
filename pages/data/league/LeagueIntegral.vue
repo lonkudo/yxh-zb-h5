@@ -157,7 +157,7 @@ export default {
             }
           });
         });
-        console.log(this.tableData);
+        // console.log(this.tableData);
       });
     },
     change(item) {
@@ -170,7 +170,6 @@ export default {
     getRowStyle(args) {
       if (args.promotion && args.promotion.color) {
         const bgColor = this.set16ToRgb(args.promotion.color, 0.2);
-        console.log(bgColor);
         return bgColor;
       } else {
         return "";
@@ -202,6 +201,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+
 .padding-tb-s {
   padding: 0 8rpx;
   margin-top: -8rpx;

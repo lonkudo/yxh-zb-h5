@@ -76,7 +76,7 @@ export function getLeagueRankPoint(competition_id, season_id) {
  * @param {类型:1:进球,2:失球,3:点球,4:射门,5:射正,6:关键传球,7:拦截,8:封堵,9:解围,10:黄牌,11:红牌} type
  * @returns
  */
-export function getLeagueRankTeamTheTable(
+export function getLeagueTeamRank(
   p,
   num,
   competition_id,

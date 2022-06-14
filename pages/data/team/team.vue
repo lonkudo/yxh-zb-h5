@@ -102,7 +102,11 @@
           :key="'team-player'"
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-player v-model="teamId" :myHeight="myHeight" :isCountryTeam="isCountryTeam"></team-player>
+          <team-player
+            v-model="teamId"
+            :myHeight="myHeight"
+            :isCountryTeam="isCountryTeam"
+          ></team-player>
         </swiper-item>
         <swiper-item
           class="swiper-item"
@@ -171,8 +175,8 @@ export default {
   onLoad(option) {
     let item = JSON.parse(decodeURIComponent(option.item));
     // this.teamInfo = JSON.parse(decodeURIComponent(option.item));
-    this.teamId = item.id;
-    // console.log(this.teamInfo);
+    this.teamId = item.team_id;
+    console.log(item);
     if (item.isCountryTeam) {
       this.isCountryTeam = true;
       this.getCountryInfo();
@@ -181,12 +185,17 @@ export default {
       this.teamInfo.competition_id = item.competition_id;
       this.getTeamInfo();
       this.getTeamLeagueRank();
+      // this.initTeamData();
     }
   },
   mounted() {
     this.myHeight = this.initScrollHeight(350);
   },
   methods: {
+    // async initTeamData() {
+    //   await this.getTeamInfo();
+    //   this.getTeamLeagueRank();
+    // },
     goPage() {
       let item = { team_id: this.teamInfo.competition_id };
       uni.navigateTo({
@@ -211,12 +220,15 @@ export default {
         this.teamInfo.venue.name_en = res.info.venue_name;
         this.teamInfo.venue.capacity = res.info.venue_capacity;
         this.teamInfo.honor_list = res.info.honor_list;
-        console.log(666666666666, this.teamInfo);
+        // console.log(666666666666, this.teamInfo);
       });
     },
     getTeamInfo() {
-      getTeamDetailBasicInfo(this.teamId).then((res) => {
-        this.teamInfo = res.info;
+      return new Promise((resolve, reject) => {
+        getTeamDetailBasicInfo(this.teamId).then((res) => {
+          this.teamInfo = res.info;
+          resolve();
+        });
       });
     },
     getTeamLeagueRank() {

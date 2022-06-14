@@ -79,7 +79,7 @@ export default {
   watch: {
     getInfo: {
       handler: function (val) {
-        console.log(val);
+        // console.log(val);
         this.infoD = val;
       },
       immediate: true,

@@ -421,6 +421,42 @@
 				</view>
 			</view>
 		</u-popup>
+		<u-popup
+			v-model="showAttent"
+			mode="center"
+			width="450rpx"
+			ref="anchorPopup"
+			id="anchorPopup"
+		>
+			<view
+				class="flex flex-direction justify-end h-400 bg-transparent"
+				style="transform: translateY(-10%)"
+				v-if="!isEmpty(liveDetail)"
+			>
+				<view
+					class="flex flex-direction p-r padding-sm justify-center align-center b-f br-15"
+				>
+					<image
+						:src="liveDetail.anchor.avatar"
+						mode=""
+						class="ava-100 p-a"
+						style="left: 175rpx; top: -50rpx"
+					/>
+					<text class="margin-top-lg fs-30">{{
+						liveDetail.anchor.user_nicename
+					}}</text>
+					<text class="margin-top-sm fc-b-6 fs-20 text-center"
+						>Follow the anchor to enjoy the exciting game</text
+					>
+					<my-button
+						class="margin-top-sm"
+						:text="'Follow'"
+						mana
+						@onTap="setAttent"
+					></my-button>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -451,6 +487,7 @@
 	import Player from '@/components/TCPlayer'
 	import Intelligence from './components/Intelligence.vue'
 	import check from '@/utils/check.js'
+	import MyButton from '../../components/MyButton/MyButton.vue'
 	// import MyTabsSwiper from '@/components/my-tabs-swiper/my-tabs-swiper.vue'
 
 	export default {
@@ -467,6 +504,7 @@
 			Handicap,
 			Player,
 			Intelligence,
+			MyButton,
 			// MyTabsSwiper,
 		},
 		data() {
@@ -523,6 +561,7 @@
 				timer: null, // 用于直播间任务计时。
 				playerInfo: {},
 				connObj: {},
+				showAttent: false,
 			}
 		},
 		async onLoad(options) {
@@ -539,6 +578,7 @@
 			uni.$on('logined', () => {
 				this.getLiveDetail()
 			})
+			this.checkAnchor()
 		},
 		async onShow() {
 			this.getCoin()
@@ -675,7 +715,9 @@
 			},
 			reloadHandle() {
 				this.reloadBtnShow = false
-				this.initPlayer()
+				this.$nextTick(() => {
+					this.initPlayer()
+				})
 			},
 			@check()
 			dianzan(team) {
@@ -861,6 +903,7 @@
 					.then((res) => {
 						this.liveDetail = res.info
 						console.log('liveDetail', this.liveDetail)
+
 						let num = this.toNum(res.info.status_id)
 						if (num > 1 && num < 8) {
 							this.livingStatus = true
@@ -893,8 +936,11 @@
 								pull: res.info.origin_video,
 								live: true,
 							}
+
 							this.$nextTick(() => {
-								this.initPlayer()
+								if (this.livingStatus) {
+									this.initPlayer()
+								}
 							})
 						} else if (res.info.uid !== '3') {
 							/* 个人直播 */
@@ -1069,6 +1115,18 @@
 					}
 				})
 			},
+			checkAnchor() {
+				setTimeout(() => {
+					if (this.toNum(this.liveDetail.is_attention) === 0) {
+						this.showAttent = true
+					}
+				}, 15000)
+				setTimeout(() => {
+					if (this.toNum(this.liveDetail.is_attention) === 0) {
+						this.showAttent = true
+					}
+				}, 75000)
+			},
 		},
 	}
 </script>
@@ -1118,5 +1176,11 @@
 	.fade-enter-from,
 	.fade-leave-to {
 		opacity: 0;
+	}
+
+	/deep/#anchorPopup
+		> uni-view.u-drawer-content.u-drawer-center.u-drawer-content-visible.u-animation-zoom
+		> uni-view.u-mode-center-box {
+		background-color: transparent !important;
 	}
 </style>

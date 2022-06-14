@@ -138,7 +138,7 @@
 			</view>
 		</template>
 		<template v-else>
-			<no-content :height="myHeight"></no-content>
+			<no-content></no-content>
 		</template>
 	</scroll-view>
 </template>

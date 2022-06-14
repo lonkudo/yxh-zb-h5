@@ -127,6 +127,7 @@
 	import { getFollowList, getFansList, RecUsers } from '@/api/my'
 	import { setAttent } from '@/api/live'
 	import fifaVue from '../../data/fifa/fifa.vue'
+	import check from '@/utils/check'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -239,16 +240,16 @@
 						this.$message.error('1')
 					})
 			},
+			@check()
 			getData() {
-				this.guard()
 				const token = this.token
 				const uid = this.uid
 				this.getFollowList()
 				this.getFansList()
 				this.getRecList()
 			},
+			@check()
 			follow(item) {
-				this.guard()
 				const token = this.token
 				const uid = this.uid
 				setAttent(uid, token, item.id).then((res) => {

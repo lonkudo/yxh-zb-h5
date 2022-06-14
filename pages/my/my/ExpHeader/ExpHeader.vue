@@ -41,6 +41,7 @@
 
 <script>
 	import Level from '@/components/Level/Level.vue'
+	import check from '@/utils/check'
 	export default {
 		name: 'ExpHeader',
 		components: {
@@ -54,8 +55,8 @@
 			console.log('this aaa', JSON.stringify(this.$store.state))
 		},
 		methods: {
+			@check()
 			go(val) {
-				this.guard()
 				if (this.isEmpty(this.uid)) return
 				switch (val) {
 					case 'modify':

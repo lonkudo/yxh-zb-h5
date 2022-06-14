@@ -94,17 +94,19 @@
 				font-size="24"
 				gutter="40"
 			></u-tabs-swiper>
-			<view
-				class="p-a flex flex-direction right-0 top-0 align-center justify-center h-80 w-80"
-				style="z-index: 400"
-				v-if="liveDetail.is_attention === 0"
-			>
-				<image :src="liveDetail.anchor.avatar" class="ava-60" mode="" />
+			<transition name="fade">
 				<view
-					class="p-a bottom add-anchor-btn bg-green flex align-center justify-center bottom-5"
-					><text class="iconfont icon-add-bold fs-16 fc-b-f"></text
-				></view>
-			</view>
+					class="p-a flex flex-direction right-0 top-0 align-center justify-center h-80 w-80"
+					style="z-index: 400"
+					v-if="liveDetail.is_attention === 0"
+				>
+					<image :src="liveDetail.anchor.avatar" class="ava-60" mode="" />
+					<view
+						class="p-a bottom add-anchor-btn bg-green flex align-center justify-center bottom-5"
+						><text class="iconfont icon-add-bold fs-16 fc-b-f" @tap="guanzhu"></text
+					></view>
+				</view>
+			</transition>
 		</view>
 		<swiper
 			:current="swiperCurrent"
@@ -432,6 +434,7 @@
 		sendGift,
 		getCoin,
 		changeRoom,
+		setAttent,
 	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
@@ -447,6 +450,7 @@
 	import Handicap from './components/Handicap/Handicap.vue'
 	import Player from '@/components/TCPlayer'
 	import Intelligence from './components/Intelligence.vue'
+	import check from '@/utils/check.js'
 	// import MyTabsSwiper from '@/components/my-tabs-swiper/my-tabs-swiper.vue'
 
 	export default {
@@ -532,10 +536,12 @@
 			this.getRoomsList()
 			this.getGiftList()
 			/*  */
+			uni.$on('logined', () => {
+				this.getLiveDetail()
+			})
 		},
 		async onShow() {
 			this.getCoin()
-			console.log('1123')
 		},
 		onUnload() {
 			if (this.timer !== null) {
@@ -671,8 +677,8 @@
 				this.reloadBtnShow = false
 				this.initPlayer()
 			},
+			@check()
 			dianzan(team) {
-				this.guard()
 				console.log('team', team)
 				let broadcastObj = {
 					msg: [],
@@ -729,15 +735,15 @@
 					}
 				})
 			},
+			@check()
 			clickGift() {
-				this.guard()
 				if (!this.isEmpty(this.uid)) {
 					this.showGift = true
 				}
 			},
+			@check()
 			sendGift(giftId, giftInfo, giftNum) {
 				/* 赠送礼物 */
-				this.guard()
 				if (!giftId) return this.$u.toast('please choose a type of gift')
 				// 最好还是别用this传值，万一有延时就错误了，
 
@@ -992,9 +998,9 @@
 					this.$u.toast("Content can't be empty")
 				}
 			},
+			@check()
 			sendMsg(msg) {
 				/* 发送消息 */
-				this.guard() // 先检查是否登录，没登录就跳转登录页
 				let broadcastObj = {} // 封装广播对象
 				broadcastObj.msg = []
 				let obj = {}
@@ -1040,6 +1046,29 @@
 			toggleControl() {
 				this.showBack = !this.showBack
 			},
+			// 关注主播
+			@check()
+			guanzhu() {
+				// if (this.followDialog) {
+				// 	this.followDialog = false
+				// }
+				let token = this.token
+				let uid = this.uid
+				if (uid === this.info.uid) {
+					this.$u.toast("Can't follow yourself.")
+					return
+				}
+				setAttent(uid, token, this.liveDetail.uid).then((res) => {
+					if (res.code == 0) {
+						getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id).then(
+							(res) => {
+								this.liveDetail = res.info
+								this.anchor = res.info.anchor
+							}
+						)
+					}
+				})
+			},
 		},
 	}
 </script>
@@ -1080,5 +1109,14 @@
 		width: 40rpx;
 		height: 20rpx;
 		border-radius: 10rpx;
+	}
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: opacity 0.5s ease;
+	}
+
+	.fade-enter-from,
+	.fade-leave-to {
+		opacity: 0;
 	}
 </style>

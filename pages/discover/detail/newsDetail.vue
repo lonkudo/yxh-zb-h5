@@ -203,6 +203,7 @@
 	import NoContent from '../../../components/NoContent/NoContent.vue'
 	import { setAttent } from '@/api/live'
 	import { addLike, addCollection } from '@/api/video'
+	import check from '@/utils/check.js'
 
 	export default {
 		components: { NoContent },
@@ -357,8 +358,8 @@
 						console.log(err)
 					})
 			},
+			@check()
 			chooseReply(cInfo, rInfo) {
-				this.guard()
 				if (rInfo === undefined) {
 					this.inputMsg = 'reply ' + cInfo.userinfo.user_nicename
 				} else {
@@ -373,8 +374,8 @@
 				}
 				this.chosen = infoObj
 			},
+			@check()
 			postComment(args) {
-				this.guard()
 				this.commentFunc({ videoid: this.videoid, content: this.inputContent })
 			},
 			commentFunc(obj) {
@@ -409,8 +410,8 @@
 				}
 			},
 			/* 回复评论 */
+			@check()
 			postReply() {
-				this.guard()
 				const uid = this.uid
 				const token = this.token
 				const replyObj = Object.assign(this.chosen, {
@@ -435,8 +436,8 @@
 						console.log(err)
 					})
 			},
+			@check()
 			likeComment(item) {
-				this.guard()
 				this.addCommentLike(item.id, this.MEDIA_TYPE, item.parentid, item) //  id,type,parentid
 				const uid = window.localStorage.getItem('uid') || 0
 				// this.getComments(uid, this.curNewsId, this.commentPage, 2)
@@ -460,8 +461,8 @@
 						console.log(err)
 					})
 			},
+			@check()
 			addCollection() {
-				this.guard()
 				const token = this.token
 				const uid = this.uid
 				addCollection({
@@ -485,8 +486,8 @@
 						this.$u.toast('login first')
 					})
 			},
+			@check()
 			addLike() {
-				this.guard()
 				const token = this.token
 				const uid = this.uid
 				addLike({ token, uid, videoid: this.videoid, type: this.MEDIA_TYPE })
@@ -516,8 +517,8 @@
 			share() {
 				this.$u.toast('download app to share')
 			},
+			@check()
 			guanzhu() {
-				this.guard()
 				let token = this.token
 				let uid = this.uid
 				let touid = this.videoData.detail.userinfo.id

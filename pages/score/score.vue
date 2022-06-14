@@ -276,6 +276,7 @@
 	import { getScores, addAppointment } from '@/api/score'
 	import { getAppointmentList } from '@/api/my'
 	import NoContent from '../../components/NoContent/NoContent.vue'
+	import check from '@/utils/check'
 
 	/* -----------------------mqtt-------------------------- */
 	import { Mqtt } from '@/utils/mqtt'
@@ -1059,9 +1060,9 @@
 					this.ongoingPage.future.compe_id = [id]
 				}
 			},
+			@check()
 			subscribe(item) {
 				/* 订阅赛事 */
-				this.guard()
 				addAppointment({ uid: this.uid, game_id: item.id, token: this.token })
 					.then((res) => {
 						if (res.info.isappointment === '0') {

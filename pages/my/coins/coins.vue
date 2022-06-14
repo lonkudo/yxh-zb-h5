@@ -155,6 +155,7 @@
 	import swiperAutoHeight from '@/mixin/swiperAutoHeight.js'
 	import swiperUTabs from '@/mixin/swiperUTabs.js'
 	import { getUserInfo, signTask, liveOrDailyTask } from '@/api/my'
+	import check from '@/utils/check'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -171,8 +172,8 @@
 			}
 		},
 
+		@check()
 		onLoad() {
-			this.guard()
 			if (!this.$store.state.task.isSign) {
 				let item = this.$store.state.task.taskList.list.find(
 					(ele) => ele.date === 'Today'

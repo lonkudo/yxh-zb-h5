@@ -152,7 +152,7 @@ export default {
   watch: {
     value: {
       handler(newVal, oldVal) {
-        console.log(newVal);
+        // console.log(newVal);
         if (newVal) {
           this.getPlayerInfo();
         }

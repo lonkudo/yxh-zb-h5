@@ -90,7 +90,7 @@ export default {
   watch: {
     season_id: {
       handler(newVal, oldVal) {
-        console.log(newVal);
+        // console.log(newVal);
         if (newVal) {
           this.activeStage.id = "";
           this.getCompetitions();
@@ -158,7 +158,7 @@ export default {
         });
         if (result) this.activeStage = result;
         else this.activeStage = this.stageList[0];
-        console.log(this.activeStage);
+        // console.log(this.activeStage);
       });
     },
     onreachBottom() {

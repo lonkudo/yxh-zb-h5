@@ -161,6 +161,7 @@ export default {
       });
     },
     change(item) {
+      item["competition_id"] = this.value;
       uni.navigateTo({
         url:
           "/pages/data/team/team?item=" +

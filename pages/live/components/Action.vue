@@ -73,7 +73,7 @@
 						</u-tr>
 					</u-table>
 				</view>
-				<view class="b-f" v-if="pay.length > 0">
+				<view class="b-f" v-if="pay.length > 0 && showTlive">
 					<view class="h-20"></view>
 					<view class="line">
 						<view
@@ -333,6 +333,9 @@
 				this.flag = true
 			},
 			getMatchData() {
+				console.log(
+					'---getMathchData----getMathchData----getMathchData----getMathchData----getMathchData---'
+				)
 				getMatchData(this.game_id).then((res) => {
 					// console.log('---res----res----res----res----res---', res)
 					if (JSON.stringify(res.info) !== '{}' && res.info.stats) {
@@ -342,8 +345,12 @@
 						})
 						this.result = this.sortList()
 						this.flag = true
+						console.log(
+							'---getMathchData----getMathchData----getMathchData----getMathchData----getMathchData---'
+						)
 						// console.log('res.info', this.stats)
 					}
+					console.log('res', res.info)
 				})
 			},
 			insertSort(arr) {
@@ -444,11 +451,8 @@
 			},
 		},
 		created() {
+			console.log('---action----action----action----action----action---')
 			this.getMatchData()
-			// console.log('this', this.teamInfo)
-			this.$nextTick(() => {
-				// console.log('this', this.teamInfo)
-			})
 			this.connectMsg()
 		},
 		computed: {

@@ -23,6 +23,7 @@ export default class Request {
 					'content-type': 'application/x-www-form-urlencoded',
 				}
 				data = { ...params.data, ...{ lan: 1 } }
+				hideLoading = { ...params.data.hideLoading } || false
 			} else {
 				header = {
 					'content-type': 'application/json',

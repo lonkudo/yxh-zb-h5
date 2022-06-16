@@ -129,8 +129,19 @@
 				</view>
 			</view>
 			<view class="w-300 text-right fc-g">
-				{{ toNum(info.intelligence) === 0 ? '' : 'Intelligence' }}
-				{{ toNum(info.intelligence) !== 0 && toNum(info.lineup) !== 0 ? '/' : '' }}
+				{{
+					toNum(info.intelligence) !== 0 &&
+					toNum(info.competition_is_important) !== 0
+						? 'Intelligence'
+						: ''
+				}}
+				{{
+					toNum(info.intelligence) !== 0 &&
+					toNum(info.competition_is_important) !== 0 &&
+					toNum(info.lineup) !== 0
+						? '/'
+						: ''
+				}}
 				{{ toNum(info.lineup) === 0 ? '' : 'Lineup' }}
 			</view>
 		</view>

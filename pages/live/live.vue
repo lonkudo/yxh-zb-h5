@@ -228,6 +228,7 @@
 				</view>
 			</swiper-item>
 			<swiper-item
+				v-if="showTlive"
 				class="swiper-item"
 				:key="'Action'"
 				@touchmove.stop=""
@@ -240,6 +241,7 @@
 				></action>
 			</swiper-item>
 			<swiper-item
+				v-if="showLineup"
 				class="swiper-item"
 				:key="'Line-up'"
 				@touchmove.stop=""
@@ -263,6 +265,7 @@
 				:key="'intelligence'"
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
+				v-if="showIntelligence"
 			>
 				<intelligence
 					:myHeight="myHeight"
@@ -523,13 +526,16 @@
 				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
-					{ name: 'Action' },
-					{ name: 'Line-up' },
+					// { name: 'Action' },
+					// { name: 'Line-up' },
 					{ name: 'Analyse' },
 					{ name: 'Handicap' },
-					{ name: 'Intelligence' },
+					// { name: 'Intelligence' },
 					{ name: 'Contribution' },
 				],
+				showIntelligence: false,
+				showLineup: false,
+				showTlive: false,
 				showBack: true,
 				ws: null,
 				showSnippet: false,
@@ -903,6 +909,18 @@
 					.then((res) => {
 						this.liveDetail = res.info
 						console.log('liveDetail', this.liveDetail)
+
+						// intelligence 和lineup处理。
+						if (this.toNum(this.liveDetail.competition_is_important) === 1) {
+							this.menu.splice(1, 0, { name: 'Action' })
+							this.showTlive = true
+							this.menu.splice(2, 0, { name: 'Intelligence' })
+							this.showIntelligence = true
+						}
+						if (this.toNum(this.liveDetail.lineup) === 1) {
+							this.menu.splice(-1, 0, { name: 'Lineup' })
+							this.showLineup = true
+						}
 
 						let num = this.toNum(res.info.status_id)
 						if (num > 1 && num < 8) {

@@ -5,7 +5,22 @@
 			<recommend-slider></recommend-slider>
 			<system-informs-slider :noticeList="noticeList"></system-informs-slider>
 			<home-title :title="'Popular game'"></home-title>
-			<popular-game :pdata="scheduleList"></popular-game>
+			<view class="flex align-center">
+				<view
+					class="b-f h-200 w-200 margin-left-xs flex flex-direction align-center justify-center"
+				>
+					<image
+						:src="myTeam.logo"
+						mode=""
+						class="w-120 h-120"
+						v-if="!isEmpty(myTeam)"
+					/>
+					<text class="fc-b-6 f-hide w-180 text-center margin-top-xs fs-20">{{
+						myTeam.name_en
+					}}</text>
+				</view>
+				<popular-game :pdata="scheduleList"></popular-game>
+			</view>
 			<home-title :title="'Live'"></home-title>
 			<live :liveList="liveList"></live>
 			<home-title :title="'Videos'"></home-title>
@@ -46,6 +61,7 @@
 				scheduleList: [],
 				liveList: [],
 				videoList: [],
+				myTeam: {},
 			}
 		},
 		created() {
@@ -67,6 +83,7 @@
 						this.scheduleList = info.schedule
 						this.liveList = info.live
 						this.videoList = info.video
+						this.myTeam = info.my_team
 						let topics = []
 						// 获取订阅者id
 						this.scheduleList.forEach((element) => {

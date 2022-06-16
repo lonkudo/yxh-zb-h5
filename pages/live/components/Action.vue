@@ -13,7 +13,7 @@
 							<u-td width="8%"></u-td>
 							<u-td width="27%">
 								<view class="flex align-center justify-end">
-									<text class="fs-16 margin-right-xs f-hide w-160">{{
+									<text class="fs-16 margin-right-xs f-hide w-160 text-right">{{
 										teamInfo.home.name
 									}}</text>
 									<image :src="teamInfo.home.logo" mode="" class="ava-40" />

@@ -1,10 +1,10 @@
 <template>
 	<view
-		class="flex flex-direction b-f padding-xs padding-top-sm"
+		class="flex flex-direction b-f padding-top-sm margin-bottom-xs"
 		v-if="!this.isEmpty(info)"
 		@tap="goLiving"
 	>
-		<view class="fs-20">
+		<view class="fs-20 padding-left-xs padding-right-xs">
 			<view class="flex align-center justify-center">
 				<view class="flex align-center w-300 justify-start">
 					<text
@@ -36,7 +36,9 @@
 				</view>
 			</view>
 		</view>
-		<view class="fs-24 margin-top-xs margin-bottom-xs">
+		<view
+			class="fs-24 margin-top-xs margin-bottom-xs padding-left-xs padding-right-xs"
+		>
 			<view class="flex align-center">
 				<view class="flex align-center justify-end w-300">
 					<view
@@ -111,18 +113,32 @@
 			</view>
 		</view>
 		<view
-			class="fs-20 margin-bottom-xs flex align-center fc-b-9"
+			class="fs-20 margin-bottom-xs fc-b-9 flex align-center padding-left-xs padding-right-xs"
 			v-if="control[5] && info.odds.asia_text"
 		>
-			<view class="w-350 text-right">
-				<text>{{ info.odds.asia_text }}</text>
+			<view class="w-300"></view>
+			<view class="w-150 flex align-center">
+				<view class="w-50 text-right">
+					<text>{{ info.odds.asia_text }}</text>
+				</view>
+				<view class="w-50 flex align-center justify-center">
+					<view style="width: 1rpx; background-color: #999; height: 24rpx"></view>
+				</view>
+				<view class="w-50">
+					<text>{{ info.odds.bs_text }}</text>
+				</view>
 			</view>
-			<view class="w-50 flex align-center justify-center">
-				<view style="width: 1rpx; background-color: #999; height: 24rpx"></view>
+			<view class="w-300 text-right fc-g">
+				{{ toNum(info.intelligence) === 0 ? '' : 'Intelligence' }}
+				{{ toNum(info.intelligence) !== 0 && toNum(info.lineup) !== 0 ? '/' : '' }}
+				{{ toNum(info.lineup) === 0 ? '' : 'Lineup' }}
 			</view>
-			<view class="w-350">
-				<text>{{ info.odds.bs_text }}</text>
-			</view>
+		</view>
+		<view
+			class="bg-lightgreen flex align-center justify-center"
+			v-if="toNum(info.neutral) === 1"
+		>
+			<text class="fs-20 fc-g"> Neutral position</text>
 		</view>
 	</view>
 </template>
@@ -152,6 +168,7 @@
 		created() {
 			// console.log('control', this.control)
 		},
+		computed: {},
 		methods: {
 			subscribe() {
 				/* 点击铃铛，触发订阅事件 */

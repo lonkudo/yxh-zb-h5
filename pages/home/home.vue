@@ -2,7 +2,7 @@
 	<view class="flex flex-direction">
 		<search-header class="top"></search-header>
 		<scroll-view scroll-y="true" class="middle b-f6">
-			<recommend-slider></recommend-slider>
+			<recommend-slider :banner="banners"></recommend-slider>
 			<system-informs-slider :noticeList="noticeList"></system-informs-slider>
 			<home-title :title="'Popular game'"></home-title>
 			<view class="flex align-center">
@@ -62,6 +62,7 @@
 				liveList: [],
 				videoList: [],
 				myTeam: {},
+				banners: [],
 			}
 		},
 		created() {
@@ -84,6 +85,7 @@
 						this.liveList = info.live
 						this.videoList = info.video
 						this.myTeam = info.my_team
+						this.banners = info.banner
 						let topics = []
 						// 获取订阅者id
 						this.scheduleList.forEach((element) => {

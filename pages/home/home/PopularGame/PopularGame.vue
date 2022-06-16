@@ -8,6 +8,7 @@
 					class="game-item flex flex-direction justify-between padding-left-sm padding-right-sm"
 					v-for="(item, index) in gameList"
 					:key="index"
+					@tap="go(item)"
 				>
 					<view class="top flex align-center justify-between">
 						<text class="fc-b-9 fs-20 f-hide w-230">{{ item.name_en }}</text>
@@ -107,6 +108,21 @@
 					.catch((err) => {
 						console.log('err', err)
 					})
+			},
+			go(item) {
+				console.log('item', item)
+				let game_id = item.live[0].id
+				let stream = item.live[0].stream
+				let liveuid = item.live[0].uid
+				uni.navigateTo({
+					url:
+						'/pages/live/live?liveuid=' +
+						liveuid +
+						'&game_id=' +
+						game_id +
+						'&stream=' +
+						stream,
+				})
 			},
 		},
 	}

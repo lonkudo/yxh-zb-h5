@@ -11,6 +11,10 @@ import Request from '@/utils/request.js'
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
+// 二维码生成
+import tkiQrcode from '@/components/tki-qrcode/tki-qrcode.vue'
+Vue.component('tki-qrcode', tkiQrcode)
+
 import { tTable, tTh, tTr, tTd } from '@/components/t-table'
 Vue.component('t-table', tTable)
 Vue.component('t-th', tTh)
@@ -42,8 +46,6 @@ import initScrollHeight from '@/utils/initScrollHeight.js'
 Vue.prototype.initScrollHeight = initScrollHeight
 import guard from '@/utils/guard.js'
 Vue.prototype.guard = guard
-
-import check from '@/utils/check.js'
 
 import rpx2px from '@/utils/rpx2px.js'
 Vue.prototype.rpx2px = rpx2px

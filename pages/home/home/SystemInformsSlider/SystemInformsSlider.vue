@@ -15,6 +15,7 @@
 				v-for="(item, index) in noticeList"
 				:key="index"
 				:style="{ height: '80rpx', overflow: 'hidden' }"
+				@tap="go(item)"
 			>
 				<view class="swiper-item flex align-center"
 					><text class="fc-b-9 fs-24 f-hide-2">{{ item.txt }}</text></view
@@ -37,6 +38,13 @@
 		},
 		data() {
 			return {}
+		},
+		methods: {
+			go(item) {
+				uni.navigateTo({
+					url: '/pages/link/notice?url=' + item.url,
+				})
+			},
 		},
 	}
 </script>

@@ -405,9 +405,9 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-		}
-	    ,{
-            "path" : "pages/my/coins/checkInRules",
+		},
+		{
+			"path": "pages/my/coins/checkInRules",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
@@ -416,10 +416,9 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-            
-        }
-        ,{
-            "path" : "pages/my/fans/fans",
+		},
+		{
+			"path": "pages/my/fans/fans",
 			"style": {
 				"enablePullDownRefresh": false,
 				"navigationBarTextStyle": "black",
@@ -428,18 +427,29 @@
 				"backgroundColor": "#FFF",
 				"navigationStyle": "default"
 			}
-            
-        }
-        ,{
-            "path" : "components/MyTimeline/MyTimelineItem",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+		},
+		{
+			"path": "components/MyTimeline/MyTimelineItem",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/link/link"
+		},
+		{
+			"path": "pages/link/notice",
+			"style": {
+				"enablePullDownRefresh": false,
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "Notice",
+				"navigationBarBackgroundColor": "#FFF",
+				"backgroundColor": "#FFF",
+				"navigationStyle": "default"
+			}
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",

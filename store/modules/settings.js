@@ -33,6 +33,7 @@ const actions = {
 			site()
 				.then((res) => {
 					commit('SET_SITEINFO', res.info)
+					console.log('settings', res.info)
 					// commit('SET_ISSUCCESSCONNECT', true)
 					resolve(res.info)
 				})

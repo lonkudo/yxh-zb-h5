@@ -29,7 +29,7 @@
 		methods: {
 			go(info) {
 				uni.navigateTo({
-					url: 'detail/newsDetail?id=' + info.id,
+					url: '/pages/discover/detail/newsDetail?id=' + info.id,
 				})
 			},
 		},

@@ -4,10 +4,23 @@
 		:class="['image-info', borderRound]"
 		:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
 	>
+		<view
+			:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
+			v-show="!loadCompleted"
+			class="flex align-center justify-center"
+		>
+			<image
+				:src="'/static/styles/logo/loading_logo.png'"
+				:style="{ width: size / 3 + 'rpx', height: size / (2.075 * 3) + 'rpx' }"
+				mode="aspectFit"
+			/>
+		</view>
 		<image
+			v-show="loadCompleted"
 			:src="img"
 			mode="aspectFill"
 			:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
+			@load="loadCompleted = true"
 		/>
 		<view class="top-shadow" v-if="shadowTop"></view>
 		<view class="bottom-shadow" v-if="shadowBottom"></view>
@@ -57,7 +70,9 @@
 			},
 		},
 		data() {
-			return {}
+			return {
+				loadCompleted: false,
+			}
 		},
 		computed: {
 			borderRound: function () {

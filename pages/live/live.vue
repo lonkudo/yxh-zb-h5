@@ -911,14 +911,20 @@
 						console.log('liveDetail', this.liveDetail)
 
 						// intelligence 和lineup处理。
+						let flag = false
 						if (this.toNum(this.liveDetail.competition_is_important) === 1) {
 							this.menu.splice(1, 0, { name: 'Action' })
 							this.showTlive = true
 							this.menu.splice(2, 0, { name: 'Intelligence' })
 							this.showIntelligence = true
+							flag = true
 						}
 						if (this.toNum(this.liveDetail.lineup) === 1) {
-							this.menu.splice(-1, 0, { name: 'Lineup' })
+							if (flag) {
+								this.menu.splice(3, 0, { name: 'Lineup' })
+							} else {
+								this.menu.splice(1, 0, { name: 'Lineup' })
+							}
 							this.showLineup = true
 						}
 

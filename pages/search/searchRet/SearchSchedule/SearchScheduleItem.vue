@@ -25,13 +25,17 @@
 		<my-button
 			:text="'Subscribe'"
 			:falseText="'Reserved'"
-			class="my-btn"
-		></my-button
-	></view>
+			mana
+			:initActive="toNum(scheduleInfo.is_appointment) === 0"
+			@onTap="subscribe(scheduleInfo)"
+		></my-button>
+	</view>
 </template>
 
 <script>
 	import MyButton from '@/components/MyButton/MyButton.vue'
+	import { addAppointment } from '@/api/score'
+	import check from '@/utils/check'
 	export default {
 		name: 'SearchSchedule',
 		components: {
@@ -40,6 +44,31 @@
 		props: ['scheduleInfo'],
 		data() {
 			return {}
+		},
+		created() {},
+		methods: {
+			@check()
+			subscribe(item) {
+				/* 订阅赛事 */
+				addAppointment({ uid: this.uid, game_id: item.id, token: this.token })
+					.then((res) => {
+						if (res.info.isappointment === '0') {
+							item.is_appointment = 0
+							this.$u.toast('unsubscribed')
+						} else if (res.info.isappointment === 1) {
+							item.is_appointment = 1
+							this.$u.toast('subscribed')
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 7,
+								that: this,
+							})
+						}
+					})
+					.catch((err) => {
+						console.log('err', err)
+					})
+			},
 		},
 	}
 </script>

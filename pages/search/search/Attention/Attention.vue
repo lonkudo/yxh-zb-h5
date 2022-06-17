@@ -1,5 +1,5 @@
 <template>
-	<scroll-view scroll-x="true">
+	<scroll-view scroll-x="true" v-if="AttentionList.length > 0">
 		<view class="flex">
 			<attention-item
 				v-for="(item, index) in AttentionList"
@@ -15,13 +15,12 @@
 	import pdata from './data.js'
 	export default {
 		name: 'Attention',
+		props: ['AttentionList'],
 		components: {
 			AttentionItem,
 		},
 		data() {
-			return {
-				AttentionList: pdata,
-			}
+			return {}
 		},
 	}
 </script>

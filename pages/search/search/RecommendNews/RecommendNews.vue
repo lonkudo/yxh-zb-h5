@@ -1,7 +1,9 @@
 <template>
 	<view class="b-f br-5 margin-xs padding-xs">
 		<view v-for="(item, index) in newsList" class="flex align-center">
-			<text :class="['seq fs-14 fw-2 margin-xs', seqBg(index)]">{{ index }}</text>
+			<text :class="['seq fs-14 fw-2 margin-xs', seqBg(index)]">{{
+				index + 1
+			}}</text>
 			<text class="f-hide w-650 fs-24 fc-b-9">{{ item.caption }}</text>
 		</view>
 	</view>
@@ -11,10 +13,9 @@
 	import pdata from './data.js'
 	export default {
 		name: 'RecommendNews',
+		props: ['newsList'],
 		data() {
-			return {
-				newsList: pdata,
-			}
+			return {}
 		},
 		methods: {
 			seqBg(idx) {

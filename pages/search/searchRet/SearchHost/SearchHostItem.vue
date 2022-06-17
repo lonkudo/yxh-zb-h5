@@ -15,7 +15,7 @@
 			:falseText="'Followed'"
 			mana
 			:initActive="toNum(hostInfo.is_attention) === 0"
-			@onTap="btnTap"
+			@onTap="follow(hostInfo)"
 		></my-button>
 	</view>
 </template>

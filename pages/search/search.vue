@@ -21,9 +21,9 @@
 		<view class="flex flex-direction" v-show="!showRec">
 			<scroll-view scroll-y="true" class="b-f6">
 				<find-title :title="'Recommand Attention'"></find-title>
-				<attention></attention>
+				<attention :AttentionList="recHostList"></attention>
 				<find-title :title="'Today\'s Recommend'"></find-title>
-				<recommend-news></recommend-news>
+				<recommend-news :newsList="recNewsList"></recommend-news>
 			</scroll-view>
 		</view>
 		<view class="flex flex-direction" v-show="showRet">
@@ -122,10 +122,13 @@
 	import SearchNews from './searchRet/SearchNews/SearchNews.vue'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 
-	import { getHostList } from '@/api/search'
-	import { getScheduleList } from '@/api/search'
-	import { getStudioList } from '@/api/search'
-	import { getNewsList } from '@/api/search'
+	import {
+		getHostList,
+		getScheduleList,
+		getStudioList,
+		getNewsList,
+		getRecommand,
+	} from '@/api/search'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -178,6 +181,8 @@
 				scheduleList: [],
 				liveList: [],
 				newsList: [],
+				recHostList: [],
+				recNewsList: [],
 				hostPage: {
 					num: 20,
 				},
@@ -197,6 +202,7 @@
 		},
 		onLoad() {
 			this.myHeight = this.initScrollHeight(176)
+			this.getRecommand()
 			setTimeout(() => {
 				this.initSwiper = false
 			}, 5)
@@ -215,6 +221,17 @@
 						delta: 1,
 					})
 				}
+			},
+			getRecommand() {
+				const uid = this.isEmpty(this.uid) ? '0' : this.uid
+				getRecommand(1, uid)
+					.then((res) => {
+						this.recNewsList = res.info.news
+						this.recHostList = res.info.user
+					})
+					.catch((err) => {
+						console.log(err)
+					})
 			},
 			getList(keyword) {
 				if (!keyword) {

@@ -152,7 +152,7 @@ export default {
     // 国家队获取赛程
     teamId: {
       handler(newVal, oldVal) {
-        console.log(this.isCountryTeam);
+        // console.log(this.isCountryTeam);
         if (newVal) {
           if (this.isCountryTeam) {
             this.getCountrySchedule();

@@ -66,7 +66,7 @@ export default {
     if (player.player) this.playerInfo = player.player;
     else this.playerInfo = player;
     this.playerId = this.playerInfo.player_id;
-    console.log(this.playerId);
+    // console.log(this.playerId);
   },
   mounted() {
     this.myHeight = this.initScrollHeight(350);

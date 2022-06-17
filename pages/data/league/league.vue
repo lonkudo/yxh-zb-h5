@@ -31,7 +31,7 @@
       >
         <swiper-item
           class="swiper-item"
-          :key="'dynamic'"
+          key="dynamic"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
@@ -43,7 +43,7 @@
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
-          :key="'schedule'"
+          key="schedule"
           :style="{ height: myHeight + 'rpx' }"
         >
           <league-schedule
@@ -53,29 +53,43 @@
             :myHeight="myHeight"
           ></league-schedule>
         </swiper-item>
-        <!--  <swiper-item
+        <swiper-item
           class="swiper-item"
-          :key="'team-data'"
+          key="integral"
           @touchmove.stop=""
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-data :teamInfo="teamInfo"></team-data>
+          <league-integral
+            v-model="competition_id"
+            :season_id="activeYearOption.id"
+            :myHeight="myHeight"
+          ></league-integral>
         </swiper-item>
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
-          :key="'team-player'"
+          key="league-player"
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-player v-model="teamId" :myHeight="myHeight" :isCountryTeam="isCountryTeam"></team-player>
+          <league-player
+            v-model="competition_id"
+            :season_id="activeYearOption.id"
+            :myHeight="myHeight"
+          ></league-player>
         </swiper-item>
         <swiper-item
           class="swiper-item"
           @touchmove.stop=""
+          key="league-team"
           :style="{ height: myHeight + 'rpx' }"
         >
-          <team-transfer v-model="teamId"></team-transfer>
-        </swiper-item> -->
+          <league-team
+            v-model="competition_id"
+            :season_id="activeYearOption.id"
+            :myHeight="myHeight"
+          ></league-team>
+        </swiper-item>
+        
       </swiper>
     </view>
     <u-popup v-model="show" mode="bottom" border-radius="14" height="580">

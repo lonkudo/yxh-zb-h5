@@ -49,6 +49,8 @@ Vue.prototype.guard = guard
 
 import rpx2px from '@/utils/rpx2px.js'
 Vue.prototype.rpx2px = rpx2px
+import px2rpx from '@/utils/px2rpx.js'
+Vue.prototype.px2rpx = px2rpx
 
 import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
 

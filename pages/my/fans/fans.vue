@@ -176,6 +176,7 @@
 			}
 		},
 		onLoad() {
+			console.log('scrollHeight', this.initScrollHeight(0))
 			this.myHeight = this.initScrollHeight(88)
 			this.getData()
 

@@ -241,6 +241,7 @@
 		async onLoad(options) {
 			this.myHeight = this.initScrollHeight(100)
 			this.screenHeight = this.initScrollHeight(0)
+			console.log('scrollHeight', this.initScrollHeight(0))
 
 			this.videoid = options.id
 			if (this.isEmpty(this.uid)) {

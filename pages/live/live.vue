@@ -571,6 +571,7 @@
 			}
 		},
 		async onLoad(options) {
+			console.log('scrollHeight', this.initScrollHeight(0))
 			this.liveuid = options.liveuid
 			this.stream = options.stream
 			this.game_id = options.game_id

@@ -510,6 +510,7 @@
 		},
 		onLoad() {
 			/* 初始化高度  */
+			console.log('scrollHeight', this.initScrollHeight(0))
 			this.myHeight = this.initScrollHeight(78)
 			this.myHeight2 = this.initScrollHeight(158)
 			/* 过滤页面传回数据,更新对应的区域,更新vuex */

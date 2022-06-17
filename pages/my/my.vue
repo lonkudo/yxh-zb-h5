@@ -39,6 +39,9 @@
 				],
 			}
 		},
+		onLoad() {
+			console.log('scrollHeight', this.initScrollHeight(0))
+		},
 		computed: {},
 		components: {
 			ExpHeader,

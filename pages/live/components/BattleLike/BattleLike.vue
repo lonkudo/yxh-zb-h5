@@ -326,7 +326,7 @@
 							a1: {
 								// 起始点
 								x: this.rpx2px(60),
-								y: this.rpx2px(600),
+								y: this.rpx2px(550),
 							},
 							a2: {
 								x: this.rpx2px(0),
@@ -345,7 +345,7 @@
 							a1: {
 								// 起始点
 								x: this.rpx2px(60),
-								y: this.rpx2px(600),
+								y: this.rpx2px(550),
 							},
 							a2: {
 								x: this.rpx2px(120),
@@ -375,7 +375,7 @@
 							a1: {
 								// 起始点
 								x: this.rpx2px(640),
-								y: this.rpx2px(600),
+								y: this.rpx2px(550),
 							},
 							a2: {
 								x: this.rpx2px(580),
@@ -394,7 +394,7 @@
 							a1: {
 								// 起始点
 								x: this.rpx2px(640),
-								y: this.rpx2px(600),
+								y: this.rpx2px(550),
 							},
 							a2: {
 								x: this.rpx2px(700),

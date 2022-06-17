@@ -82,17 +82,32 @@
 				></player>
 			</template>
 		</view>
-		<u-tabs-swiper
-			ref="uTabs"
-			:list="menu"
-			:current="current"
-			@change="tabsChange"
-			:is-scroll="false"
-			swiperWidth="750"
-			active-color="#02b875"
-			font-size="24"
-			gutter="40"
-		></u-tabs-swiper>
+		<view class="p-r">
+			<u-tabs-swiper
+				ref="uTabs"
+				:list="menu"
+				:current="current"
+				@change="tabsChange"
+				:is-scroll="false"
+				swiperWidth="750"
+				active-color="#02b875"
+				font-size="24"
+				gutter="40"
+			></u-tabs-swiper>
+			<transition name="fade">
+				<view
+					class="p-a flex flex-direction right-0 top-0 align-center justify-center h-80 w-80"
+					style="z-index: 400"
+					v-if="liveDetail.is_attention === 0"
+				>
+					<image :src="liveDetail.anchor.avatar" class="ava-60" mode="" />
+					<view
+						class="p-a bottom add-anchor-btn bg-green flex align-center justify-center bottom-5"
+						><text class="iconfont icon-add-bold fs-16 fc-b-f" @tap="guanzhu"></text
+					></view>
+				</view>
+			</transition>
+		</view>
 		<swiper
 			:current="swiperCurrent"
 			@transition="transition"
@@ -213,6 +228,7 @@
 				</view>
 			</swiper-item>
 			<swiper-item
+				v-if="showTlive"
 				class="swiper-item"
 				:key="'Action'"
 				@touchmove.stop=""
@@ -225,6 +241,7 @@
 				></action>
 			</swiper-item>
 			<swiper-item
+				v-if="showLineup"
 				class="swiper-item"
 				:key="'Line-up'"
 				@touchmove.stop=""
@@ -242,6 +259,19 @@
 			</swiper-item>
 			<swiper-item>
 				<handicap :myHeight="myHeight" :game_id="game_id"></handicap>
+			</swiper-item>
+			<swiper-item
+				class="swiper-item"
+				:key="'intelligence'"
+				@touchmove.stop=""
+				:style="{ height: myHeight + 'rpx' }"
+				v-if="showIntelligence"
+			>
+				<intelligence
+					:myHeight="myHeight"
+					:game_id="game_id"
+					:teamInfo="teamInfo"
+				></intelligence>
 			</swiper-item>
 			<swiper-item
 				class="swiper-item"
@@ -286,11 +316,11 @@
 				<view
 					class="flex align-center h-60 justify-between padding-left-sm padding-right-sm b-f"
 				>
-					<u-tabs-swiper
+					<my-tabs-swiper
 						:list="[{ name: 'Gift' }]"
 						swiperWidth="750"
 						active-color="#02b875"
-					></u-tabs-swiper>
+					></my-tabs-swiper>
 				</view>
 				<swiper
 					class="swiper"
@@ -394,10 +424,48 @@
 				</view>
 			</view>
 		</u-popup>
+		<u-popup
+			v-model="showAttent"
+			mode="center"
+			width="450rpx"
+			ref="anchorPopup"
+			id="anchorPopup"
+		>
+			<view
+				class="flex flex-direction justify-end h-400 bg-transparent"
+				style="transform: translateY(-10%)"
+				v-if="!isEmpty(liveDetail)"
+			>
+				<view
+					class="flex flex-direction p-r padding-sm justify-center align-center b-f br-15"
+				>
+					<image
+						:src="liveDetail.anchor.avatar"
+						mode=""
+						class="ava-100 p-a"
+						style="left: 175rpx; top: -50rpx"
+					/>
+					<text class="margin-top-lg fs-30">{{
+						liveDetail.anchor.user_nicename
+					}}</text>
+					<text class="margin-top-sm fc-b-6 fs-20 text-center"
+						>Follow the anchor to enjoy the exciting game</text
+					>
+					<my-button
+						class="margin-top-sm"
+						:text="'Follow'"
+						mana
+						@onTap="setAttent"
+					></my-button>
+				</view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
 <script>
+	// console.log = function(){}
+
 	import {
 		getLiveDetail,
 		enterLiveRoom,
@@ -405,6 +473,7 @@
 		sendGift,
 		getCoin,
 		changeRoom,
+		setAttent,
 	} from '@/api/live'
 	import { swiperAutoHeight, swiperUTabs } from '@/mixin'
 	import Level from '@/components/Level/Level.vue'
@@ -419,6 +488,10 @@
 	import BattleLike from './components/BattleLike/BattleLike.vue'
 	import Handicap from './components/Handicap/Handicap.vue'
 	import Player from '@/components/TCPlayer'
+	import Intelligence from './components/Intelligence.vue'
+	import check from '@/utils/check.js'
+	import MyButton from '../../components/MyButton/MyButton.vue'
+	// import MyTabsSwiper from '@/components/my-tabs-swiper/my-tabs-swiper.vue'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -433,6 +506,9 @@
 			BattleLike,
 			Handicap,
 			Player,
+			Intelligence,
+			MyButton,
+			// MyTabsSwiper,
 		},
 		data() {
 			return {
@@ -450,12 +526,16 @@
 				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
-					{ name: 'Action' },
-					{ name: 'Line-up' },
+					// { name: 'Action' },
+					// { name: 'Line-up' },
 					{ name: 'Analyse' },
 					{ name: 'Handicap' },
+					// { name: 'Intelligence' },
 					{ name: 'Contribution' },
 				],
+				showIntelligence: false,
+				showLineup: false,
+				showTlive: false,
 				showBack: true,
 				ws: null,
 				showSnippet: false,
@@ -487,6 +567,7 @@
 				timer: null, // 用于直播间任务计时。
 				playerInfo: {},
 				connObj: {},
+				showAttent: false,
 			}
 		},
 		async onLoad(options) {
@@ -500,10 +581,13 @@
 			this.getRoomsList()
 			this.getGiftList()
 			/*  */
+			uni.$on('logined', () => {
+				this.getLiveDetail()
+			})
+			this.checkAnchor()
 		},
 		async onShow() {
 			this.getCoin()
-			console.log('1123')
 		},
 		onUnload() {
 			if (this.timer !== null) {
@@ -557,15 +641,15 @@
 				let startTimestamp = this.toNum(this.liveDetail.starttime) * 1000
 				let curTimestamp = Number(new Date())
 				let gap = curTimestamp - startTimestamp
-				console.log(
-					'gap',
-					curTimestamp,
-					startTimestamp,
-					gap,
-					'status:',
-					this.livingStatus
-				)
-				console.log('gap', new Date(curTimestamp), new Date(startTimestamp))
+				// console.log(
+				// 	'gap',
+				// 	curTimestamp,
+				// 	startTimestamp,
+				// 	gap,
+				// 	'status:',
+				// 	this.livingStatus
+				// )
+				// console.log('gap', new Date(curTimestamp), new Date(startTimestamp))
 				if (this.livingStatus) {
 					return 'living'
 				} else if (gap > 10800000) {
@@ -637,10 +721,12 @@
 			},
 			reloadHandle() {
 				this.reloadBtnShow = false
-				this.initPlayer()
+				this.$nextTick(() => {
+					this.initPlayer()
+				})
 			},
+			@check()
 			dianzan(team) {
-				this.guard()
 				console.log('team', team)
 				let broadcastObj = {
 					msg: [],
@@ -697,15 +783,15 @@
 					}
 				})
 			},
+			@check()
 			clickGift() {
-				this.guard()
 				if (!this.isEmpty(this.uid)) {
 					this.showGift = true
 				}
 			},
+			@check()
 			sendGift(giftId, giftInfo, giftNum) {
 				/* 赠送礼物 */
-				this.guard()
 				if (!giftId) return this.$u.toast('please choose a type of gift')
 				// 最好还是别用this传值，万一有延时就错误了，
 
@@ -822,6 +908,20 @@
 				getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id)
 					.then((res) => {
 						this.liveDetail = res.info
+						console.log('liveDetail', this.liveDetail)
+
+						// intelligence 和lineup处理。
+						if (this.toNum(this.liveDetail.competition_is_important) === 1) {
+							this.menu.splice(1, 0, { name: 'Action' })
+							this.showTlive = true
+							this.menu.splice(2, 0, { name: 'Intelligence' })
+							this.showIntelligence = true
+						}
+						if (this.toNum(this.liveDetail.lineup) === 1) {
+							this.menu.splice(-1, 0, { name: 'Lineup' })
+							this.showLineup = true
+						}
+
 						let num = this.toNum(res.info.status_id)
 						if (num > 1 && num < 8) {
 							this.livingStatus = true
@@ -854,8 +954,11 @@
 								pull: res.info.origin_video,
 								live: true,
 							}
+
 							this.$nextTick(() => {
-								this.initPlayer()
+								if (this.livingStatus) {
+									this.initPlayer()
+								}
 							})
 						} else if (res.info.uid !== '3') {
 							/* 个人直播 */
@@ -959,9 +1062,9 @@
 					this.$u.toast("Content can't be empty")
 				}
 			},
+			@check()
 			sendMsg(msg) {
 				/* 发送消息 */
-				this.guard() // 先检查是否登录，没登录就跳转登录页
 				let broadcastObj = {} // 封装广播对象
 				broadcastObj.msg = []
 				let obj = {}
@@ -1007,6 +1110,41 @@
 			toggleControl() {
 				this.showBack = !this.showBack
 			},
+			// 关注主播
+			@check()
+			guanzhu() {
+				// if (this.followDialog) {
+				// 	this.followDialog = false
+				// }
+				let token = this.token
+				let uid = this.uid
+				if (uid === this.info.uid) {
+					this.$u.toast("Can't follow yourself.")
+					return
+				}
+				setAttent(uid, token, this.liveDetail.uid).then((res) => {
+					if (res.code == 0) {
+						getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id).then(
+							(res) => {
+								this.liveDetail = res.info
+								this.anchor = res.info.anchor
+							}
+						)
+					}
+				})
+			},
+			checkAnchor() {
+				setTimeout(() => {
+					if (this.toNum(this.liveDetail.is_attention) === 0) {
+						this.showAttent = true
+					}
+				}, 15000)
+				setTimeout(() => {
+					if (this.toNum(this.liveDetail.is_attention) === 0) {
+						this.showAttent = true
+					}
+				}, 75000)
+			},
 		},
 	}
 </script>
@@ -1042,5 +1180,25 @@
 		background-image: url('@/static/styles/png/preview-bg.png');
 		background-repeat: no-repeat;
 		background-size: 750rpx auto;
+	}
+	.add-anchor-btn {
+		width: 40rpx;
+		height: 20rpx;
+		border-radius: 10rpx;
+	}
+	.fade-enter-active,
+	.fade-leave-active {
+		transition: opacity 0.5s ease;
+	}
+
+	.fade-enter-from,
+	.fade-leave-to {
+		opacity: 0;
+	}
+
+	/deep/#anchorPopup
+		> uni-view.u-drawer-content.u-drawer-center.u-drawer-content-visible.u-animation-zoom
+		> uni-view.u-mode-center-box {
+		background-color: transparent !important;
 	}
 </style>

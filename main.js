@@ -43,6 +43,8 @@ Vue.prototype.initScrollHeight = initScrollHeight
 import guard from '@/utils/guard.js'
 Vue.prototype.guard = guard
 
+import check from '@/utils/check.js'
+
 import rpx2px from '@/utils/rpx2px.js'
 Vue.prototype.rpx2px = rpx2px
 

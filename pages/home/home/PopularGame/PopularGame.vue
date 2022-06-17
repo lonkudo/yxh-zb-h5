@@ -1,6 +1,6 @@
 <template>
-	<view class="margin-xs b-f br-5">
-		<scroll-view scroll-x="true">
+	<view class="margin-xs b-f br-5 h-200">
+		<scroll-view scroll-x="true" class="w-520">
 			<view
 				class="flex game-swiper padding-top-sm padding-bottom-sm justify-between"
 			>
@@ -10,35 +10,41 @@
 					:key="index"
 				>
 					<view class="top flex align-center justify-between">
-						<text class="fc-b-9 fs-22 f-hide w-230">{{ item.competition_name }}</text>
+						<text class="fc-b-9 fs-20 f-hide w-230">{{ item.name_en }}</text>
 						<view v-if="true">
-							<text class="fc-b-9 fs-22 margin-left-xs">{{
-								item.match_time | formatGiven('MM-dd hh:ss')
-							}}</text>
+							<text class="fc-b-9 fs-20 margin-left-xs"
+								>{{ item.match_time | formatGiven('MM-dd hh:ss') }} ></text
+							>
 						</view>
 						<view v-else>
-							<text class="fc-b-9 fs-22 margin-right-xs">Live</text>
+							<text class="fc-b-9 fs-20 margin-right-xs">Live</text>
 							<text class="iconfont fc-g icon-zhibozhong"></text>
 						</view>
 					</view>
 					<view class="bottom flex justify-between">
 						<view class="left flex flex-direction justify-between">
 							<view class="team-item flex align-center">
-								<img :src="item.home_logo" alt="" class="margin-right-sm" />
-								<text class="fs-18 f-hide w-230">{{ item.home_name }}</text>
+								<img :src="item.home_team.logo" alt="" class="margin-right-sm" />
+								<text class="fs-18 f-hide w-230">{{ item.home_team.name_en }}</text>
 							</view>
 							<view class="team-item flex align-center">
-								<img :src="item.away_logo" alt="" class="margin-right-sm" />
-								<text class="fs-18 f-hide w-230">{{ item.away_name }}</text>
+								<img :src="item.away_team.logo" alt="" class="margin-right-sm" />
+								<text class="fs-18 f-hide w-230">{{ item.away_team.name_en }}</text>
 							</view>
 						</view>
 						<view class="right">
 							<view v-if="false" class="scores flex flex-direction justify-between">
-								<text class="fs-18">{{ item.home_scores[0] }}</text>
-								<text class="fs-18">{{ item.away_scores[0] }}</text>
+								<text class="fs-18">{{ item.score.home_team }}</text>
+								<text class="fs-18">{{ item.score.home_team }}</text>
 							</view>
 							<view v-else class="scores flex align-center">
-								<text class="iconfont icon-lingdang fc-g"></text>
+								<text
+									:class="[
+										'iconfont icon-lingdang fs-40  ',
+										item.is_appointment ? 'fc-g' : 'fc-b-c',
+									]"
+									@tap.stop="subscribe(item)"
+								></text>
 							</view>
 						</view>
 					</view>
@@ -50,6 +56,9 @@
 
 <script>
 	// import pdata from './data.js'
+	import check from '@/utils/check'
+	import { getAppointmentList } from '@/api/my'
+	import { addAppointment } from '@/api/score'
 	export default {
 		name: 'PopularGame',
 		props: {
@@ -65,8 +74,40 @@
 				gameList: this.pdata,
 			}
 		},
-		created() {
-			console.log('pdata', this.pdata)
+		watch: {
+			pdata: function (newVal) {
+				this.gameList = this.pdata
+			},
+		},
+		created() {},
+		methods: {
+			@check()
+			subscribe(item) {
+				/* 订阅赛事 */
+				addAppointment({
+					uid: this.uid,
+					game_id: item.id,
+					token: this.token,
+					hideLoading: true,
+				})
+					.then((res) => {
+						if (res.info.isappointment === '0') {
+							item.is_appointment = 0
+							this.$u.toast('unsubscribed')
+						} else if (res.info.isappointment === 1) {
+							item.is_appointment = 1
+							this.$u.toast('subscribed')
+							this.$store.dispatch('FINISH_TASK', {
+								type: 1,
+								taskid: 7,
+								that: this,
+							})
+						}
+					})
+					.catch((err) => {
+						console.log('err', err)
+					})
+			},
 		},
 	}
 </script>
@@ -81,7 +122,6 @@
 		.game-item {
 			min-width: 370rpx;
 			max-width: 370rpx;
-			border-right: 1rpx solid #f6f6f6;
 			.top {
 				text:nth-child(1) {
 					padding-top: 2rpx;

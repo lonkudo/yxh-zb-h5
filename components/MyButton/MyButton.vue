@@ -41,10 +41,21 @@
 			handleTap: function () {
 				if (!this.mana) {
 					this.isActive = !this.isActive
-				} else {
-					this.isActive = this.initActive
 				}
+
+				// else {
+				// 	this.isActive = this.initActive
+				// 	console.log('isActive', this.isActive)
+				// }
 				this.$emit('onTap')
+			},
+		},
+		watch: {
+			initActive: {
+				handler: function (newVal) {
+					this.isActive = newVal
+				},
+				immediate: true,
 			},
 		},
 	}

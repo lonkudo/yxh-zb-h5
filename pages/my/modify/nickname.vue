@@ -10,7 +10,7 @@
 
 <script>
 	import { updateInfo } from '@/api/my'
-
+	import check from '@/utils/check'
 	export default {
 		data() {
 			return {
@@ -19,8 +19,8 @@
 				},
 			}
 		},
+		@check()
 		onLoad() {
-			this.guard()
 			this.form.user_nicename = this.userInfo.user_nicename
 		},
 		methods: {
@@ -30,8 +30,8 @@
 				}
 				this.updateInfo()
 			},
+			@check()
 			updateInfo() {
-				this.guard()
 				updateInfo({
 					uid: this.uid,
 					token: this.token,

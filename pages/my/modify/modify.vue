@@ -67,6 +67,7 @@
 
 <script>
 	import { updateInfo } from '@/api/my'
+	import check from '@/utils/check'
 	export default {
 		data() {
 			return {
@@ -112,8 +113,8 @@
 				this.form[ref] = args[0].response.data.info.avatar
 				this.updateInfo()
 			},
+			@check()
 			updateInfo() {
-				this.guard()
 				updateInfo({
 					uid: this.uid,
 					token: this.token,

@@ -20,7 +20,7 @@
 						>Sign in tomorrow +{{ nextDayCoin }} gold coins</text
 					>
 				</view>
-				<view class="fc-b-9 fs-20">Sign-in Rules ></view>
+				<view class="fc-b-9 fs-20" @tap="go">Sign-in Rules ></view>
 			</view>
 			<view class="flex align-center justify-around">
 				<view
@@ -155,6 +155,7 @@
 	import swiperAutoHeight from '@/mixin/swiperAutoHeight.js'
 	import swiperUTabs from '@/mixin/swiperUTabs.js'
 	import { getUserInfo, signTask, liveOrDailyTask } from '@/api/my'
+	import check from '@/utils/check'
 
 	export default {
 		mixins: [swiperAutoHeight, swiperUTabs],
@@ -171,8 +172,8 @@
 			}
 		},
 
+		@check()
 		onLoad() {
-			this.guard()
 			if (!this.$store.state.task.isSign) {
 				let item = this.$store.state.task.taskList.list.find(
 					(ele) => ele.date === 'Today'
@@ -182,6 +183,11 @@
 		},
 		onShow() {},
 		methods: {
+			go() {
+				uni.navigateTo({
+					url: 'checkInRules',
+				})
+			},
 			signTask(item) {
 				signTask(this.uid, item.day, this.token)
 					.then((res) => {

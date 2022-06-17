@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="scheduleList.length > 0">
 		<search-schedule-item
 			v-for="(item, index) in scheduleList"
 			:key="index"
@@ -16,10 +16,9 @@
 		components: {
 			SearchScheduleItem,
 		},
+		props: ['scheduleList'],
 		data() {
-			return {
-				scheduleList: pdata,
-			}
+			return {}
 		},
 	}
 </script>

@@ -9,9 +9,14 @@
 			>{{ liveInfo.title }}</text
 		>
 		<view class="flex align-center margin-top-xs margin-left-sm">
-			<img :src="liveInfo.user_avatar" alt="" />
+			<img
+				:src="liveInfo.user_avatar ? liveInfo.user_avatar : liveInfo.user.avatar"
+				alt=""
+			/>
 			<text class="margin-left-xs f-hide fc-b-6 fs-22">{{
 				liveInfo.user_nicename
+					? liveInfo.user_nicename
+					: liveInfo.user.user_nicename
 			}}</text>
 		</view>
 	</view>

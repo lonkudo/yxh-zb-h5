@@ -1,5 +1,8 @@
 <template>
-	<view class="margin-xs flex flex-wrap live-con justify-between">
+	<view
+		class="margin-xs flex flex-wrap live-con justify-between"
+		v-if="liveList.length > 0"
+	>
 		<live-item
 			v-for="(item, index) in liveList"
 			:key="index"
@@ -10,16 +13,14 @@
 
 <script>
 	import LiveItem from '@/pages/home/home/Live/LiveItem.vue'
-	import pdata from './data.js'
 	export default {
 		name: 'SearchLive',
+		props: ['liveList'],
 		components: {
 			LiveItem,
 		},
 		data() {
-			return {
-				liveList: pdata,
-			}
+			return {}
 		},
 	}
 </script>

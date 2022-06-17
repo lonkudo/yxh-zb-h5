@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="hostList.length > 0">
 		<search-host-item
 			v-for="(item, index) in hostList"
 			:key="index"
@@ -11,17 +11,22 @@
 <script>
 	import SearchHostItem from './SearchHostItem.vue'
 	import pdata from './data.js'
-	import MyButton from '@/components/MyButton/MyButton.vue'
+
 	export default {
 		name: 'SearchHost',
+		props: {
+			hostList: {
+				type: Array,
+				default() {
+					return []
+				},
+			},
+		},
 		components: {
 			SearchHostItem,
-			MyButton
 		},
 		data() {
-			return {
-				hostList: pdata,
-			}
+			return {}
 		},
 	}
 </script>

@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="newsList.length > 0">
 		<search-news-item
 			v-for="(item, index) in newsList"
 			:key="index"
@@ -10,16 +10,14 @@
 
 <script>
 	import SearchNewsItem from './SearchNewsItem.vue'
-	import pdata from './data.js'
 	export default {
 		name: 'SearchNews',
+		props: ['newsList'],
 		components: {
 			SearchNewsItem,
 		},
 		data() {
-			return {
-				newsList: pdata,
-			}
+			return {}
 		},
 	}
 </script>

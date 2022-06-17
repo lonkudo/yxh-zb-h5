@@ -4,8 +4,8 @@
 			v-show="imgLoaded"
 			:src="src"
 			:mode="mode"
-			@error="onErrorImg(item)"
-			@load="onSuccessImg(item)"
+			@error="onErrorImg()"
+			@load="onSuccessImg()"
 			class="w100 h100"
 		/>
 		<image v-show="!imgLoaded" :src="loadingPic" :mode="mode" class="w100 h100" />

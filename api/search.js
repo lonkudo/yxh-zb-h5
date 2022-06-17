@@ -51,3 +51,21 @@ export function getRecommand(p, uid) {
 		data: { service: 'Seek.GetSearch', p, uid },
 	})
 }
+
+// 换一组用户
+export function changeUser(p, uid) {
+	return request({
+		url: '?Seek.ChangUser',
+		method: 'POST',
+		data: { service: 'Seek.ChangUser', p, uid },
+	})
+}
+
+// 换一组新闻
+export function changeNews(p) {
+	return request({
+		url: '?Seek.ChangNews',
+		method: 'POST',
+		data: { service: 'Seek.ChangNews', p },
+	})
+}

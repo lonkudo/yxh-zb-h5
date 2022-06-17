@@ -20,9 +20,9 @@
 		</view>
 		<view class="flex flex-direction" v-show="!showRec">
 			<scroll-view scroll-y="true" class="b-f6">
-				<find-title :title="'Recommand Attention'"></find-title>
+				<find-title :title="'Recommand Attention'" @onTap="batchUser"></find-title>
 				<attention :AttentionList="recHostList"></attention>
-				<find-title :title="'Today\'s Recommend'"></find-title>
+				<find-title :title="'Today\'s Recommend'" @onTap="batchNews"></find-title>
 				<recommend-news :newsList="recNewsList"></recommend-news>
 			</scroll-view>
 		</view>
@@ -128,6 +128,8 @@
 		getStudioList,
 		getNewsList,
 		getRecommand,
+		changeUser,
+		changeNews,
 	} from '@/api/search'
 
 	export default {
@@ -197,12 +199,19 @@
 					size: 20,
 					total: 0,
 				},
+				recNewsPage: {
+					p: 1,
+				},
+				recHostPage: {
+					p: 1,
+				},
 				initSwiper: true,
 			}
 		},
 		onLoad() {
 			this.myHeight = this.initScrollHeight(176)
-			this.getRecommand()
+			this.changeUser()
+			this.changeNews()
 			setTimeout(() => {
 				this.initSwiper = false
 			}, 5)
@@ -280,7 +289,6 @@
 			},
 			getNewsList(keyword) {
 				// keyword 空的情况不查询
-				console.log('---11----11----11----11----11---')
 				if (!keyword) {
 					this.newsList = []
 					return
@@ -294,6 +302,33 @@
 					.catch((err) => {
 						console.log('err', err)
 					})
+			},
+			changeNews() {
+				changeNews(this.recNewsList)
+					.then((res) => {
+						this.recNewsList = res.info
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			batchNews() {
+				this.recNewsPage.p += 1
+				this.changeNews()
+			},
+			changeUser() {
+				let uid = this.isEmpty(this.uid) ? '100' : this.uid
+				changeUser(this.recHostPage.p, uid)
+					.then((res) => {
+						this.recHostList = res.info
+					})
+					.catch((err) => {
+						console.log(err)
+					})
+			},
+			batchUser() {
+				this.recHostPage.p += 1
+				this.changeUser()
 			},
 		},
 	}

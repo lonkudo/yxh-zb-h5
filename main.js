@@ -64,6 +64,8 @@ import ImageRight from '@/layout/ImageRight/ImageRight.vue'
 Vue.component('image-right', ImageRight)
 import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
 Vue.component('image-info', ImageInfo)
+import MyImage from '@/components/MyImage/MyImage.vue'
+Vue.component('my-image', MyImage)
 
 import VueSocketIO from 'vue-socket.io'
 store.dispatch('settings/GetSiteInfo').then((res) => {

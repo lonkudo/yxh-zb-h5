@@ -13,7 +13,7 @@
 				</view>
 			</view>
 			<view>
-				<img :src="newsInfo.img" alt="" />
+				<my-image :src="newsInfo.img" alt="" class="my-img" />
 			</view>
 		</view>
 	</view>
@@ -38,7 +38,7 @@
 
 <style lang="scss">
 	.news-item {
-		img {
+		.my-img {
 			width: 211rpx;
 			height: 140rpx;
 			border-radius: 10rpx;

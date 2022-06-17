@@ -3,7 +3,7 @@
 		<view class="hot"
 			><text class="fc-b-f fs-16 b-t iconfont icon-remen">2302</text></view
 		>
-		<img :src="liveInfo.thumb" alt="" />
+		<my-image :src="liveInfo.thumb" alt="" class="my-img" mode="aspectFill" />
 		<text
 			class="margin-top-xs margin-left-xs f-hide margin-left-sm fs-28 fc-b-3"
 			>{{ liveInfo.title }}</text
@@ -57,7 +57,7 @@
 				padding: 2rpx 6rpx;
 			}
 		}
-		img {
+		.my-img {
 			height: 200rpx;
 			width: 360rpx;
 			border-top-left-radius: 5rpx;

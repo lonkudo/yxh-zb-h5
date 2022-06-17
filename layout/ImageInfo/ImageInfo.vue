@@ -4,7 +4,12 @@
 		:class="['image-info', borderRound]"
 		:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
 	>
-		<view
+		<my-image
+			:src="img"
+			:mode="'aspectFill'"
+			:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
+		></my-image>
+		<!-- <view
 			:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
 			v-show="!loadCompleted"
 			class="flex align-center justify-center"
@@ -21,7 +26,7 @@
 			mode="aspectFill"
 			:style="{ width: size + 'rpx', height: size / 2.075 + 'rpx' }"
 			@load="loadCompleted = true"
-		/>
+		/> -->
 		<view class="top-shadow" v-if="shadowTop"></view>
 		<view class="bottom-shadow" v-if="shadowBottom"></view>
 		<view class="center-icon" v-if="showIcon">

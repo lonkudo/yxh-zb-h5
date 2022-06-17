@@ -4,7 +4,9 @@
 		:style="{ height: myHeight + 'rpx' }"
 		:id="'content-wrap' + 'Action'"
 	>
+		<!-- teamInfo不为空且加载完成才渲染 -->
 		<template v-if="!isEmpty(teamInfo) && flag">
+			<!-- 技术统计 -->
 			<view :style="{ height: myHeight + 'rpx' }" class="b-f">
 				<view class="padding-sm b-f">Technical statistics</view>
 				<view class="b-f">
@@ -73,6 +75,7 @@
 						</u-tr>
 					</u-table>
 				</view>
+				<!-- 文字直播 -->
 				<view class="b-f" v-if="pay.length > 0 && showTlive">
 					<view class="h-20"></view>
 					<view class="line">
@@ -85,6 +88,7 @@
 						>
 					</view>
 					<view class="margin-top-lg" v-show="activeIndex !== 0">
+						<!-- my-timeline是根据u-timline改造，有左右布局和左中右布局两种 -->
 						<my-timeline>
 							<my-timeline-item v-for="(item, index) in tliveScript" :key="index">
 								<template v-slot:node>
@@ -109,6 +113,7 @@
 						</my-timeline>
 					</view>
 					<view class="margin-top-lg" v-show="activeIndex === 0">
+						<!-- 左中右布局的timeline -->
 						<my-timeline-center>
 							<view v-for="(item, index) in mainScript" :key="index">
 								<my-timeline-item-left v-if="item.events[0].position === 1">
@@ -170,6 +175,7 @@
 						</view>
 					</view>
 					<view class="flex flex-wrap padding-left-sm padding-right-xs">
+						<!-- 时间类型指示区 -->
 						<image-left
 							class="margin-bottom-sm"
 							v-for="(item, index) in tliveIcons"
@@ -314,6 +320,7 @@
 				)
 			},
 			dealMessage(topic, payload) {
+				/* mqtt建立以后通过这个函数来处理获取到实时数据 */
 				// this.pay = JSON.parse(payload)
 				let newPayload = JSON.parse(payload)
 
@@ -325,6 +332,7 @@
 				// this.realTime(JSON.parse(payload))
 			},
 			renewStats(stats) {
+				/* 技术统计刷新 */
 				this.stats = stats
 				this.stats.forEach((element) => {
 					this.setChildSort(element)
@@ -333,24 +341,18 @@
 				this.flag = true
 			},
 			getMatchData() {
-				console.log(
-					'---getMathchData----getMathchData----getMathchData----getMathchData----getMathchData---'
-				)
 				getMatchData(this.game_id).then((res) => {
 					// console.log('---res----res----res----res----res---', res)
 					if (JSON.stringify(res.info) !== '{}' && res.info.stats) {
+						// 下面都是技术统计的处理过程，result是结果，拿来渲染
 						this.stats = res.info.stats
 						this.stats.forEach((element) => {
 							this.setChildSort(element)
 						})
 						this.result = this.sortList()
 						this.flag = true
-						console.log(
-							'---getMathchData----getMathchData----getMathchData----getMathchData----getMathchData---'
-						)
 						// console.log('res.info', this.stats)
 					}
-					console.log('res', res.info)
 				})
 			},
 			insertSort(arr) {
@@ -451,12 +453,12 @@
 			},
 		},
 		created() {
-			console.log('---action----action----action----action----action---')
 			this.getMatchData()
 			this.connectMsg()
 		},
 		computed: {
 			tliveScript: function () {
+				/* 文字直播（所有）处理成timeline渲染形式 */
 				let arr = []
 				let tmp = {
 					time: null,
@@ -482,6 +484,7 @@
 				return arr
 			},
 			mainScript: function () {
+				/* 文字直播（重要）处理成timeline-center渲染形式 */
 				let mainArr = []
 				let arr = []
 				let tmp = {

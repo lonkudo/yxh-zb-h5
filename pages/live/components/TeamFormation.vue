@@ -1,4 +1,5 @@
 <template>
+	<!-- 球队阵容 -->
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Squad'"

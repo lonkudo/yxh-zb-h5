@@ -5,6 +5,7 @@ const snippet = {
 
 	mutations: {
 		add_sni: function (state, str) {
+			/* 增加快捷语 */
 			const timestamp = Date.now()
 			state.snippetList.push({ timestamp: timestamp, msg: str, show: false })
 			uni.setStorage({
@@ -13,6 +14,7 @@ const snippet = {
 			})
 		},
 		del_sni: function (state, obj) {
+			/* 删除快捷语 */
 			const index = state.snippetList.findIndex((ele) => {
 				return ele.timestamp === obj.timestamp
 			})
@@ -20,18 +22,17 @@ const snippet = {
 			uni.setStorageSync('snippetList', state.snippetList)
 		},
 		show_sni: function (state, obj) {
+			/* u-swiper-action删除的时候需要控制show来实现唯一的删除按钮显示 */
 			state.snippetList.forEach((element) => {
-				console.log('timstamp', element.timestamp, obj.timestamp)
 				if (element.timestamp === obj.timestamp) {
-					console.log('---1----1----1----1----1---')
 					element.show = !element.show
 				} else {
-					console.log('---2----2----2----2----2---')
 					element.show = false
 				}
 			})
 		},
 		mod_sni: function (state, obj) {
+			/* 修改快捷语 */
 			const index = state.snippetList.findIndex((ele) => {
 				console.log(ele, obj)
 				return ele.timestamp === obj.timestamp

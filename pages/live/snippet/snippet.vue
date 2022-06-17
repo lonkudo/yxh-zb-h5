@@ -1,4 +1,5 @@
 <template>
+	<!-- 用户快捷语列表，快捷语保存在vuex和localStorage里面 -->
 	<view>
 		<u-navbar
 			:is-back="true"

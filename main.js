@@ -39,32 +39,32 @@ Vue.prototype.formatGiven = formatGiven
 import { TcPlayer } from '@/utils/TcPlayer-module-2.4.1'
 Vue.prototype.TcPlayer = TcPlayer
 import isEmpty from '@/utils/isEmpty.js'
-Vue.prototype.isEmpty = isEmpty
+Vue.prototype.isEmpty = isEmpty // 封装了一个判断对象和字符串是否为空的组件，经常用到
 import toNum from '@/utils/toNum.js'
-Vue.prototype.toNum = toNum
+Vue.prototype.toNum = toNum // 封装了一个把潜在字符串类型的数据转为数值类型的方法，经常用到
 import initScrollHeight from '@/utils/initScrollHeight.js'
-Vue.prototype.initScrollHeight = initScrollHeight
-import guard from '@/utils/guard.js'
-Vue.prototype.guard = guard
+Vue.prototype.initScrollHeight = initScrollHeight // 封装了一个用来控制scroll-view高度的方法，经常用到
+// import guard from '@/utils/guard.js'
+// Vue.prototype.guard = guard   功能守卫（没有登录就跳转登录页，改成 @check()装饰器了）
 
 import rpx2px from '@/utils/rpx2px.js'
-Vue.prototype.rpx2px = rpx2px
+Vue.prototype.rpx2px = rpx2px // rpx数值转为px数值
 import px2rpx from '@/utils/px2rpx.js'
-Vue.prototype.px2rpx = px2rpx
+Vue.prototype.px2rpx = px2rpx // px数值转为rpx数值
 
-import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息
+import '@/mixin/userComputed.js' // 全局混入 computed的user相关信息 可以用this.uid this.token来获取 判断是否为空的时候搭配isEmpty判断
 
 import CustomNavBar from '@/components/CustomNavBar/CustomNavBar.vue'
 Vue.component('custom-nav-bar', CustomNavBar)
-import CardCon from '@/layout/CardCon/CardCon.vue'
+import CardCon from '@/layout/CardCon/CardCon.vue' // 封装了一个卡片组件，几乎没用到。没啥用
 Vue.component('card-con', CardCon)
-import ImageLeft from '@/layout/ImageLeft/ImageLeft.vue'
+import ImageLeft from '@/layout/ImageLeft/ImageLeft.vue' // 封装了一个左侧圆形图片，右侧两行文字组件，少量用到。
 Vue.component('image-left', ImageLeft)
-import ImageRight from '@/layout/ImageRight/ImageRight.vue'
+import ImageRight from '@/layout/ImageRight/ImageRight.vue' // 封装了一个右侧圆形图片，左侧两行文字组件，没用到。
 Vue.component('image-right', ImageRight)
-import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue'
+import ImageInfo from '@/layout/ImageInfo/ImageInfo.vue' // 封装了一个带阴影控制和中间按钮显示的图片对象。视频显示用到
 Vue.component('image-info', ImageInfo)
-import MyImage from '@/components/MyImage/MyImage.vue'
+import MyImage from '@/components/MyImage/MyImage.vue' // 封装了一个图片加载失败或者没加载出来的时候显示 logo的组件，有用。
 Vue.component('my-image', MyImage)
 
 import VueSocketIO from 'vue-socket.io'

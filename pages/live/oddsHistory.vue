@@ -1,6 +1,7 @@
 <script>
 	import { getOddsHistory } from '@/api/odds'
 	import { formatGiven } from '@/utils/index.js'
+	/* 指数历史页面。由于u-table等u-view组件是easycom按需加载的，按需加载的组件在JSX中无法使用，必须是全局加载。所以封装了u-table-my等组件 */
 
 	export default {
 		data() {

@@ -1,4 +1,5 @@
 <template>
+	<!-- 直播间的盘口指数，handicap是四个tab和容器，handicapTrend是三行指数变化趋势，handicapTable是指数列表 -->
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Handicap'"

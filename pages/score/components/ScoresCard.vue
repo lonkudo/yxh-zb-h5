@@ -1,4 +1,5 @@
 <script>
+	/* 进球动画 */
 	export default {
 		name: 'ScoresCard',
 		props: {

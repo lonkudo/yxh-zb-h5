@@ -1,12 +1,18 @@
 <template>
+	<!-- 思路:
+聊天室： main.js，也就是全局使用VueSocket建立socket链接，然后在本页面通过emit connect事件建立二次链接，来从server获取广播的数据
+获取的数据通过broadcastlisten来获取。
+ -->
 	<view>
+		<!-- 头部控制区，点一下控制区这一行，控制返回切换按钮等的显示 -->
 		<view
 			class="control-bar flex align-center justify-between"
 			@tap="toggleControl"
 		>
 			<view class="flex align-center" @tap.stop="go('back')" v-show="showBack"
-				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text
-				><text
+				><text class="iconfont icon-left fs-40 fc-b-f margin-sm"></text>
+				<!-- 只有用户直播才显示直播间标题 -->
+				<text
 					class="fc-b-f"
 					v-if="liveDetail.uid !== '3' && liveDetail.uid !== '2'"
 					>{{ liveDetail.title }}</text
@@ -22,13 +28,17 @@
 		<!-- 视频区域 -->
 		<view class="video-container" :style="{ height: videoHeight + 'rpx' }">
 			<template v-if="liveDetail.uid === '3'">
+				<!-- 官方动画 -->
 				<web-view
 					:src="liveDetail.animation"
 					:style="{ height: '568rpx' }"
 				></web-view>
 			</template>
 			<template v-else-if="liveDetail.uid === '2'">
+				<!-- 官方直播 -->
+				<!-- 官方直播通过livingStatus判断显示视频还是比赛状态 -->
 				<template v-if="livingStatus">
+					<!-- 视频  -->
 					<player
 						ref="tcplayer"
 						:isShow="true"
@@ -38,6 +48,7 @@
 					></player>
 				</template>
 				<template v-else>
+					<!-- 比赛状态 -->
 					<view class="w100 h100 preview flex flex-direction align-center fc-b-f">
 						<text class="margin-top-sm">{{ liveDetail.competition_name }}</text>
 						<text class="margin-top-sm margin-bottom-sm">{{
@@ -73,6 +84,7 @@
 				</template>
 			</template>
 			<template v-else>
+				<!-- 用户直播 -->
 				<player
 					ref="tcplayer"
 					:isShow="true"
@@ -83,6 +95,7 @@
 			</template>
 		</view>
 		<view class="p-r">
+			<!-- swiper控制区 -->
 			<u-tabs-swiper
 				ref="uTabs"
 				:list="menu"
@@ -95,6 +108,7 @@
 				gutter="40"
 			></u-tabs-swiper>
 			<transition name="fade">
+				<!-- 用户关注 -->
 				<view
 					class="p-a flex flex-direction right-0 top-0 align-center justify-center h-80 w-80"
 					style="z-index: 400"
@@ -108,12 +122,14 @@
 				</view>
 			</transition>
 		</view>
+		<!-- swiper内容区域 -->
 		<swiper
 			:current="swiperCurrent"
 			@transition="transition"
 			@animationfinish="animationfinish"
 			:style="{ height: myHeight + 'rpx' }"
 		>
+			<!-- 直播聊天室 -->
 			<swiper-item class="swiper-item" :key="'Chat'" @touchmove.stop="">
 				<!-- <text>{{ timeGap }}</text> -->
 				<view
@@ -121,17 +137,19 @@
 					:id="'content-wrap' + 'Chat'"
 					:style="{ height: myHeight + 'rpx' }"
 				>
+					<!-- 聊天室比点赞 -->
 					<battle-like
 						:battleLikeInfo="battleLikeInfo"
 						:teamInfo="teamInfo"
 						@dianzan="dianzan"
 					></battle-like>
+					<!-- 聊天室内容区 -->
 					<scroll-view
 						scroll-y
 						class="flex flex-direction b-f6"
 						:style="{ height: chatHeight - battleLikeHeight + 'rpx' }"
 					>
-						<!-- :style="{ height: chatHeight + 'rpx' }" -->
+						<!-- 内容区渲染 -->
 						<view
 							v-for="(item, index) in chatList"
 							:key="index"
@@ -200,6 +218,7 @@
 								<text class="margin-left-sm fs-24"> leave </text>
 							</template>
 
+							<!-- 测试未渲染的聊天室消息内容 -->
 							<!-- <template v-else>
 								<text>
 									{{ JSON.stringify(item)  }}
@@ -207,10 +226,13 @@
 							</template> -->
 						</view>
 					</scroll-view>
+					<!-- 底部控制区 -->
 					<view
 						class="h-80 b-f6 flex align-center justify-between padding-left-sm padding-right-sm"
 					>
+						<!-- 左边按钮控制快捷语编辑 -->
 						<view class="btn ava-60 btn-snippet" @tap="showSnippet = true"></view>
+						<!-- 中间用户输入 -->
 						<view
 							class="flex input-con b-f align-center padding-left-sm padding-right-sm h-60"
 						>
@@ -223,6 +245,7 @@
 								@confirm="inputSend"
 							/>
 						</view>
+						<!-- 右边礼物赠送 -->
 						<view class="btn ava-80 btn-gift" @tap="clickGift"></view>
 					</view>
 				</view>
@@ -234,6 +257,7 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<!-- 技术统计和文字直播 -->
 				<action
 					:game_id="game_id"
 					:teamInfo="teamInfo"
@@ -247,6 +271,7 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<!-- 对战阵容 -->
 				<team-formation :myHeight="myHeight" :game_id="game_id"></team-formation>
 			</swiper-item>
 			<swiper-item
@@ -255,9 +280,11 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<!-- 技术分析 -->
 				<analyse :myHeight="myHeight" :game_id="game_id"></analyse>
 			</swiper-item>
 			<swiper-item>
+				<!-- 盘口指数 -->
 				<handicap :myHeight="myHeight" :game_id="game_id"></handicap>
 			</swiper-item>
 			<swiper-item
@@ -267,6 +294,7 @@
 				:style="{ height: myHeight + 'rpx' }"
 				v-if="showIntelligence"
 			>
+				<!-- 重要情报 -->
 				<intelligence
 					:myHeight="myHeight"
 					:game_id="game_id"
@@ -279,6 +307,7 @@
 				@touchmove.stop=""
 				:style="{ height: myHeight + 'rpx' }"
 			>
+				<!-- 贡献排名 -->
 				<contribution :myHeight="myHeight" :stream="stream"></contribution>
 			</swiper-item>
 		</swiper>
@@ -387,6 +416,7 @@
 				</view>
 			</view>
 		</u-popup>
+		<!-- 礼物数量设置弹框,缺少自定义数量 -->
 		<u-action-sheet
 			:list="giftNumOptions"
 			v-model="showGiftNum"
@@ -395,6 +425,7 @@
 		></u-action-sheet>
 		<pop-msg></pop-msg>
 		<u-popup v-model="showAnchor" mode="bottom">
+			<!-- 切换用户弹框 -->
 			<view>
 				<view class="b-f6 padding-sm flex justify-center"
 					><text class="fc-g">Choose A Live Source</text></view
@@ -431,6 +462,7 @@
 			ref="anchorPopup"
 			id="anchorPopup"
 		>
+			<!-- 关注弹框 -->
 			<view
 				class="flex flex-direction justify-end h-400 bg-transparent"
 				style="transform: translateY(-10%)"
@@ -526,7 +558,7 @@
 				inputContent: '',
 				menu: [
 					{ name: 'Chat' },
-					// { name: 'Action' },
+					// { name: 'Action' }, // 动态加载
 					// { name: 'Line-up' },
 					{ name: 'Analyse' },
 					{ name: 'Handicap' },
@@ -614,8 +646,9 @@
 			},
 			broadcastingListen(mes) {
 				let pMes = JSON.parse(mes[0])
-				console.log('---pMes----pMes----pMes----pMes----pMes---')
+				// console.log('---pMes----pMes----pMes----pMes----pMes---')
 				if (pMes.msg[0]._method_ === 'SendGift') {
+					/* 礼物赠送的动画渲染是通过池的方式来处理的，具体看PopMsg */
 					GiftPoolBus.$emit('push', {
 						id: pMes.msg[0].uid,
 						giftId: pMes.msg[0].ct.giftid,
@@ -638,6 +671,7 @@
 		},
 		computed: {
 			timeGap: function () {
+				/* 用于在官方直播未开播的时候显示状态 */
 				if (this.isEmpty(this.liveDetail)) return ''
 				let startTimestamp = this.toNum(this.liveDetail.starttime) * 1000
 				let curTimestamp = Number(new Date())
@@ -670,6 +704,7 @@
 				}
 			},
 			videoHeight: function () {
+				/* web-view使用的来自外部的官方动画的高度和,视频的高度,下面几种高度跟随这个设置 */
 				if (this.liveuid === '3') {
 					return 568
 				} else {
@@ -684,6 +719,7 @@
 				}
 			},
 			battleLikeHeight: function () {
+				/* battleLike有两种状态 */
 				if (this.$store.state.flag.battleLikeFlag) {
 					return 230
 				} else {
@@ -726,6 +762,7 @@
 					this.initPlayer()
 				})
 			},
+			/* @check() 是检查登录用的装饰器 */
 			@check()
 			dianzan(team) {
 				console.log('team', team)
@@ -904,6 +941,7 @@
 				}
 			},
 			getLiveDetail() {
+				/* 获取直播详情 */
 				let uid = this.isEmpty(this.uid) ? 100 : this.uid
 				let token = this.isEmpty(this.token) ? 'not logined' : this.token
 				getLiveDetail(uid, token, this.liveuid, this.stream, this.game_id)
@@ -911,7 +949,7 @@
 						this.liveDetail = res.info
 						console.log('liveDetail', this.liveDetail)
 
-						// intelligence 和lineup处理。
+						// intelligence 和lineup的动态渲染。k
 						let flag = false
 						if (this.toNum(this.liveDetail.competition_is_important) === 1) {
 							this.menu.splice(1, 0, { name: 'Action' })
@@ -929,6 +967,7 @@
 							this.showLineup = true
 						}
 
+						/* 获取直播状态用于控制渲染 */
 						let num = this.toNum(res.info.status_id)
 						if (num > 1 && num < 8) {
 							this.livingStatus = true
@@ -936,6 +975,7 @@
 							this.livingStatus = false
 						}
 
+						/* 获取teamInfo传递给 swiper里面的组件使用 */
 						this.teamInfo = {
 							home: {
 								name: res.info.home_name,
@@ -947,7 +987,9 @@
 							},
 						}
 
+						/* 完成观看直播任务任务 */
 						if (!this.isEmpty(this.uid)) {
+							/* timer会在离开页面的时候清除 */
 							this.timer = setTimeout(() => {
 								this.$store.dispatch('FINISH_TASK', {
 									type: 2,
@@ -956,12 +998,12 @@
 								})
 							}, 15000)
 						}
+						/* 如果是官方直播，且正在直播就初始化视频 */
 						if (res.info.uid === '2') {
 							this.playerInfo = {
 								pull: res.info.origin_video,
 								live: true,
 							}
-
 							this.$nextTick(() => {
 								if (this.livingStatus) {
 									this.initPlayer()
@@ -978,6 +1020,7 @@
 							})
 						}
 
+						/* soceket清除监听，避免重复监听 */
 						this.$socket.removeAllListeners()
 
 						if (this.isEmpty(this.token)) {
@@ -1044,6 +1087,7 @@
 					})
 			},
 			async enterLiveRoom() {
+				/* 进入直播间 */
 				let uid = this.isEmpty(this.uid) ? 100 : this.uid
 				let token = this.isEmpty(this.token) ? 'not logined' : this.token
 				await enterLiveRoom(uid, token, this.liveuid, this.stream)
@@ -1063,6 +1107,7 @@
 
 			inputSend() {
 				// console.log('inputSend')
+				/* 底部控制条的用户输入，空的时候提示 */
 				if (this.inputContent.trim().length > 0) {
 					this.sendMsg(this.inputContent)
 				} else {
@@ -1120,9 +1165,6 @@
 			// 关注主播
 			@check()
 			guanzhu() {
-				// if (this.followDialog) {
-				// 	this.followDialog = false
-				// }
 				let token = this.token
 				let uid = this.uid
 				if (uid === this.info.uid) {
@@ -1141,6 +1183,7 @@
 				})
 			},
 			checkAnchor() {
+				/* 没关注主播的时候提示关注 */
 				setTimeout(() => {
 					if (this.toNum(this.liveDetail.is_attention) === 0) {
 						this.showAttent = true

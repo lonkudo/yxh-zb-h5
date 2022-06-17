@@ -1,4 +1,5 @@
 <template>
+	<!-- 直播列表，单独页面  -->
 	<scroll-view scroll-y :style="{ height: myHeight + 'rpx' }">
 		<view>
 			<live :liveList="liveList"></live>

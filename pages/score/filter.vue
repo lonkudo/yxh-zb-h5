@@ -1,7 +1,9 @@
 <template>
 	<view>
+		<!-- 赛事筛选 -->
 		<scroll-view :style="{ height: myHeight + 'rpx' }" scroll-y>
 			<u-index-list :scrollTop="scrollTop" class="b-f">
+				<!-- 原生checkbox直接隐藏了使用但是可以点击，直接使用自定义的样式具体看scss -->
 				<checkbox-group @change="eventChecked">
 					<view v-for="(event, index) in compeInfo" :key="index">
 						<view @tap="eventGroup(index)">

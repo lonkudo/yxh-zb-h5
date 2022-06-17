@@ -1,9 +1,15 @@
 <template>
+	<!-- 直播间比点赞：思路：
+监听主队和客队的点赞数量变化，当变化发生触发soccerBallFlyUp事件。
+在body下面添加一个img，让这个img按照三阶贝塞尔曲线来更改top和left。从而实现球弯曲飞行向上的效果。
+ -->
 	<view v-if="!this.isEmpty(teamInfo) && !this.isEmpty(battleLikeInfo)">
 		<view class="flex flex-direction">
 			<template v-if="openFlag">
+				<!-- 打开状态 -->
 				<view class="flex flex-direction full-vote h-200 padding-lg">
 					<view class="flex align-center justify-center">
+						<!-- 左边球队 -->
 						<view
 							class="flex align-center"
 							style="
@@ -45,6 +51,7 @@
 						<view class="margin-left-lg margin-right-lg">
 							<text class="fs-30 fc-b-f">VS</text>
 						</view>
+						<!-- 右边球队 -->
 						<view
 							class="flex align-center"
 							style="
@@ -78,6 +85,7 @@
 					</view>
 					<view class="line-vote flex align-center h-20" style="margin-top: 30rpx">
 						<view class="flex-sub">
+							<!-- 点赞比拼的进度条 -->
 							<my-line-progress
 								active-color="#ed0505"
 								:percent="percent"
@@ -98,6 +106,7 @@
 				</view>
 			</template>
 			<template v-else>
+				<!-- 收起状态只显示进度条 -->
 				<view class="line-vote flex align-center padding-xs h-50 b-0">
 					<text class="fc-b-f fs-16" style="padding-bottom: 5rpx">{{
 						battleLikeInfo.home_team
@@ -119,6 +128,7 @@
 				</view>
 			</template>
 			<view class="flex justify-center b-f6">
+				<!-- 梯形收起按钮 -->
 				<view class="xiangxia-con w-80 text-center h-30" @tap="changeFlag">
 					<view class="trapezoid">
 						<!-- 梯形 -->
@@ -149,30 +159,30 @@
 	import MyLineProgress from './my-line-progress/my-line-progress.vue'
 	import BallIcon from '@/static/styles/png/soccerball.png'
 
-	class SoccerBall {
-		constructor(x, y, xDirection) {
-			this.x = x
-			this.y = y
-			this.opacity = 1
-			this.xDirection = true
-		}
+	// class SoccerBall {
+	// 	constructor(x, y, xDirection) {
+	// 		this.x = x
+	// 		this.y = y
+	// 		this.opacity = 1
+	// 		this.xDirection = true
+	// 	}
 
-		flyUp() {
-			this.y -= 1
-			if (this.xDirection) {
-				this.x += 1
-				if (this.x > 30) {
-					this.xDirection = false
-				}
-			} else {
-				this.x -= 1
-				if (this.x < -30) {
-					this.xDirection = true
-				}
-			}
-			this.opacity -= 0.01
-		}
-	}
+	// 	flyUp() {
+	// 		this.y -= 1
+	// 		if (this.xDirection) {
+	// 			this.x += 1
+	// 			if (this.x > 30) {
+	// 				this.xDirection = false
+	// 			}
+	// 		} else {
+	// 			this.x -= 1
+	// 			if (this.x < -30) {
+	// 				this.xDirection = true
+	// 			}
+	// 		}
+	// 		this.opacity -= 0.01
+	// 	}
+	// }
 
 	function step() {
 		// console.log('this', this)
@@ -245,11 +255,12 @@
 		this.ele.style.opacity = this.opacity
 		// console.log('ok', typeof this.ele.style.opacity)
 		if (this.t < 1) {
-			window.requestAnimationFrame(step.bind(this))
+			window.requestAnimationFrame(step.bind(this)) // 在this里面保存参数，并且在每个帧修改参数值 t是播放进度
 		}
 	}
 
 	function threebsr(t, a1, a2, a3, a4) {
+		/* 三阶贝塞尔曲线函数 */
 		return (
 			a1 * (1 - t) * (1 - t) * (1 - t) +
 			3 * a2 * t * (1 - t) * (1 - t) +

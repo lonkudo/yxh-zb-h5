@@ -15,6 +15,7 @@ const task = {
 	},
 	actions: {
 		GET_TASKLIST: ({ commit }, userInfo) => {
+			/* 获取任务列表 */
 			getTaskList(userInfo.uid, userInfo.token, 1)
 				.then((res) => {
 					console.log('task', res)
@@ -25,9 +26,9 @@ const task = {
 				})
 		},
 		FINISH_TASK: ({ commit, state, dispatch }, info) => {
-			// 如果任务已完成则直接终止，不发送请求。
 			let that = info.that
 			let item
+			/* 查找当前想要完成的任务，在任务列表里面的信息 */
 			if (info.type === 1) {
 				item = state.taskList.task.find((ele) => {
 					return ele.id === info.taskid
@@ -38,6 +39,7 @@ const task = {
 				})
 			}
 
+			// 如果任务已完成则直接终止，不发送请求。
 			if (item && item.current_num === item.num) return
 
 			liveOrDailyTask(that.uid, info.type, info.taskid)

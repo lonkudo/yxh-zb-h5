@@ -1,4 +1,5 @@
 <template>
+	<!-- 比分显示等设置 -->
 	<view class="flex flex-direction">
 		<view class="padding-xs padding-top-lg padding-left-lg">
 			<text>GOAL TIPS</text>

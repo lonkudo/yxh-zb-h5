@@ -1,4 +1,5 @@
 <template>
+	<!-- 重要情报 -->
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Intelligence'"

@@ -1,4 +1,5 @@
 <template>
+	<!-- 用户快捷语添加页面, 快捷语保存在vuex和localStorage里面 -->
 	<view class="b-f">
 		<u-navbar
 			:is-back="true"

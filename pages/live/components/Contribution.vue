@@ -1,4 +1,5 @@
 <template>
+	<!-- 贡献排行榜 -->
 	<scroll-view
 		scroll-y
 		:id="'content-wrap' + 'Contribution'"

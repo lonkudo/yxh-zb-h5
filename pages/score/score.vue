@@ -12,6 +12,7 @@
 			<navigator :url="'settings'" slot="default"
 				><text class="margin-left-lg iconfont icon-shezhi fs-40"></text
 			></navigator>
+			<!-- 当tab切换到subscribe的时候禁用筛选功能 -->
 			<template v-if="swiperCurrent !== 3">
 				<navigator :url="'filter?type=' + (swiperCurrent + 1)" slot="right"
 					><text class="margin-right-lg iconfont icon-shaixuan fs-40"></text
@@ -514,6 +515,7 @@
 			this.myHeight = this.initScrollHeight(78)
 			this.myHeight2 = this.initScrollHeight(158)
 			/* 过滤页面传回数据,更新对应的区域,更新vuex */
+			/* ongoing和future和finished是分开保存的，他们筛选信息不同 */
 			FilterBus.$on('confirm', (data) => {
 				this.eventsList = data.compe_id
 				// console.log('confirm--------')
@@ -579,6 +581,7 @@
 		// 	console.log('---unload----unload----unload----unload----unload---')
 		// 	if (this.mq) this.mq.unconnect()
 		// },
+		/* mqtt离开的时候没有关闭链接，许老板说这个链接不需要关闭 */
 		methods: {
 			/* -----------------------mqtt部分------------------------------- */
 			// 连接MQTT服务器
@@ -626,6 +629,7 @@
 
 			realTime(msgArr) {
 				msgArr.forEach((item) => {
+					/* 获取到实时数据以后，播放动画和修改渲染scoreItem的数据 */
 					this.ongoingObj.ongoing.forEach((ele) => {
 						//ele 是当前的 item是实时的
 						if (ele.id == item.id.toString()) {
@@ -652,13 +656,8 @@
 				// console.log('msgArrAfter', msgArr[0].id, msgArr);
 			},
 			checkScoresCard: function (ele, realItem) {
-				// if (ele.id == '3705598' && !this.testFlag) {
-				//   this.testFlag = true;
-				//   this.test(ele, realItem);
-				//   setTimeout(() => {
-				//     this.testFlag = false;
-				//   }, 10000);
-				// }
+				/* 动画处理 */
+
 				//ele 是当前的 realItem是实时的
 				let eleObj = JSON.parse(JSON.stringify(ele))
 				let item = JSON.parse(JSON.stringify(realItem))
@@ -684,7 +683,9 @@
 					eleObj['type'] = 1
 
 					if (uni.getStorageSync('settingForm').goalPopup) {
+						/* 设置rank用来控制渲染的时候显示位置 */
 						this.setRank(eleObj)
+						/* 推到goalList里面就是播放动画 */
 						this.pushGoalList(eleObj)
 						if (uni.getStorageSync('settingForm').goalSound) {
 							this.changeSound(uni.getStorageSync('settingForm').homeSoundType) // 播放声音
@@ -699,6 +700,7 @@
 								},
 							})
 						}
+						/* 一定时间后清除动画 */
 						this.delItemByTimeOut(eleObj.id)
 					}
 				}
@@ -819,6 +821,7 @@
 
 			delItemByTimeOut(id) {
 				console.log(new Date().getMinutes() + ':' + new Date().getSeconds())
+				/* 五秒后清除动画 */
 				setTimeout(() => {
 					console.log(
 						'delItemAfterFive',
@@ -827,6 +830,7 @@
 					this.delItemAfterFive(id)
 				}, 5000)
 				// }, 120000);
+				/* 十秒后删除元素（删除前空白但是占位） */
 				setTimeout(() => {
 					console.log(
 						'delItemAfterTen',
@@ -844,6 +848,7 @@
 						: 0
 			},
 			pushGoalList(eleObj) {
+				/* 推到进球列表 */
 				const result = this.goalList.find((ele) => {
 					if (eleObj.id === ele.id) {
 						// 如果是同一场比赛的话更新进球数量

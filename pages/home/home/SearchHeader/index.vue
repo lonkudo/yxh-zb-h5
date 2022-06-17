@@ -12,7 +12,7 @@
 			><input type="text" placeholder="Search"
 		/></view>
 		<view class="margin-left-sm margin-right-sm"
-			><text class="iconfont icon-qiandao fs-40"></text
+			><text class="iconfont icon-qiandao fs-40" @tap="go('task')"></text
 		></view>
 	</view>
 </template>
@@ -24,6 +24,11 @@
 				if (val === 'search') {
 					uni.navigateTo({
 						url: '/pages/search/search',
+					})
+				}
+				if (val === 'task') {
+					uni.navigateTo({
+						url: '/pages/my/coins/coins',
 					})
 				}
 			},

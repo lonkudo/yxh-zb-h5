@@ -4,7 +4,7 @@
 		<scroll-view scroll-y="true" class="middle b-f6">
 			<recommend-slider :banner="banners"></recommend-slider>
 			<system-informs-slider :noticeList="noticeList"></system-informs-slider>
-			<home-title :title="'Popular game'"></home-title>
+			<home-title :title="'Popular game'" @onTap="go('score')"></home-title>
 			<view class="flex align-center">
 				<view
 					class="b-f h-200 w-200 margin-left-xs flex flex-direction align-center justify-center"
@@ -21,11 +21,11 @@
 				</view>
 				<popular-game :pdata="scheduleList"></popular-game>
 			</view>
-			<home-title :title="'Live'"></home-title>
+			<home-title :title="'Live'" @onTap="go('livelist')"></home-title>
 			<live :liveList="liveList"></live>
-			<home-title :title="'Videos'"></home-title>
+			<home-title :title="'Videos'" @onTap="go('video')"></home-title>
 			<videos :videoList="videoList"></videos>
-			<home-title :title="'Sport news'"></home-title>
+			<home-title :title="'Sport news'" @onTap="go('news')"></home-title>
 			<news :newsList="newsList"></news>
 		</scroll-view>
 	</view>
@@ -69,6 +69,30 @@
 			this.getHomeIndex()
 		},
 		methods: {
+			go(val) {
+				if (val === 'score') {
+					uni.switchTab({
+						url: '/pages/score/score',
+					})
+				}
+				if (val === 'livelist') {
+					uni.navigateTo({
+						url: '/pages/live/livelist',
+					})
+				}
+				if (val === 'video') {
+					uni.setStorageSync('discoverTab', { tab: 'video', isSwitch: true })
+					uni.switchTab({
+						url: '/pages/discover/discover',
+					})
+				}
+				if (val === 'news') {
+					uni.setStorageSync('discoverTab', { tab: 'news', isSwitch: true }) // switchTab 不能传递参数
+					uni.switchTab({
+						url: '/pages/discover/discover',
+					})
+				}
+			},
 			getHomeIndex() {
 				getHomeIndex(
 					1,

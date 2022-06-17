@@ -4,7 +4,7 @@
 		:bg="'#f6f6f6'"
 	>
 		<text class="fc-b-0 fw-9">{{ title }}</text
-		><text class="fc-b-9">More ></text>
+		><text class="fc-b-9" @tap="tap">More ></text>
 	</card-con>
 </template>
 
@@ -16,6 +16,11 @@
 		props: ['title'],
 		data() {
 			return {}
+		},
+		methods: {
+			tap: function () {
+				this.$emit('onTap')
+			},
 		},
 	}
 </script>
